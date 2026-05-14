@@ -3740,6 +3740,129 @@ table{
   }
 }
 
+
+/* ===== V60 FINAL MOBILE ALERT ALIGN FIX ===== */
+@media(max-width:650px){
+
+  #alertsTable tr.fixed-report-row{
+    min-height:182px!important;
+  }
+
+  /* açıklama alanı */
+  #alertsTable .fixed-desc-cell{
+    position:absolute!important;
+    left:168px!important;
+    right:12px!important;
+    top:14px!important;
+  }
+
+  #alertsTable .fixed-desc-text{
+    font-size:14px!important;
+    line-height:1.08!important;
+    max-height:78px!important;
+    overflow:hidden!important;
+  }
+
+  /* tarihleri alta sola hizala */
+  #alertsTable .fixed-date-cell{
+    position:absolute!important;
+    bottom:62px!important;
+    left:18px!important;
+    width:auto!important;
+    font-size:11px!important;
+    z-index:3!important;
+    color:#dbe4f0!important;
+  }
+
+  #alertsTable .fixed-date-cell strong{
+    font-size:11px!important;
+    font-weight:1000!important;
+  }
+
+  /* çıkış tarihi sağa */
+  #alertsTable .fixed-date-cell:nth-of-type(5){
+    left:108px!important;
+  }
+
+  /* gün kaldı rozeti artık tarihlerden tamamen ayrı */
+  #alertsTable .fixed-status-cell{
+    position:absolute!important;
+    left:220px!important;
+    bottom:58px!important;
+    width:auto!important;
+    z-index:4!important;
+  }
+
+  #alertsTable .fixed-status-cell .due-pill{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:5px 10px!important;
+    min-height:24px!important;
+    border-radius:999px!important;
+    font-size:10px!important;
+    font-weight:1000!important;
+    white-space:nowrap!important;
+  }
+
+  /* butonlar */
+  #alertsTable .fixed-action-cell{
+    position:absolute!important;
+    left:12px!important;
+    right:12px!important;
+    bottom:10px!important;
+    width:auto!important;
+  }
+
+  #alertsTable .report-actions{
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:6px!important;
+  }
+
+  #alertsTable .report-actions .btn{
+    min-height:36px!important;
+    font-size:9px!important;
+  }
+
+  /* küçük ekran ekstra */
+  @media(max-width:390px){
+
+    #alertsTable tr.fixed-report-row{
+      min-height:194px!important;
+    }
+
+    #alertsTable .fixed-desc-cell{
+      left:160px!important;
+      right:10px!important;
+    }
+
+    #alertsTable .fixed-desc-text{
+      font-size:13px!important;
+    }
+
+    #alertsTable .fixed-date-cell{
+      bottom:64px!important;
+      left:14px!important;
+      font-size:10px!important;
+    }
+
+    #alertsTable .fixed-date-cell:nth-of-type(5){
+      left:92px!important;
+    }
+
+    #alertsTable .fixed-status-cell{
+      left:190px!important;
+      bottom:60px!important;
+    }
+
+    #alertsTable .fixed-status-cell .due-pill{
+      font-size:9px!important;
+      padding:4px 8px!important;
+    }
+  }
+}
+
 </style>
 </head>
 <body>
