@@ -113,6 +113,189 @@ button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer
   }
 }
 
+
+/* ===== PREMIUM A4 BASKI TASARIMI ===== */
+.print-layout{
+  background:#06111f;
+  padding:22px;
+}
+.print-page{
+  background:#f8fafc;
+  padding:9mm;
+  box-shadow:0 30px 90px rgba(0,0,0,.28);
+}
+.print-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:0;
+  border-bottom:2px solid #cbd5e1;
+  padding:0 0 8mm;
+  margin-bottom:5mm;
+}
+.print-logo-side{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.print-logo-img{
+  width:48mm;
+  max-height:18mm;
+  object-fit:contain;
+  filter:grayscale(1) contrast(1.15);
+}
+.print-brand{
+  font-size:21px;
+  font-weight:950;
+  color:#111827;
+  letter-spacing:.06em;
+}
+.print-sub{
+  font-size:10px;
+  color:#64748b;
+  font-weight:900;
+  margin-top:2px;
+}
+.print-date-top{
+  color:#334155;
+  font-size:12px;
+  font-weight:950;
+  background:#e2e8f0;
+  border:1px solid #cbd5e1;
+  padding:7px 10px;
+  border-radius:12px;
+}
+.print-table{
+  border-collapse:separate;
+  border-spacing:0 4mm;
+  background:transparent;
+}
+.print-table th{
+  background:#e5e7eb;
+  border:1px solid #cbd5e1;
+  color:#111827;
+  font-size:16px;
+  padding:8px 6px;
+  letter-spacing:.04em;
+}
+.print-table th:first-child{
+  border-radius:12px 0 0 12px;
+}
+.print-table th:last-child{
+  border-radius:0 12px 12px 0;
+}
+.print-table td{
+  background:#ffffff;
+  border-top:1px solid #cbd5e1;
+  border-bottom:1px solid #cbd5e1;
+  border-left:0;
+  border-right:0;
+  height:42mm;
+  padding:7px;
+  color:#111827;
+  box-shadow:0 8px 18px rgba(15,23,42,.08);
+}
+.print-table td:first-child{
+  border-left:1px solid #cbd5e1;
+  border-radius:14px 0 0 14px;
+}
+.print-table td:last-child{
+  border-right:1px solid #cbd5e1;
+  border-radius:0 14px 14px 0;
+}
+.print-no{
+  display:inline-block;
+  float:right;
+  font-size:14px;
+  color:#111827;
+  background:#f1f5f9;
+  border:1px solid #cbd5e1;
+  border-radius:999px;
+  padding:4px 8px;
+  margin-bottom:5px;
+}
+.print-product-stack{
+  clear:both;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.print-product-card{
+  width:44%;
+  min-width:28mm;
+  text-align:center;
+  background:linear-gradient(180deg,#ffffff,#f1f5f9);
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  padding:5px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 5px 12px rgba(15,23,42,.08);
+}
+.print-product-label{
+  font-size:9px;
+  font-weight:950;
+  color:#475569;
+  text-align:center;
+  margin-bottom:3px;
+  letter-spacing:.03em;
+}
+.print-img{
+  max-width:30mm;
+  max-height:19mm;
+  object-fit:contain;
+  display:block;
+  margin:0 auto;
+  filter:drop-shadow(0 5px 6px rgba(15,23,42,.18));
+}
+.print-items{
+  font-size:18px;
+  font-weight:950;
+  line-height:1.22;
+  white-space:pre-line;
+  color:#111827;
+}
+.print-date{
+  display:inline-block;
+  font-size:18px;
+  font-weight:950;
+  color:#111827;
+  background:#f8fafc;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  padding:8px 10px;
+}
+.print-note{
+  margin-top:8px;
+  padding:7px 9px;
+  border:1px dashed #94a3b8;
+  background:#fef2f2;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:950;
+  color:#991b1b;
+  line-height:1.25;
+}
+@media print{
+  .print-page{
+    background:#f8fafc!important;
+    box-shadow:none!important;
+    padding:0!important;
+  }
+  .print-layout{
+    padding:0!important;
+  }
+  .print-table{
+    border-spacing:0 3mm!important;
+  }
+  .print-table td{
+    box-shadow:none!important;
+  }
+  .print-logo-img{
+    filter:grayscale(1) contrast(1.15)!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -136,7 +319,16 @@ button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer
 <section id="reportsPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tarih Aralığı Raporları</h2><span class="mini">Belirli tarih aralığında gelen veya çıkması gereken siparişleri gör.</span></div><div class="grid-3"><div class="field"><label>Başlangıç</label><input id="reportStart" type="date"></div><div class="field"><label>Bitiş</label><input id="reportEnd" type="date"></div><div class="field"><label>Rapor Tipi</label><select id="reportType"><option value="received">Bu aralıkta işleme alınan siparişler</option><option value="shipping">Bu aralıkta çıkması gereken siparişler</option><option value="important">Bu aralıktaki önemli siparişler</option></select></div></div><div class="actions"><button class="btn btn-primary" onclick="renderReports()">Raporu Göster</button><button class="btn btn-light" onclick="setReportToday()">Bugün</button><button class="btn btn-light" onclick="setReportThisWeek()">Bu Hafta</button></div></div><div class="panel"><div class="panel-head"><h2 id="reportTitle">Rapor Sonuçları</h2><span id="reportCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Adet / Açıklama</th><th>İşleme Tarihi</th><th>Çıkış Tarihi</th><th>Durum</th><th>Not</th></tr></thead><tbody id="reportsTable"></tbody></table></div></div></section>
 <section id="newOrderPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="formTitle">Sipariş Ekle</h2><button class="btn btn-light" onclick="resetForm()">Formu Temizle</button></div><form id="orderForm" action="javascript:void(0)"><input type="hidden" id="editId"><div class="grid-3"><div class="field"><label>İş No</label><input id="orderNo" type="number" required placeholder="2367"></div><div class="field"><label>İşleme Alınma Tarihi</label><input id="approvalDate" type="date" required></div><div class="field"><label>Durum</label><select id="status"><option>İŞLEME ALINDI</option><option>BEKLEMEDE</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select></div></div><label class="important-row"><input id="important" type="checkbox"> Önemli sipariş olarak işaretle</label><div class="field"><label>Ürün / Adet Satırları</label><div id="itemsBox" class="items-box"></div><button type="button" class="btn btn-light" onclick="addItemRow()">+ Satır Ekle</button><span class="mini">Oto kokusu, paspas, bardak altlığı ve sırt kartonu için ayrı fotoğraf yükleyebilirsin.</span></div><div class="field"><label>Not</label><textarea id="note" placeholder="Örn: 14.05 acil çıkış, öncelikli üretim..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Kaydet</button><button class="btn btn-dark" type="button" onclick="openOrdersByStatus('ALL')">Listeye Dön</button></div></form></div></section>
 <section id="testersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tester Çıkışı</h2><span class="mini">Siparişten bağımsız tester paketlerini buradan takip et.</span></div><form id="testerForm" action="javascript:void(0)"><input type="hidden" id="testerEditId"><div class="grid-3"><div class="field"><label>Tarih</label><input id="testerDate" type="date" required></div><div class="field"><label>Paket Adedi</label><input id="testerQty" type="number" required placeholder="10"></div><div class="field"><label>Gönderilen Yer / Kişi</label><input id="testerTarget" placeholder="Firma / kişi adı"></div></div><div class="field"><label>Not</label><textarea id="testerNote" placeholder="Örn: 5 paket oto kokusu tester, 2 paket paspas numunesi..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Tester Kaydet</button><button class="btn btn-light" type="button" onclick="resetTesterForm()">Temizle</button></div></form></div><div class="panel"><div class="panel-head"><h2>Tester Geçmişi</h2><span id="testerCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>Tarih</th><th>Paket</th><th>Gönderilen</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="testerTable"></tbody></table></div></div></section>
-<section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi</h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters print-filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><input id="printStart" type="date"><input id="printEnd" type="date"><button class="btn btn-light" onclick="setPrintToday()">Bugün</button><button class="btn btn-dark" onclick="renderPrintSelector();renderPrint()">A4 Güncelle</button></div><div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header"><div><div class="print-brand">DO DESIGN ÜRETİM LİSTESİ</div><div class="print-sub">Seçilen iş numaralarının üretim çıktısı</div></div><div class="print-date-top" id="printTopDate"></div></div><table class="print-table"><thead><tr><th style="width:30%">ÜRÜN</th><th style="width:42%">ADET / AÇIKLAMA</th><th style="width:28%">ONAY TARİHİ</th></tr></thead><tbody id="printBody"></tbody></table></div></div></div></section>
+<section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi</h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters print-filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><input id="printStart" type="date"><input id="printEnd" type="date"><button class="btn btn-light" onclick="setPrintToday()">Bugün</button><button class="btn btn-dark" onclick="renderPrintSelector();renderPrint()">A4 Güncelle</button></div><div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header">
+  <div class="print-logo-side">
+    <img src="/do-logo.png" alt="DO DESIGN" class="print-logo-img">
+    <div>
+      <div class="print-brand">ÜRETİM LİSTESİ</div>
+      <div class="print-sub">Seçilen iş numaralarının üretim çıktısı</div>
+    </div>
+  </div>
+  <div class="print-date-top" id="printTopDate"></div>
+</div><table class="print-table"><thead><tr><th style="width:30%">ÜRÜN</th><th style="width:42%">ADET / AÇIKLAMA</th><th style="width:28%">ONAY TARİHİ</th></tr></thead><tbody id="printBody"></tbody></table></div></div></div></section>
 <section id="profilePage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Profilim</h2><span class="mini">Sadece giriş yapan kullanıcı kendi bilgilerini düzenler.</span></div><form id="profileForm" action="javascript:void(0)"><div class="grid-2"><div class="field"><label>Profil Fotoğrafı</label><input id="profilePhotoInput" type="file" accept="image/*"><img id="profilePreview" class="profile-preview hidden"></div><div class="field"><label>Ad Soyad</label><input id="profileName" required></div></div><div class="grid-2"><div class="field"><label>Email</label><input id="profileEmail" type="email" disabled></div><div class="field"><label>Telefon</label><input id="profilePhone" placeholder="Opsiyonel"></div></div><div class="field"><label>Yeni Şifre</label><input id="profilePassword" type="password" placeholder="Boş bırakırsan değişmez"></div><button class="btn btn-primary" type="submit">Bilgilerimi Güncelle</button><div id="profileOk" class="ok-box hidden">Bilgiler güncellendi.</div></form></div></section>
 </main></section>
 <div class="bottom-mobile-nav no-print"><button class="menu-open-btn" onclick="$('sidebar').classList.toggle('open')"><span>☰</span><b>Menü</b></button><button onclick="goPage('dashboard')"><span>⌂</span><b>Panel</b></button><button onclick="openOrdersByStatus('ALL')"><span>▦</span><b>Sipariş</b></button><button onclick="goPage('alerts')"><span>!</span><b>Uyarı</b></button><button onclick="goPage('reports')"><span>↕</span><b>Rapor</b></button><button onclick="goPage('newOrder')"><span>＋</span><b>Ekle</b></button></div>
