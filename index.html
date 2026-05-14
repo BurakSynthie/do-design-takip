@@ -688,6 +688,23 @@ button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer
 .bulk-entry-box textarea{width:100%;min-height:92px;border:1px solid rgba(125,211,252,.18);background:#071827;color:var(--text);border-radius:14px;padding:12px 13px;resize:vertical;margin-bottom:10px}
 .copied-image-pill{display:inline-flex;align-items:center;padding:4px 7px;border-radius:999px;background:rgba(34,197,94,.13);color:#bbf7d0;border:1px solid rgba(34,197,94,.26);font-size:10px;font-weight:950}
 
+
+/* ===== TEK GORSEL COKLU KOKU DUZENI ===== */
+.multi-thumbs img{
+  flex-shrink:0;
+}
+.print-product-stack{
+  gap:4px!important;
+}
+.print-product-card{
+  max-width:32%!important;
+}
+@media print{
+  .print-product-card{
+    max-width:32%!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -879,12 +896,22 @@ function productPills(items){
   const arr=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
   return arr.map(p=>`<span class="product-pill">${p}</span>`).join('');
 }
+
 function itemImages(items){
-  const imgs=(items||[]).map(i=>i.image||i.image_url).filter(Boolean);
+  const seen=new Set();
+  const imgs=(items||[])
+    .map(i=>i.image||i.image_url)
+    .filter(Boolean)
+    .filter(src=>{
+      if(seen.has(src)) return false;
+      seen.add(src);
+      return true;
+    });
   return imgs.length
     ? `<div class="multi-thumbs">${imgs.map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}</div>`
     : `<div class="empty-thumb">GÖRSEL<br>YOK</div>`;
 }
+
 function badge(s){
   return `<span class="badge ${norm(s||'BEKLEMEDE')}">${s||'BEKLEMEDE'}</span>`;
 }
@@ -1210,7 +1237,22 @@ function updatePrintSelectedCount(){
 function renderPrintSelector(){if(!$('printSelector'))return;const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk});$('printSelector').innerHTML=list.map(o=>`<label class="select-order"><input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint();updatePrintSelectedCount()"><strong>No:${o.orderNo}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span>${badge(o.status)}</label>`).join('')||'Kayıt bulunamadı.';updatePrintSelectedCount()}
 $('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;if($('printStart'))$('printStart').onchange=renderPrintSelector;if($('printEnd'))$('printEnd').onchange=renderPrintSelector;
 function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);if(ids.length)return orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk}).slice(0,12)}
-function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=(o.items||[]).map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:20mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999">GÖRSEL YOK</div>`}</div>`).join('');const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
+
+function uniquePrintProductCards(items){
+  const seen=new Set();
+  return (items||[])
+    .filter(i=>{
+      const key=(i.product||'')+'|'+(i.image||'');
+      if(!i.image) return true;
+      if(seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:15mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999;font-size:8px">GÖRSEL YOK</div>`}</div>`)
+    .join('');
+}
+
+function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=uniquePrintProductCards(o.items||[]);const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
   ${fdate(o.approvalDate)}
   <div style="font-size:10px;font-weight:900;margin-top:4px;color:#475569;border-top:1px dashed #cbd5e1;padding-top:3px">
     → Çıkış: ${fdate(dueDateForOrder(o))}${extraProductionNote(o)?`<br><span style="color:#9a3412">${extraProductionNote(o)}</span>`:''}
