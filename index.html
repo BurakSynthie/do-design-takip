@@ -2384,9 +2384,139 @@ table{
   .alert-date-line strong,.alert-date-line span{font-size:10.5px!important}
 }
 
+
+/* ===== V36 UX POLISH / LOGIN ANIMASYON / YEDEK / BILDIRIM ===== */
+.app-splash{
+  position:fixed;
+  inset:0;
+  z-index:3000;
+  background:radial-gradient(circle at 40% 20%,rgba(255,255,255,.10),transparent 32%),linear-gradient(135deg,#101216,#1f232b,#101216);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.42s ease;
+}
+.app-splash.hide{
+  opacity:0;
+  transform:scale(1.015);
+  pointer-events:none;
+}
+.splash-card{
+  width:min(340px,84vw);
+  padding:26px;
+  border-radius:28px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 30px 90px rgba(0,0,0,.50);
+  text-align:center;
+  backdrop-filter:blur(18px);
+  animation:splashPop .55s ease;
+}
+.splash-card img{
+  width:230px;
+  max-width:100%;
+  filter:brightness(0) invert(1);
+}
+.splash-card p{
+  margin:14px 0 0;
+  color:#d4d4d8;
+  font-weight:900;
+  font-size:13px;
+}
+.splash-loader{
+  width:100%;
+  height:5px;
+  background:rgba(255,255,255,.10);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:18px;
+}
+.splash-loader span{
+  display:block;
+  height:100%;
+  width:42%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#fff,#94a3b8);
+  animation:loaderMove 1s ease-in-out infinite;
+}
+@keyframes loaderMove{
+  0%{transform:translateX(-110%)}
+  100%{transform:translateX(260%)}
+}
+@keyframes splashPop{
+  from{opacity:0;transform:translateY(12px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+.critical-mini-bar{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:-4px 0 14px;
+}
+.critical-chip{
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;
+  padding:8px 11px;
+  font-size:12px;
+  font-weight:1000;
+  color:#fff;
+  background:rgba(255,255,255,.08);
+}
+.critical-chip.danger{background:rgba(239,68,68,.20);border-color:rgba(248,113,113,.32)}
+.critical-chip.warn{background:rgba(245,158,11,.20);border-color:rgba(251,191,36,.32)}
+.critical-chip.neutral{background:rgba(148,163,184,.16);border-color:rgba(203,213,225,.22)}
+.mini-tool-btn{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:linear-gradient(180deg,#313743,#20242c);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.16);
+  font-size:18px;
+  box-shadow:0 10px 26px rgba(0,0,0,.22);
+}
+.toast-card{
+  animation:toastIn .28s ease, subtleGlow 2.2s ease infinite alternate;
+}
+@keyframes subtleGlow{
+  from{box-shadow:0 18px 50px rgba(0,0,0,.42)}
+  to{box-shadow:0 18px 58px rgba(148,163,184,.14)}
+}
+@media(max-width:650px){
+  .critical-mini-bar{
+    margin:0 0 9px;
+    gap:6px;
+  }
+  .critical-chip{
+    padding:7px 9px;
+    font-size:10.5px;
+  }
+  .mini-tool-btn{
+    width:38px;
+    height:38px;
+    border-radius:13px;
+    font-size:16px;
+  }
+  .splash-card{
+    padding:22px;
+  }
+  .splash-card img{
+    width:210px;
+  }
+}
+
 </style>
 </head>
 <body>
+
+<div id="appSplash" class="app-splash">
+  <div class="splash-card">
+    <img src="/do-logo.png" alt="DO DESIGN">
+    <div class="splash-loader"><span></span></div>
+    <p>Panel hazırlanıyor...</p>
+  </div>
+</div>
+
 <section id="loginPage" class="login-page"><div class="login-card"><div class="login-logo-wrap">
   <img src="/do-logo.png" alt="DO DESIGN" class="login-logo-img" onerror="this.style.display='none';document.querySelector('.brand-mark').style.display='flex'">
   <div class="brand-mark" style="display:none">DO</div>
@@ -2403,10 +2533,13 @@ table{
       <input id="globalSearchInput" placeholder="Sipariş no / koku / not ara..." oninput="renderGlobalSearch()">
       <div id="globalSearchResults" class="global-search-results hidden"></div>
     </div>
-    <button id="globalBell" class="bell-btn" onclick="goPage('alerts')" title="Uyarılar">🔔<span id="bellCount" class="bell-count hidden">0</span></button>
+    <button class="mini-tool-btn" onclick="requestNotificationPermission()" title="Bildirimleri Aç">🔊</button><button class="mini-tool-btn" onclick="exportBackup()" title="Yedek Al">💾</button><button id="globalBell" class="bell-btn" onclick="goPage('alerts')" title="Uyarılar">🔔<span id="bellCount" class="bell-count hidden">0</span></button>
     <button id="menuBtn" class="btn btn-dark mobile-menu">Menü</button>
   </div>
 </div>
+
+<div id="criticalMiniBar" class="critical-mini-bar no-print hidden"></div>
+
 <section id="dashboardPage" class="page"><div class="stats" id="stats"></div><div class="panel"><div class="panel-head"><h2>Durum Dağılımı</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş</button></div><div id="statusBars" class="status-bars"></div></div><div class="panel"><div class="panel-head"><h2>Son Eklenen İşler</h2><button class="btn btn-light" onclick="openOrdersByStatus('ALL')">Aktifleri Gör</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay</th><th>Durum</th><th>Ekleyen</th></tr></thead><tbody id="latestOrders"></tbody></table></div></div></section>
 <section id="ordersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="ordersTitle">Aktif Siparişler</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş Ekle</button></div><div id="ordersStatusBars" class="status-bars"></div><div class="filters order-filters">
   <input id="searchInput" placeholder="No, kategori, açıklama, not veya ekleyen ara...">
@@ -2718,6 +2851,7 @@ async function startApp(email){
   resetTesterForm();
   goPage('dashboard');
   await refreshAll();
+  hideSplashSoon();
 }
 async function prefillRemember(){await loadUsers();const r=localStorage.getItem(REMEMBER_KEY);if(r){$('loginEmail').value=r;$('rememberMe').checked=true}}
 $('loginForm').addEventListener('submit',async e=>{
@@ -2754,6 +2888,9 @@ function renderAll(){
   safe('printSelector',renderPrintSelector);
   safe('print',renderPrint);
   safe('bell',updateBell);
+  safe('critical',renderCriticalMiniBar);
+  safe('autoBackup',autoLocalBackup);
+  safe('notify',()=>notifyCriticalOrders(false));
 }
 function countStatus(s){return orders.filter(o=>o.status===s).length}
 function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler','orders','ALL'],['Önemli',importantTotal,'Öncelikli işler','orders','IMPORTANT'],['Uyarı',alertTotal,'Yaklaşan çıkış','alerts',''],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde','orders','İŞLEME ALINDI'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı','orders','KARGO GÖNDERİLDİ'],['Tester',testerTotal,'Paket çıkışı','testers','']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card pulse-alert':''}" onclick="handleStatClick('${x[3]}','${x[4]}')"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
@@ -3253,6 +3390,134 @@ function closeOrderDetailModal(e){
 
 function openImageModal(src){if(!src)return;$('imageModalImg').src=src;$('imageModal').classList.remove('hidden')}
 function closeImageModal(){$('imageModal').classList.add('hidden');$('imageModalImg').src=''}
+
+
+function hideSplashSoon(){
+  const splash=$('appSplash');
+  if(!splash)return;
+  setTimeout(()=>{
+    splash.classList.add('hide');
+    setTimeout(()=>splash.remove(),450);
+  },520);
+}
+function renderCriticalMiniBar(){
+  const el=$('criticalMiniBar');
+  if(!el)return;
+  const alerts=getAlertOrders();
+  const overdue=alerts.filter(o=>daysUntilDate(dueDateForOrder(o))<0).length;
+  const today=alerts.filter(o=>daysUntilDate(dueDateForOrder(o))===0).length;
+  const soon=alerts.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;
+  if(!alerts.length){
+    el.classList.add('hidden');
+    el.innerHTML='';
+    return;
+  }
+  el.classList.remove('hidden');
+  el.innerHTML=`
+    <button onclick="goPage('alerts')" class="critical-chip danger">🚨 ${overdue+today} bugün/geciken</button>
+    <button onclick="goPage('alerts')" class="critical-chip warn">⚠ ${soon} yaklaşan</button>
+    <button onclick="openOrdersByStatus('ALL')" class="critical-chip neutral">📋 ${orders.filter(o=>o.status!=='KARGO GÖNDERİLDİ'&&o.status!=='ARŞİV').length} aktif</button>
+  `;
+}
+
+async function saveBackupToSupabase(reason='manual'){
+  const payload={
+    exported_at:new Date().toISOString(),
+    reason,
+    orders,
+    testers,
+    users:(users||[]).map(u=>({email:u.email,name:u.name,phone:u.phone,photo_url:u.photo_url}))
+  };
+
+  const {error}=await db.from('backups').insert({
+    reason,
+    created_by:currentUser?.email || 'system',
+    orders_count:orders.length,
+    testers_count:testers.length,
+    payload
+  });
+
+  if(error)throw error;
+}
+
+async function exportBackup(){
+  const data={
+    exported_at:new Date().toISOString(),
+    orders,
+    testers,
+    users:(users||[]).map(u=>({email:u.email,name:u.name,phone:u.phone,photo_url:u.photo_url}))
+  };
+
+  try{
+    await saveBackupToSupabase('manual');
+  }catch(err){
+    console.warn('Supabase backup kaydedilemedi:',err);
+    if(typeof showToast==='function')showToast('Supabase yedek hatası','JSON inecek ama Supabase yedeği kaydedilemedi: '+err.message,'warning');
+  }
+
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const d=new Date();
+  const name=`do-design-yedek-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.json`;
+  a.href=url;
+  a.download=name;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+
+  if(typeof showToast==='function')showToast('Yedek hazırlandı','Yedek Supabase’e kaydedildi ve JSON dosyası indirildi.','success');
+}
+
+async function autoLocalBackup(){
+  try{
+    const today=toISODate(new Date());
+    const key='do_design_last_auto_backup';
+    if(localStorage.getItem(key)===today)return;
+
+    const data={date:today,orders,testers};
+    localStorage.setItem('do_design_auto_backup_'+today,JSON.stringify(data));
+    await saveBackupToSupabase('auto-daily');
+
+    localStorage.setItem(key,today);
+  }catch(e){
+    console.warn('Otomatik yedek alınamadı',e);
+  }
+}
+
+async function requestNotificationPermission(){
+  if(!('Notification' in window)){
+    alert('Bu tarayıcı bildirim desteklemiyor.');
+    return;
+  }
+  const perm=await Notification.requestPermission();
+  if(perm==='granted'){
+    showToast('Bildirimler açıldı','Kritik işler için tarayıcı bildirimi gösterebilirim.','success');
+    notifyCriticalOrders(true);
+  }else{
+    showToast('Bildirim izni kapalı','Bildirim almak için tarayıcıdan izin vermen gerekiyor.','warning');
+  }
+}
+function notifyCriticalOrders(force=false){
+  if(!('Notification' in window) || Notification.permission!=='granted')return;
+  const alerts=getAlertOrders();
+  if(!alerts.length)return;
+  const today=toISODate(new Date());
+  const key='do_design_notified_'+today;
+  if(!force && localStorage.getItem(key)==='1')return;
+  const first=alerts[0];
+  new Notification('DO DESIGN Uyarı', {
+    body:`${alerts.length} yaklaşan iş var. İlk iş: No:${first.orderNo} - çıkış ${fdate(dueDateForOrder(first))}`,
+    icon:'/icon-192.png'
+  });
+  localStorage.setItem(key,'1');
+}
+let renderTimer=null;
+function scheduleSoftRender(){
+  clearTimeout(renderTimer);
+  renderTimer=setTimeout(()=>{try{renderAll()}catch(e){console.error(e)}},120);
+}
 
 function showToast(title,message,type='success',actionText='',actionFn=null){
   const stack=$('toastStack');
