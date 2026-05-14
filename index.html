@@ -311,20 +311,134 @@ h1,h2,p{margin-top:0}.login-card h1{font-size:29px;margin-bottom:8px}.login-card
   }
 }
 
+
+/* ===== IS GUNU / RAPOR / MOBIL ALT BAR V5 ===== */
+.alert-card{
+  background:linear-gradient(135deg,rgba(239,68,68,.16),rgba(245,158,11,.1));
+  border-color:rgba(248,113,113,.38)!important;
+}
+.due-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:rgba(245,158,11,.18);
+  color:#fde68a;
+  font-size:12px;
+  font-weight:950;
+}
+.due-pill.danger{
+  background:rgba(239,68,68,.18);
+  color:#fecaca;
+}
+.due-pill.done{
+  background:rgba(34,197,94,.16);
+  color:#bbf7d0;
+}
+.bottom-mobile-nav .menu-open-btn{
+  background:linear-gradient(135deg,rgba(6,182,212,.25),rgba(56,189,248,.11));
+  color:white;
+  border:1px solid rgba(125,211,252,.28);
+}
+@media(max-width:650px){
+  .bottom-mobile-nav{
+    display:grid!important;
+    grid-template-columns:repeat(6,1fr)!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:8px!important;
+    padding:6px!important;
+    border-radius:20px!important;
+  }
+  .bottom-mobile-nav button{
+    font-size:9px!important;
+    padding:8px 2px!important;
+  }
+  #alertsTable tr,
+  #reportsTable tr{
+    display:block!important;
+    border-left:4px solid #f59e0b!important;
+  }
+  #alertsTable td,
+  #reportsTable td{
+    display:block!important;
+    padding:6px 4px!important;
+  }
+  #alertsTable td:first-child,
+  #reportsTable td:first-child{
+    font-size:20px;
+    font-weight:950;
+    color:#e0f2fe;
+  }
+  .due-pill{
+    font-size:11px;
+    padding:5px 7px;
+  }
+}
+
 </style>
 </head>
 <body>
 <section id="loginPage" class="login-page"><div class="login-card"><div class="brand-mark">DO</div><h1>DO DESIGN Takip</h1><p>Kurumsal sipariş, üretim ve A4 baskı takip paneli.</p><form id="loginForm" action="javascript:void(0)"><div class="field"><label>Email</label><input id="loginEmail" type="email" required></div><div class="field"><label>Şifre</label><input id="loginPassword" type="password" required></div><label class="remember-row"><input id="rememberMe" type="checkbox"> Beni hatırla</label><button class="btn btn-primary" style="width:100%" type="submit">Giriş Yap</button><div id="loginError" class="error-box hidden">Email veya şifre hatalı.</div></form></div></section>
-<section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><div class="logo-row"><div class="logo-mini">DO</div><div><h2>DO DESIGN</h2><span>Sipariş Takip Paneli</span></div></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Tüm Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="newOrder">Sipariş Ekle</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
+<section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><div class="logo-row"><div class="logo-mini">DO</div><div><h2>DO DESIGN</h2><span>Sipariş Takip Paneli</span></div></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Tüm Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="newOrder">Sipariş Ekle</button><button data-page="alerts">Uyarılar</button><button data-page="reports">Raporlar</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
 <main class="main"><div class="topbar no-print"><div><h1 id="pageTitle">Dashboard</h1><p>İşleri takip et, güncelle, kullanıcı bilgilerini yönet ve A4 liste oluştur.</p></div><button id="menuBtn" class="btn btn-dark mobile-menu">Menü</button></div>
 <section id="dashboardPage" class="page"><div class="stats" id="stats"></div><div class="panel"><div class="panel-head"><h2>Durum Dağılımı</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş</button></div><div id="statusBars" class="status-bars"></div></div><div class="panel"><div class="panel-head"><h2>Son Eklenen İşler</h2><button class="btn btn-light" onclick="openOrdersByStatus('ALL')">Tümünü Gör</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay</th><th>Durum</th><th>Ekleyen</th></tr></thead><tbody id="latestOrders"></tbody></table></div></div></section>
 <section id="ordersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="ordersTitle">Sipariş Listesi</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş Ekle</button></div><div id="ordersStatusBars" class="status-bars"></div><div class="filters"><input id="searchInput" placeholder="No, kategori, açıklama, not veya ekleyen ara..."><select id="statusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><button class="btn btn-light" onclick="clearFilters()">Temizle</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay Tarihi</th><th>Durum</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div></section>
-<section id="newOrderPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="formTitle">Sipariş Ekle</h2><button class="btn btn-light" onclick="resetForm()">Formu Temizle</button></div><form id="orderForm" action="javascript:void(0)"><input type="hidden" id="editId"><div class="grid-3"><div class="field"><label>İş No</label><input id="orderNo" type="number" required placeholder="2367"></div><div class="field"><label>Onay Tarihi</label><input id="approvalDate" type="date" required></div><div class="field"><label>Durum</label><select id="status"><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select></div></div><label class="important-row"><input id="important" type="checkbox"> Önemli sipariş olarak işaretle</label><div class="field"><label>Ürün / Adet Satırları</label><div id="itemsBox" class="items-box"></div><button type="button" class="btn btn-light" onclick="addItemRow()">+ Satır Ekle</button><span class="mini">Oto kokusu, paspas, bardak altlığı ve sırt kartonu için ayrı fotoğraf yükleyebilirsin.</span></div><div class="field"><label>Not</label><textarea id="note" placeholder="Örn: 14.05 acil çıkış, öncelikli üretim..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Kaydet</button><button class="btn btn-dark" type="button" onclick="openOrdersByStatus('ALL')">Listeye Dön</button></div></form></div></section>
+<section id="newOrderPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="formTitle">Sipariş Ekle</h2><button class="btn btn-light" onclick="resetForm()">Formu Temizle</button></div><form id="orderForm" action="javascript:void(0)"><input type="hidden" id="editId"><div class="grid-3"><div class="field"><label>İş No</label><input id="orderNo" type="number" required placeholder="2367"></div><div class="field"><label>İşleme Alınma Tarihi</label><input id="approvalDate" type="date" required></div><div class="field"><label>Durum</label><select id="status"><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select></div></div><label class="important-row"><input id="important" type="checkbox"> Önemli sipariş olarak işaretle</label><div class="field"><label>Ürün / Adet Satırları</label><div id="itemsBox" class="items-box"></div><button type="button" class="btn btn-light" onclick="addItemRow()">+ Satır Ekle</button><span class="mini">Oto kokusu, paspas, bardak altlığı ve sırt kartonu için ayrı fotoğraf yükleyebilirsin.</span></div><div class="field"><label>Not</label><textarea id="note" placeholder="Örn: 14.05 acil çıkış, öncelikli üretim..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Kaydet</button><button class="btn btn-dark" type="button" onclick="openOrdersByStatus('ALL')">Listeye Dön</button></div></form></div></section>
+
+<section id="alertsPage" class="page hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Yaklaşan Kargo Uyarıları</h2>
+      <span class="mini">12 iş günü hesabına göre, kargoya yaklaşan işler burada görünür.</span>
+    </div>
+    <div id="alertSummary" class="status-bars"></div>
+    <div class="orders-table-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Kategori</th><th>Adet / Açıklama</th><th>İşleme Tarihi</th><th>Çıkış Tarihi</th><th>Kalan</th><th>İşlem</th></tr></thead>
+        <tbody id="alertsTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="reportsPage" class="page hidden">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Tarih Aralığı Raporları</h2>
+      <span class="mini">Belirli tarih aralığında gelen veya işleme alınan siparişleri gör.</span>
+    </div>
+    <div class="grid-3">
+      <div class="field"><label>Başlangıç</label><input id="reportStart" type="date"></div>
+      <div class="field"><label>Bitiş</label><input id="reportEnd" type="date"></div>
+      <div class="field"><label>Rapor Tipi</label><select id="reportType"><option value="received">Bu aralıkta gelen / işleme alınan siparişler</option><option value="shipping">Bu aralıkta çıkması gereken siparişler</option><option value="important">Bu aralıktaki önemli siparişler</option></select></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" onclick="renderReports()">Raporu Göster</button>
+      <button class="btn btn-light" onclick="setReportToday()">Bugün</button>
+      <button class="btn btn-light" onclick="setReportThisWeek()">Bu Hafta</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head">
+      <h2 id="reportTitle">Rapor Sonuçları</h2>
+      <span id="reportCount" class="mini"></span>
+    </div>
+    <div class="orders-table-wrap">
+      <table>
+        <thead><tr><th>No</th><th>Kategori</th><th>Adet / Açıklama</th><th>İşleme Tarihi</th><th>Çıkış Tarihi</th><th>Durum</th><th>Not</th></tr></thead>
+        <tbody id="reportsTable"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
 <section id="testersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tester Çıkışı</h2><span class="mini">Siparişten bağımsız tester paketlerini buradan takip et.</span></div><form id="testerForm" action="javascript:void(0)"><input type="hidden" id="testerEditId"><div class="grid-3"><div class="field"><label>Tarih</label><input id="testerDate" type="date" required></div><div class="field"><label>Paket Adedi</label><input id="testerQty" type="number" required placeholder="10"></div><div class="field"><label>Gönderilen Yer / Kişi</label><input id="testerTarget" placeholder="Firma / kişi adı"></div></div><div class="field"><label>Not</label><textarea id="testerNote" placeholder="Örn: 5 paket oto kokusu tester, 2 paket paspas numunesi..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Tester Kaydet</button><button class="btn btn-light" type="button" onclick="resetTesterForm()">Temizle</button></div></form></div><div class="panel"><div class="panel-head"><h2>Tester Geçmişi</h2><span id="testerCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>Tarih</th><th>Paket</th><th>Gönderilen</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="testerTable"></tbody></table></div></div></section>
 <section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi</h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><button class="btn btn-dark" onclick="renderPrint()">A4 Güncelle</button></div><div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header"><div><div class="print-brand">DO DESIGN ÜRETİM LİSTESİ</div><div class="print-sub">Seçilen iş numaralarının üretim çıktısı</div></div><div class="print-date-top" id="printTopDate"></div></div><table class="print-table"><thead><tr><th style="width:30%">ÜRÜN</th><th style="width:42%">ADET / AÇIKLAMA</th><th style="width:28%">ONAY TARİHİ</th></tr></thead><tbody id="printBody"></tbody></table></div></div></div></section>
 <section id="profilePage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Profilim</h2><span class="mini">Sadece giriş yapan kullanıcı kendi bilgilerini düzenler.</span></div><form id="profileForm" action="javascript:void(0)"><div class="grid-2"><div class="field"><label>Profil Fotoğrafı</label><input id="profilePhotoInput" type="file" accept="image/*"><img id="profilePreview" class="profile-preview hidden"></div><div class="field"><label>Ad Soyad</label><input id="profileName" required></div></div><div class="grid-2"><div class="field"><label>Email</label><input id="profileEmail" type="email" disabled></div><div class="field"><label>Telefon</label><input id="profilePhone" placeholder="Opsiyonel"></div></div><div class="field"><label>Yeni Şifre</label><input id="profilePassword" type="password" placeholder="Boş bırakırsan değişmez"></div><button class="btn btn-primary" type="submit">Bilgilerimi Güncelle</button><div id="profileOk" class="ok-box hidden">Bilgiler güncellendi.</div></form></div></section>
 </main></section>
-<div class="bottom-mobile-nav no-print"><button onclick="goPage('dashboard')">Panel</button><button onclick="openOrdersByStatus('ALL')">Sipariş</button><button onclick="goPage('newOrder')">Ekle</button><button onclick="goPage('testers')">Tester</button><button onclick="goPage('print')">A4</button></div>
+<div class="bottom-mobile-nav no-print"><button class="menu-open-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">Menü</button><button onclick="goPage('dashboard')">Panel</button><button onclick="openOrdersByStatus('ALL')">Sipariş</button><button onclick="goPage('alerts')">Uyarı</button><button onclick="goPage('reports')">Rapor</button><button onclick="goPage('newOrder')">Ekle</button></div>
 <script>
 const DEFAULT_USERS=[{email:'akyapromosyon@gmail.com',password:'akyapromo123',name:'Akya Promosyon',phone:'',photo:''},{email:'deryaaydogan@gmail.com',password:'deryaaydogan123',name:'Derya Aydoğan',phone:'',photo:''}];
 const STORAGE_KEY='do_design_orders_final_v3',TESTER_KEY='do_design_testers_final_v3',SESSION_KEY='do_design_session_final_v3',USERS_KEY='do_design_users_final_v3',REMEMBER_KEY='do_design_remember_final_v3';
@@ -340,11 +454,77 @@ $('loginForm').addEventListener('submit',e=>{e.preventDefault();loadUsers();cons
 $('logoutBtn').onclick=()=>{document.body.classList.remove('logged-in');localStorage.removeItem(SESSION_KEY);location.reload()};$('menuBtn').onclick=()=>$('sidebar').classList.toggle('open');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page));$('ordersToggle').onclick=()=>$('ordersSubnav').classList.toggle('open');$('categoryToggle').onclick=()=>$('categorySubnav').classList.toggle('open');document.querySelectorAll('#ordersSubnav button').forEach(b=>b.onclick=()=>openOrdersByStatus(b.dataset.status));document.querySelectorAll('#categorySubnav button').forEach(b=>b.onclick=()=>openOrdersByCategory(b.dataset.category));
 function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':'Sipariş Listesi';renderOrders()}
 function openOrdersByCategory(cat){currentSpecial='ALL';currentCategory=cat||'ALL';goPage('orders');$('categorySubnav').classList.add('open');$('statusFilter').value='ALL';$('ordersTitle').textContent=cat+' Ürünler';renderOrders()}
-function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',newOrder:'Sipariş Ekle',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
-function renderAll(){renderStats();renderStatusBars();renderLatest();renderOrders();renderTesters();renderPrintSelector();renderPrint()}function countStatus(s){return orders.filter(o=>o.status===s).length}
-function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const data=[['Toplam',orders.length,'Tüm işler'],['Önemli',importantTotal,'Öncelikli işler'],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı'],['Tester',testerTotal,'Paket çıkışı']];$('stats').innerHTML=data.map(x=>`<div class="stat-card"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
+
+function parseLocalDate(value){
+  if(!value)return null;
+  const [y,m,d]=value.split('-').map(Number);
+  return new Date(y,m-1,d);
+}
+function toISODate(date){
+  const y=date.getFullYear();
+  const m=String(date.getMonth()+1).padStart(2,'0');
+  const d=String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function addBusinessDays(dateStr,days){
+  const date=parseLocalDate(dateStr);
+  if(!date)return '';
+  let added=0;
+  while(added<days){
+    date.setDate(date.getDate()+1);
+    const day=date.getDay();
+    if(day!==0 && day!==6) added++;
+  }
+  return toISODate(date);
+}
+function businessDaysBetween(startStr,endDate=new Date()){
+  const start=parseLocalDate(startStr);
+  if(!start)return 0;
+  const end=new Date(endDate.getFullYear(),endDate.getMonth(),endDate.getDate());
+  let count=0;
+  const d=new Date(start.getFullYear(),start.getMonth(),start.getDate());
+  while(d<end){
+    d.setDate(d.getDate()+1);
+    const day=d.getDay();
+    if(day!==0 && day!==6) count++;
+  }
+  return count;
+}
+function daysUntilDate(dateStr){
+  const d=parseLocalDate(dateStr);
+  if(!d)return 999;
+  const today=new Date();
+  const t=new Date(today.getFullYear(),today.getMonth(),today.getDate());
+  return Math.ceil((d-t)/(1000*60*60*24));
+}
+function dueDateForOrder(o){return addBusinessDays(o.approvalDate,12)}
+function getAlertOrders(){
+  return orders.filter(o=>{
+    if(o.status==='KARGO GÖNDERİLDİ' || o.status==='TAMAMLANDI' || o.status==='İPTAL') return false;
+    const due=dueDateForOrder(o);
+    const remaining=daysUntilDate(due);
+    return remaining<=2;
+  }).sort((a,b)=>dueDateForOrder(a).localeCompare(dueDateForOrder(b)));
+}
+function duePill(o){
+  const due=dueDateForOrder(o);
+  const remaining=daysUntilDate(due);
+  if(o.status==='KARGO GÖNDERİLDİ') return `<span class="due-pill done">Kargolandı</span>`;
+  if(remaining<0) return `<span class="due-pill danger">${Math.abs(remaining)} gün gecikti</span>`;
+  if(remaining===0) return `<span class="due-pill danger">Bugün çıkmalı</span>`;
+  if(remaining<=2) return `<span class="due-pill">${remaining} gün kaldı</span>`;
+  return `<span class="due-pill">${remaining} gün</span>`;
+}
+function inRange(dateStr,start,end){
+  if(!dateStr)return false;
+  return (!start || dateStr>=start) && (!end || dateStr<=end);
+}
+
+function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',newOrder:'Sipariş Ekle',alerts:'Uyarılar',reports:'Raporlar',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
+function renderAll(){renderStats();renderStatusBars();renderLatest();renderOrders();renderAlerts();renderReports();renderTesters();renderPrintSelector();renderPrint()}function countStatus(s){return orders.filter(o=>o.status===s).length}
+function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler'],['Önemli',importantTotal,'Öncelikli işler'],['Uyarı',alertTotal,'Yaklaşan çıkış'],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı'],['Tester',testerTotal,'Paket çıkışı']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card':''}"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
 function barsHtml(){const max=Math.max(orders.length,1);return['İŞLEME ALINDI','İPTAL','KARGO GÖNDERİLDİ','TAMAMLANDI'].map(s=>{const c=countStatus(s),w=Math.round(c/max*100);return`<div class="status-bar"><b>${s}</b><span>${c}</span><div class="barline"><div class="barfill" style="width:${w}%"></div></div></div>`}).join('')}function renderStatusBars(){$('statusBars').innerHTML=barsHtml();$('ordersStatusBars').innerHTML=barsHtml()}
-function rowHtml(o,latest=false){return`<tr><td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td>${itemImages(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td>${badge(o.status)}</td><td>${latest?userName(o.createdBy):(o.note||'-')}</td>${latest?'':`<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}</tr>`}
+function rowHtml(o,latest=false){return`<tr><td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td>${itemImages(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong><br><span class="mini">Çıkış: ${fdate(dueDateForOrder(o))}</span></td><td>${badge(o.status)}<br>${duePill(o)}</td><td>${latest?userName(o.createdBy):(o.note||'-')}</td>${latest?'':`<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}</tr>`}
 function renderLatest(){const list=[...orders].sort((a,b)=>b.createdAt-a.createdAt).slice(0,6);$('latestOrders').innerHTML=list.map(o=>rowHtml(o,true)).join('')||`<tr><td colspan="7">Henüz kayıt yok.</td></tr>`}
 function filtered(searchId='searchInput',statusId='statusFilter'){const q=($(searchId)?.value||'').toLowerCase().trim(),st=($(statusId)?.value||'ALL');return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')} ${userName(o.createdBy)}`.toLowerCase();const matchSearch=!q||hay.includes(q);const matchStatus=st==='ALL'||o.status===st;const matchCategory=currentCategory==='ALL'||o.items.some(i=>i.product===currentCategory);const matchSpecial=currentSpecial!=='IMPORTANT'||o.important;return matchSearch&&matchStatus&&matchCategory&&matchSpecial})}
 function renderOrders(){const list=filtered();$('ordersTable').innerHTML=list.map(o=>rowHtml(o,false)).join('')||`<tr><td colspan="9">Kayıt bulunamadı.</td></tr>`}$('searchInput').oninput=renderOrders;$('statusFilter').onchange=renderOrders;function clearFilters(){$('searchInput').value='';$('statusFilter').value='ALL';currentCategory='ALL';currentSpecial='ALL';$('ordersTitle').textContent='Sipariş Listesi';renderOrders()}
@@ -358,6 +538,50 @@ function renderPrintSelector(){if(!$('printSelector'))return;const q=($('printSe
 $('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);return(ids.length?orders.filter(o=>ids.includes(o.id)):orders.slice(0,7)).sort((a,b)=>a.orderNo-b.orderNo)}
 function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=(o.items||[]).map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:20mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999">GÖRSEL YOK</div>`}</div>`).join('');const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return `<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">${fdate(o.approvalDate)}</div></td></tr>`}).join('')}
 function selectAllPrint(v){document.querySelectorAll('.print-check').forEach(c=>c.checked=v);renderPrint()}function resetTesterForm(){if(!$('testerForm'))return;$('testerForm').reset();$('testerEditId').value='';$('testerDate').valueAsDate=new Date()}
+
+function renderAlerts(){
+  if(!$('alertsTable'))return;
+  const list=getAlertOrders();
+  const dueToday=list.filter(o=>daysUntilDate(dueDateForOrder(o))<=0).length;
+  const dueSoon=list.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;
+  if($('alertSummary')){
+    $('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;
+  }
+  $('alertsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span></td><td>${productPills(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong></td><td>${duePill(o)}</td><td><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></td></tr>`).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`;
+}
+function setReportToday(){
+  const today=toISODate(new Date());
+  $('reportStart').value=today;
+  $('reportEnd').value=today;
+  renderReports();
+}
+function setReportThisWeek(){
+  const now=new Date();
+  const day=now.getDay()||7;
+  const start=new Date(now);
+  start.setDate(now.getDate()-day+1);
+  const end=new Date(start);
+  end.setDate(start.getDate()+6);
+  $('reportStart').value=toISODate(start);
+  $('reportEnd').value=toISODate(end);
+  renderReports();
+}
+function renderReports(){
+  if(!$('reportsTable'))return;
+  const start=$('reportStart')?.value||'';
+  const end=$('reportEnd')?.value||'';
+  const type=$('reportType')?.value||'received';
+  let list=[...orders];
+  if(type==='received') list=list.filter(o=>inRange(o.approvalDate,start,end));
+  if(type==='shipping') list=list.filter(o=>inRange(dueDateForOrder(o),start,end));
+  if(type==='important') list=list.filter(o=>o.important && inRange(o.approvalDate,start,end));
+  list=list.sort((a,b)=>a.orderNo-b.orderNo);
+  const titleMap={received:'Gelen / İşleme Alınan Siparişler',shipping:'Çıkması Gereken Siparişler',important:'Önemli Siparişler'};
+  if($('reportTitle'))$('reportTitle').textContent=titleMap[type]||'Rapor Sonuçları';
+  if($('reportCount'))$('reportCount').textContent=`${list.length} kayıt`;
+  $('reportsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${duePill(o)}</td><td>${badge(o.status)}</td><td>${o.note||'-'}</td></tr>`).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`;
+}
+
 function renderTesters(){if(!$('testerTable'))return;const list=[...testers].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('testerCount').textContent=`Toplam ${list.length} kayıt`;$('testerTable').innerHTML=list.map(t=>`<tr><td><strong>${fdate(t.date)}</strong></td><td><strong>${t.qty} Paket</strong></td><td>${t.target||'-'}</td><td>${t.note||'-'}</td><td>${userName(t.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editTester('${t.id}')">Düzenle</button><button class="btn btn-danger" onclick="deleteTester('${t.id}')">Sil</button></div></td></tr>`).join('')||`<tr><td colspan="6">Henüz tester çıkışı yok.</td></tr>`}
 $('testerForm').addEventListener('submit',e=>{e.preventDefault();const id=$('testerEditId').value,old=id?testers.find(t=>t.id===id):null;const payload={id:id||uid(),date:$('testerDate').value,qty:Number($('testerQty').value),target:$('testerTarget').value.trim(),note:$('testerNote').value.trim(),createdBy:old?old.createdBy:currentUser.email,createdAt:old?old.createdAt:Date.now(),updatedAt:Date.now()};testers=id?testers.map(t=>t.id===id?payload:t):[...testers,payload];saveTesters();resetTesterForm();renderAll()});
 function editTester(id){const t=testers.find(x=>x.id===id);if(!t)return;goPage('testers');$('testerEditId').value=t.id;$('testerDate').value=t.date;$('testerQty').value=t.qty;$('testerTarget').value=t.target||'';$('testerNote').value=t.note||''}function deleteTester(id){const t=testers.find(x=>x.id===id);if(!t)return;if(!confirm(`${fdate(t.date)} tarihli tester kaydını silmek istediğine emin misin?`))return;testers=testers.filter(x=>x.id!==id);saveTesters();renderAll()}
