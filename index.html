@@ -2906,113 +2906,132 @@ table{
 }
 
 
-/* ===== V52 A4 GORSEL + UYARI/RAPOR TAM GENISLIK FIX ===== */
-.print-product-stack{
-  display:flex!important;
-  flex-wrap:nowrap!important;
-  gap:4px!important;
-  align-items:center!important;
-  justify-content:center!important;
-}
-.print-product-card{
-  width:28mm!important;
-  max-width:28mm!important;
-  min-width:20mm!important;
-  padding:3px!important;
-}
-.print-img{
-  display:block!important;
-  max-width:18mm!important;
-  max-height:16mm!important;
-  object-fit:contain!important;
-  margin:auto!important;
-}
-.print-no-image{
-  height:15mm;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#999;
-  font-size:7px;
-  font-weight:900;
-}
-.full-card-row td{
-  padding:0!important;
+/* ===== V53 RAPOR/UYARI IZOLASYON + A4 GUVENLI FIX ===== */
+#alertsTable tr.isolated-card-row,
+#reportsTable tr.isolated-card-row{
+  display:table-row!important;
+  background:transparent!important;
   border:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0!important;
 }
-.wide-order-card{
-  display:grid;
-  grid-template-columns:92px 64px 1fr 150px;
-  gap:12px;
-  align-items:center;
-  width:100%;
-  margin-bottom:10px;
-  padding:12px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#262b35,#181b21);
-  border:1px solid rgba(255,255,255,.17);
-  border-left:4px solid rgba(226,232,240,.40);
-  box-shadow:0 14px 32px rgba(0,0,0,.34);
-  cursor:pointer;
+
+#alertsTable tr.isolated-card-row > td,
+#reportsTable tr.isolated-card-row > td{
+  display:table-cell!important;
+  padding:0 0 10px!important;
+  border:0!important;
+  background:transparent!important;
 }
-.wide-no{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-  align-items:flex-start;
+
+.isolated-card{
+  display:grid!important;
+  grid-template-columns:96px 68px minmax(0,1fr) 150px!important;
+  gap:12px!important;
+  align-items:center!important;
+  width:100%!important;
+  min-height:96px!important;
+  padding:13px!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,#262b35,#181b21)!important;
+  border:1px solid rgba(255,255,255,.17)!important;
+  border-left:4px solid rgba(226,232,240,.42)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.34)!important;
+  cursor:pointer!important;
 }
-.wide-img .multi-thumbs img{
-  width:48px!important;
-  height:48px!important;
+
+.iso-no{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  align-items:flex-start!important;
 }
-.wide-main{
-  min-width:0;
+
+.iso-img .multi-thumbs{
+  max-width:64px!important;
 }
-.wide-main .scent-list{
-  max-height:none!important;
-  overflow:visible!important;
-  white-space:pre-line!important;
+.iso-img .multi-thumbs img{
+  width:54px!important;
+  height:54px!important;
+  object-fit:contain!important;
+}
+.iso-img .multi-thumbs img:nth-child(n+2){
+  display:none!important;
+}
+
+.iso-main{
+  min-width:0!important;
+}
+.iso-cat{
+  margin-bottom:5px!important;
+}
+.iso-items{
+  color:#fff!important;
+  font-size:15px!important;
+  font-weight:1000!important;
   line-height:1.18!important;
-  margin-top:4px;
+  white-space:pre-line!important;
+  word-break:break-word!important;
 }
-.wide-meta{
-  display:flex;
-  flex-wrap:wrap;
-  gap:5px;
-  align-items:center;
-  margin-top:6px;
-  font-size:11px;
-  color:#cbd5e1;
+.iso-meta{
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+  gap:6px!important;
+  margin-top:7px!important;
+  color:#cbd5e1!important;
+  font-size:11px!important;
+  font-weight:800!important;
 }
-.wide-meta em{
-  font-style:normal;
+.iso-note{
+  margin-top:6px!important;
+  color:#fecaca!important;
+  font-size:11px!important;
+  font-weight:900!important;
 }
-.wide-action{
-  display:flex;
-  justify-content:flex-end;
+.iso-action{
+  display:flex!important;
+  justify-content:flex-end!important;
 }
+
+/* A4 seçim listesi görünür kalsın */
+#printSelector{
+  min-height:50px!important;
+}
+.print-select-chip,
+.print-select-row{
+  cursor:pointer!important;
+}
+
 @media(max-width:650px){
-  .wide-order-card{
-    grid-template-columns:76px 52px 1fr;
+  .isolated-card{
+    grid-template-columns:76px 52px minmax(0,1fr)!important;
     grid-template-areas:
       "no img main"
-      "act act act";
-    gap:7px 9px;
-    padding:10px;
+      "act act act"!important;
+    gap:8px 9px!important;
+    min-height:auto!important;
+    padding:10px!important;
   }
-  .wide-no{grid-area:no}
-  .wide-img{grid-area:img}
-  .wide-main{grid-area:main}
-  .wide-action{
-    grid-area:act;
-    justify-content:stretch;
+  .iso-no{grid-area:no!important}
+  .iso-img{grid-area:img!important}
+  .iso-main{grid-area:main!important}
+  .iso-action{
+    grid-area:act!important;
+    justify-content:stretch!important;
   }
-  .wide-action .btn{
-    width:100%;
+  .iso-action .btn{
+    width:100%!important;
     min-height:42px!important;
   }
-  .wide-main .scent-list{
+  .iso-items{
     font-size:13.5px!important;
+    line-height:1.18!important;
+  }
+  .iso-meta{
+    font-size:10.5px!important;
+    gap:4px!important;
   }
 }
 
@@ -3754,25 +3773,31 @@ function renderAlerts(){
     $('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;
   }
 
-  $('alertsTable').innerHTML=list.map(o=>{
-    return `<tr class="full-card-row"><td colspan="7">
-      <div class="wide-order-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-        <div class="wide-no"><span class="order-no-strong">No:${o.orderNo}</span></div>
-        <div class="wide-img">${itemImages(o.items)}</div>
-        <div class="wide-main">
-          <div>${productPills(o.items)}</div>
-          <div class="scent-list">${itxt(o.items)}</div>
-          <div class="wide-meta">
-            <strong>${fdate(o.approvalDate)}</strong>
-            <span>Çıkış: ${fdate(dueDateForOrder(o))}</span>
-            ${extraProductionNote(o)?`<em>${extraProductionNote(o)}</em>`:''}
-            ${duePill(o)}
+  $('alertsTable').innerHTML=list.map(o=>`
+    <tr class="isolated-card-row">
+      <td colspan="7">
+        <div class="isolated-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
+          <div class="iso-no">
+            <span class="order-no-strong">No:${o.orderNo}</span>
+          </div>
+          <div class="iso-img">${itemImages(o.items)}</div>
+          <div class="iso-main">
+            <div class="iso-cat">${productPills(o.items)}</div>
+            <div class="iso-items">${itxt(o.items)}</div>
+            <div class="iso-meta">
+              <span>İşleme: <b>${fdate(o.approvalDate)}</b></span>
+              <span>Çıkış: <b>${fdate(dueDateForOrder(o))}</b></span>
+              ${extraProductionNote(o)?`<span>${extraProductionNote(o)}</span>`:''}
+              ${duePill(o)}
+            </div>
+          </div>
+          <div class="iso-action">
+            <button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>
           </div>
         </div>
-        <div class="wide-action"><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></div>
-      </div>
-    </td></tr>`;
-  }).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`;
+      </td>
+    </tr>
+  `).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`;
 }
 
 function setReportToday(){const today=toISODate(new Date());$('reportStart').value=today;$('reportEnd').value=today;renderReports()}
@@ -3795,25 +3820,30 @@ function renderReports(showMsg=false){
   if($('reportCount'))$('reportCount').textContent=`${list.length} kayıt`;
   if(showMsg && typeof showToast==='function')showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');
 
-  $('reportsTable').innerHTML=list.map(o=>{
-    return `<tr class="full-card-row"><td colspan="7">
-      <div class="wide-order-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-        <div class="wide-no"><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}</div>
-        <div class="wide-img">${itemImages(o.items)}</div>
-        <div class="wide-main">
-          <div>${productPills(o.items)}</div>
-          <div class="scent-list">${itxt(o.items)}</div>
-          <div class="wide-meta">
-            <strong>${fdate(o.approvalDate)}</strong>
-            <span>Çıkış: ${fdate(dueDateForOrder(o))}</span>
-            ${duePill(o)}
-            ${badge(o.status)}
+  $('reportsTable').innerHTML=list.map(o=>`
+    <tr class="isolated-card-row">
+      <td colspan="7">
+        <div class="isolated-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
+          <div class="iso-no">
+            <span class="order-no-strong">No:${o.orderNo}</span>
+            ${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}
           </div>
-          ${o.note?`<div class="report-note">${o.note}</div>`:''}
+          <div class="iso-img">${itemImages(o.items)}</div>
+          <div class="iso-main">
+            <div class="iso-cat">${productPills(o.items)}</div>
+            <div class="iso-items">${itxt(o.items)}</div>
+            <div class="iso-meta">
+              <span>İşleme: <b>${fdate(o.approvalDate)}</b></span>
+              <span>Çıkış: <b>${fdate(dueDateForOrder(o))}</b></span>
+              ${duePill(o)}
+              ${badge(o.status)}
+            </div>
+            ${o.note?`<div class="iso-note">NOT: ${o.note}</div>`:''}
+          </div>
         </div>
-      </div>
-    </td></tr>`;
-  }).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`;
+      </td>
+    </tr>
+  `).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`;
 }
 
 function renderPrintSelector(){
@@ -4299,49 +4329,6 @@ setInterval(()=>{
     a4BindSelectorV51();
   }
 },700);
-
-
-/* === A4 IMAGE + DESCRIPTION FIX V52 === */
-function a4RenderPreviewV52(){
-  const body=$('printBody');
-  if(!body)return;
-
-  const ids=(window.DO_SELECTED_PRINT_IDS||[]).map(String);
-  const selected=(orders||[])
-    .filter(o=>ids.includes(String(o.id)))
-    .sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0));
-
-  if($('printTopDate'))$('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
-
-  body.innerHTML=selected.map(o=>{
-    const printed=typeof isPrinted==='function'?isPrinted(o.id):false;
-    const productHtml=uniquePrintProductCards(o.items||[]);
-    const itemText=itxt(o.items||[]);
-
-    return '<tr class="'+(printed?'printed-print-row':'')+'">'+
-      '<td>'+
-        '<div class="print-no">No:'+o.orderNo+'</div>'+
-        (printed?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':'')+
-        '<div class="print-product-stack">'+productHtml+'</div>'+
-      '</td>'+
-      '<td>'+
-        '<div class="print-items">'+itemText+'</div>'+
-        (o.note?'<div class="print-note">NOT: '+o.note+'</div>':'')+
-      '</td>'+
-      '<td>'+
-        '<div class="print-date">'+
-          fdate(o.approvalDate)+
-          '<div style="font-size:10px;font-weight:900;margin-top:4px;color:#475569;border-top:1px dashed #cbd5e1;padding-top:3px">→ Çıkış: '+fdate(dueDateForOrder(o))+(extraProductionNote(o)?'<br><span style="color:#9a3412">'+extraProductionNote(o)+'</span>':'')+'</div>'+
-        '</div>'+
-      '</td>'+
-    '</tr>';
-  }).join('') || '<tr><td colspan="3">Yazdırmak için sipariş seç.</td></tr>';
-
-  if(typeof a4UpdateCountV51==='function')a4UpdateCountV51();
-  if(typeof doUpdatePrintCount==='function')doUpdatePrintCount();
-}
-
-renderPrint=a4RenderPreviewV52;
 
 window.addEventListener('load',async()=>{await prefillRemember();const user=localStorage.getItem(SESSION_KEY);if(user)await startApp(user)});
 </script>
