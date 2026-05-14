@@ -3264,6 +3264,161 @@ table{
   }
 }
 
+
+/* ===== V56 UYARI/RAPOR KOLONLU TABLO FIX ===== */
+#alertsTable tr.fixed-report-row,
+#reportsTable tr.fixed-report-row{
+  display:table-row!important;
+  background:rgba(255,255,255,.025)!important;
+  border:0!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+}
+
+#alertsTable tr.fixed-report-row:hover,
+#reportsTable tr.fixed-report-row:hover{
+  background:rgba(255,255,255,.055)!important;
+}
+
+#alertsTable tr.fixed-report-row td,
+#reportsTable tr.fixed-report-row td{
+  display:table-cell!important;
+  vertical-align:middle!important;
+  padding:10px 9px!important;
+  border-bottom:1px solid rgba(255,255,255,.08)!important;
+}
+
+.fixed-no-cell{
+  width:105px!important;
+  white-space:nowrap!important;
+}
+
+.fixed-image-cell{
+  width:190px!important;
+}
+
+.fixed-img-wrap{
+  display:inline-flex!important;
+  vertical-align:middle!important;
+  margin-right:8px!important;
+}
+
+.fixed-img-wrap .multi-thumbs{
+  display:inline-flex!important;
+  gap:4px!important;
+  max-width:70px!important;
+}
+
+.fixed-img-wrap .multi-thumbs img{
+  width:44px!important;
+  height:44px!important;
+  object-fit:contain!important;
+  background:#fff!important;
+  border-radius:9px!important;
+}
+
+.fixed-img-wrap .multi-thumbs img:nth-child(n+2){
+  display:none!important;
+}
+
+.fixed-cat-wrap{
+  display:inline-flex!important;
+  flex-wrap:wrap!important;
+  gap:4px!important;
+  vertical-align:middle!important;
+}
+
+.fixed-desc-cell{
+  min-width:260px!important;
+}
+
+.fixed-desc-text{
+  color:#fff!important;
+  font-size:14px!important;
+  font-weight:1000!important;
+  line-height:1.18!important;
+  white-space:pre-line!important;
+}
+
+.fixed-note{
+  margin-top:5px!important;
+  color:#fecaca!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+
+.fixed-date-cell{
+  width:130px!important;
+  color:#e5e7eb!important;
+  font-size:12px!important;
+}
+
+.fixed-status-cell{
+  width:130px!important;
+}
+
+.fixed-action-cell{
+  width:150px!important;
+  text-align:right!important;
+}
+
+.fixed-note-cell{
+  width:170px!important;
+  color:#cbd5e1!important;
+  font-size:12px!important;
+}
+
+/* Mobilde yine kart gibi ama bilgiler doğru sırada */
+@media(max-width:650px){
+  #alertsTable tr.fixed-report-row,
+  #reportsTable tr.fixed-report-row{
+    display:grid!important;
+    grid-template-columns:76px 52px minmax(0,1fr)!important;
+    grid-template-areas:
+      "no img desc"
+      "date date desc"
+      "status status status"
+      "action action action"!important;
+    gap:7px 9px!important;
+    padding:10px!important;
+    margin-bottom:9px!important;
+    border-radius:16px!important;
+    background:linear-gradient(135deg,#262b35,#181b21)!important;
+    border:1px solid rgba(255,255,255,.17)!important;
+    border-left:4px solid rgba(226,232,240,.42)!important;
+  }
+
+  #alertsTable tr.fixed-report-row td,
+  #reportsTable tr.fixed-report-row td{
+    display:block!important;
+    border:0!important;
+    padding:0!important;
+  }
+
+  .fixed-no-cell{grid-area:no!important;width:auto!important}
+  .fixed-image-cell{grid-area:img!important;width:auto!important}
+  .fixed-desc-cell{grid-area:desc!important;min-width:0!important}
+  .fixed-date-cell{grid-area:date!important;width:auto!important;font-size:10.5px!important}
+  .fixed-status-cell{grid-area:status!important;width:auto!important}
+  .fixed-action-cell{grid-area:action!important;width:auto!important;text-align:left!important}
+  .fixed-action-cell .btn{width:100%!important;min-height:42px!important}
+  .fixed-note-cell{grid-area:status!important;width:auto!important}
+
+  .fixed-cat-wrap{
+    display:none!important;
+  }
+
+  .fixed-img-wrap .multi-thumbs img{
+    width:44px!important;
+    height:44px!important;
+  }
+
+  .fixed-desc-text{
+    font-size:13.5px!important;
+    line-height:1.18!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3998,6 +4153,7 @@ async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if
 
 
 
+
 function renderAlerts(){
   if(!$('alertsTable'))return;
   const list=getAlertOrders();
@@ -4009,25 +4165,30 @@ function renderAlerts(){
   }
 
   $('alertsTable').innerHTML=list.map(o=>`
-    <tr class="clean-card-row">
-      <td colspan="7">
-        <div class="clean-wide-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-          <div class="clean-no"><span class="order-no-strong">No:${o.orderNo}</span></div>
-          <div class="clean-img">${itemImages(o.items)}</div>
-          <div class="clean-main">
-            <div class="clean-cats">${productPills(o.items)}</div>
-            <div class="clean-items">${itxt(o.items)}</div>
-            <div class="clean-meta">
-              <span>İşleme: <b>${fdate(o.approvalDate)}</b></span>
-              <span>Çıkış: <b>${fdate(dueDateForOrder(o))}</b></span>
-              ${extraProductionNote(o)?`<span>${extraProductionNote(o)}</span>`:''}
-              ${duePill(o)}
-            </div>
-          </div>
-          <div class="clean-action">
-            <button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>
-          </div>
-        </div>
+    <tr class="fixed-report-row" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
+      <td class="fixed-no-cell">
+        <span class="order-no-strong">No:${o.orderNo}</span>
+      </td>
+      <td class="fixed-image-cell">
+        <div class="fixed-img-wrap">${itemImages(o.items)}</div>
+        <div class="fixed-cat-wrap">${productPills(o.items)}</div>
+      </td>
+      <td class="fixed-desc-cell">
+        <div class="fixed-desc-text">${itxt(o.items)}</div>
+        ${o.note?`<div class="fixed-note">NOT: ${o.note}</div>`:''}
+      </td>
+      <td class="fixed-date-cell">
+        <strong>${fdate(o.approvalDate)}</strong>
+      </td>
+      <td class="fixed-date-cell">
+        <strong>${fdate(dueDateForOrder(o))}</strong>
+        ${extraProductionNote(o)?`<br><span class="mini">${extraProductionNote(o)}</span>`:''}
+      </td>
+      <td class="fixed-status-cell">
+        ${duePill(o)}
+      </td>
+      <td class="fixed-action-cell">
+        <button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>
       </td>
     </tr>
   `).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`;
@@ -4035,6 +4196,7 @@ function renderAlerts(){
 
 function setReportToday(){const today=toISODate(new Date());$('reportStart').value=today;$('reportEnd').value=today;renderReports()}
 function setReportThisWeek(){const now=new Date(),day=now.getDay()||7,start=new Date(now);start.setDate(now.getDate()-day+1);const end=new Date(start);end.setDate(start.getDate()+6);$('reportStart').value=toISODate(start);$('reportEnd').value=toISODate(end);renderReports()}
+
 
 
 
@@ -4055,26 +4217,30 @@ function renderReports(showMsg=false){
   if(showMsg && typeof showToast==='function')showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');
 
   $('reportsTable').innerHTML=list.map(o=>`
-    <tr class="clean-card-row">
-      <td colspan="7">
-        <div class="clean-wide-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-          <div class="clean-no">
-            <span class="order-no-strong">No:${o.orderNo}</span>
-            ${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}
-          </div>
-          <div class="clean-img">${itemImages(o.items)}</div>
-          <div class="clean-main">
-            <div class="clean-cats">${productPills(o.items)}</div>
-            <div class="clean-items">${itxt(o.items)}</div>
-            <div class="clean-meta">
-              <span>İşleme: <b>${fdate(o.approvalDate)}</b></span>
-              <span>Çıkış: <b>${fdate(dueDateForOrder(o))}</b></span>
-              ${duePill(o)}
-              ${badge(o.status)}
-            </div>
-            ${o.note?`<div class="clean-note">NOT: ${o.note}</div>`:''}
-          </div>
-        </div>
+    <tr class="fixed-report-row" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
+      <td class="fixed-no-cell">
+        <span class="order-no-strong">No:${o.orderNo}</span>
+        ${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}
+      </td>
+      <td class="fixed-image-cell">
+        <div class="fixed-img-wrap">${itemImages(o.items)}</div>
+        <div class="fixed-cat-wrap">${productPills(o.items)}</div>
+      </td>
+      <td class="fixed-desc-cell">
+        <div class="fixed-desc-text">${itxt(o.items)}</div>
+      </td>
+      <td class="fixed-date-cell">
+        <strong>${fdate(o.approvalDate)}</strong>
+      </td>
+      <td class="fixed-date-cell">
+        <strong>${fdate(dueDateForOrder(o))}</strong>
+        ${extraProductionNote(o)?`<br><span class="mini">${extraProductionNote(o)}</span>`:''}
+      </td>
+      <td class="fixed-status-cell">
+        ${badge(o.status)}<br>${duePill(o)}
+      </td>
+      <td class="fixed-note-cell">
+        ${o.note||'-'}
       </td>
     </tr>
   `).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`;
