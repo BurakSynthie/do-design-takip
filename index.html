@@ -2820,6 +2820,38 @@ table{
   }
 }
 
+
+/* ===== V43 ALT IS / AYNI SIPARIS NO SISTEMI ===== */
+.sub-order-badge{
+  margin-top:6px;
+  display:inline-flex;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  color:#dbe4ee;
+  font-size:11px;
+  font-weight:1000;
+}
+.sub-order-inline{
+  margin-left:6px;
+  display:inline-flex;
+  padding:2px 6px;
+  border-radius:999px;
+  background:rgba(148,163,184,.14);
+  border:1px solid rgba(255,255,255,.12);
+  color:#dbe4ee;
+  font-size:9px;
+  font-weight:1000;
+  vertical-align:middle;
+}
+.sub-order-print{
+  margin-top:3px;
+  font-size:8px;
+  font-weight:1000;
+  color:#475569;
+}
+
 </style>
 </head>
 <body>
@@ -3236,7 +3268,7 @@ function rowHtml(o,latest=false){
   const createdText = latest ? userName(o.createdBy) : (o.note || '-');
   const itemList = o.items || [];
   return `<tr class="${o.important ? 'important-order' : ''}" data-order-id="${o.id}" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-    <td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important ? '<span class="important-pill">ÖNEMLİ</span>' : ''}</td>
+    <td><span class="order-no-strong">No:${getDisplayOrderNo(o.orderNo)}</span><br>${o.important ? '<span class="important-pill">ÖNEMLİ</span>' : ''}</td>
     <td>${productPills(itemList)}</td>
     <td>${itemImages(itemList)}</td>
     <td class="scent-list">${itxt(itemList)}</td>
@@ -3482,7 +3514,7 @@ $('orderForm').addEventListener('submit',async e=>{
     if(itemError) throw itemError;
 
     const usedDate=$('approvalDate').value;
-    rememberLastOrderEntry(orderNo, usedDate);
+    rememberLastOrderEntry(getOrderGroupBase(orderNo), usedDate);
 
     await refreshAll();
 
@@ -3505,6 +3537,37 @@ $('orderForm').addEventListener('submit',async e=>{
 });
 
 
+
+function getOrderGroupBase(orderNo){
+  return String(orderNo||'').split('-')[0];
+}
+
+function generateNextSubOrderNo(baseNo){
+  const same=orders.filter(o=>getOrderGroupBase(o.orderNo)===String(baseNo));
+  if(!same.length)return String(baseNo);
+
+  let maxSub=1;
+  same.forEach(o=>{
+    const m=String(o.orderNo).match(/-(\d+)$/);
+    if(m){
+      maxSub=Math.max(maxSub,Number(m[1]));
+    }else{
+      maxSub=Math.max(maxSub,1);
+    }
+  });
+
+  return `${baseNo}-${maxSub+1}`;
+}
+
+function getDisplayOrderNo(orderNo){
+  return getOrderGroupBase(orderNo);
+}
+
+function getSubOrderLabel(orderNo){
+  const m=String(orderNo||'').match(/-(\d+)$/);
+  return m ? `İş #${m[1]}` : 'İş #1';
+}
+
 function rememberLastOrderEntry(orderNo,dateValue){
   try{
     localStorage.setItem('do_design_last_order_no', String(Number(orderNo)||''));
@@ -3522,7 +3585,7 @@ function getLastOrderDate(){
 }
 
 function resetForm(setNext=true,keepDate=''){$('orderForm').reset();$('editId').value='';$('formTitle').textContent='Sipariş Ekle';$('itemsBox').innerHTML='';$('important').checked=false;addItemRow();if(setNext){const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:2367;$('orderNo').value=max}if(keepDate){$('approvalDate').value=keepDate}else{$('approvalDate').valueAsDate=new Date()}$('status').value='İŞLEME ALINDI'}
-function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${o.orderNo} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
+function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${getDisplayOrderNo(o.orderNo)} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
 async function unmarkShipped(id){
   const o=orders.find(x=>x.id===id);
   if(!o)return;
@@ -3533,7 +3596,7 @@ async function unmarkShipped(id){
   }).eq('id',id);
   if(error){alert(error.message);return}
   await refreshAll();
-  if(typeof showToast==='function')showToast('Kargo geri alındı',`No:${o.orderNo} tekrar işleme alındı olarak güncellendi.`,'success');
+  if(typeof showToast==='function')showToast('Kargo geri alındı',`No:${getDisplayOrderNo(o.orderNo)} tekrar işleme alındı olarak güncellendi.`,'success');
 }
 async function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;const {error}=await db.from('orders').update({status:'KARGO GÖNDERİLDİ',updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert(error.message);return}await refreshAll();showToast('Kargo çıkışı işlendi','Sipariş aktif listeden kaldırıldı ve Kargoya Çıkanlar bölümüne taşındı.','success')}
 async function archiveOrder(id){
@@ -3542,9 +3605,9 @@ async function archiveOrder(id){
   const {error}=await db.from('orders').update({status:'ARŞİV',updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);
   if(error){alert(error.message);return}
   await refreshAll();
-  if(typeof showToast==='function')showToast('Arşive taşındı',`No:${o.orderNo} siparişi arşive taşındı.`,'success');
+  if(typeof showToast==='function')showToast('Arşive taşındı',`No:${getDisplayOrderNo(o.orderNo)} siparişi arşive taşındı.`,'success');
 }
-async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if(!confirm(`No:${o.orderNo} siparişini silmek istediğine emin misin?`))return;const {error}=await db.from('orders').delete().eq('id',id);if(error)alert(error.message);await refreshAll()}
+async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if(!confirm(`No:${getDisplayOrderNo(o.orderNo)} siparişini silmek istediğine emin misin?`))return;const {error}=await db.from('orders').delete().eq('id',id);if(error)alert(error.message);await refreshAll()}
 
 
 function renderAlerts(){
@@ -3556,7 +3619,7 @@ function renderAlerts(){
     $('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;
   }
   $('alertsTable').innerHTML=list.map(o=>`<tr class="alert-card-row" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-    <td class="alert-no-cell"><span class="order-no-strong">No:${o.orderNo}</span></td>
+    <td class="alert-no-cell"><span class="order-no-strong">No:${getDisplayOrderNo(o.orderNo)}</span></td>
     <td class="alert-img-cell">${itemImages(o.items)}</td>
     <td class="alert-main-cell">
       <div>${productPills(o.items)}</div>
@@ -3589,7 +3652,7 @@ function renderReports(showMsg=false){
   if($('reportCount'))$('reportCount').textContent=`${list.length} kayıt`;
   if(showMsg && typeof showToast==='function')showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');
   $('reportsTable').innerHTML=list.map(o=>`<tr class="report-card-row" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-    <td class="report-no-cell"><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td>
+    <td class="report-no-cell"><span class="order-no-strong">No:${getDisplayOrderNo(o.orderNo)}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td>
     <td class="report-img-cell">${itemImages(o.items)}</td>
     <td class="report-main-cell">
       <div>${productPills(o.items)}</div>
@@ -3645,7 +3708,7 @@ function renderPrintSelector(){
     <label class="print-select-row ${isPrinted(o.id)?'printed-row':''}">
       <input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint();updatePrintSelectedCount()">
       <div class="print-select-content">
-        <span class="print-select-no">No:${o.orderNo}</span>
+        <span class="print-select-no">No:${getDisplayOrderNo(o.orderNo)}</span>
         <span class="print-select-date">${fdate(o.approvalDate)}</span>
         <span class="print-select-items">${(o.items||[]).length} ürün</span>
         ${isPrinted(o.id)?'<span class="print-select-badge">Basıldı</span>':''}
@@ -3667,7 +3730,7 @@ function renderPrint(){
     const productHtml=uniquePrintProductCards(o.items||[]);
     return `<tr class="${isPrinted(o.id)?'printed-print-row':''}">
       <td>
-        <div class="print-no">No:${o.orderNo}</div>
+        <div class="print-no">No:${getDisplayOrderNo(o.orderNo)}</div>
         ${isPrinted(o.id)?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':''}
         <div class="print-product-stack">${productHtml}</div>
       </td>
@@ -3711,7 +3774,7 @@ function openOrderDetail(id){
   const content=`
     <div class="detail-layout">
       <div class="detail-left">
-        <div class="detail-no">No:${o.orderNo}</div>
+        <div class="detail-no">No:${getDisplayOrderNo(o.orderNo)}</div>
         ${o.important?'<div class="detail-important">ÖNEMLİ</div>':''}
         ${imgHtml}
       </div>
@@ -3915,7 +3978,7 @@ function renderGlobalSearch(){
     const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();
     return hay.includes(q);
   }).slice(0,8);
-  box.innerHTML=list.map(o=>`<div class="search-result-item" onclick="openOrderFromSearch('${o.id}')"><strong>No:${o.orderNo} ${o.important?'• ÖNEMLİ':''}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span><span>${badge(o.status)} · ${fdate(o.approvalDate)}</span></div>`).join('')||'<div class="search-result-item"><strong>Sonuç yok</strong><span>Başka numara veya açıklama dene.</span></div>';
+  box.innerHTML=list.map(o=>`<div class="search-result-item" onclick="openOrderFromSearch('${o.id}')"><strong>No:${getDisplayOrderNo(o.orderNo)} ${o.important?'• ÖNEMLİ':''}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span><span>${badge(o.status)} · ${fdate(o.approvalDate)}</span></div>`).join('')||'<div class="search-result-item"><strong>Sonuç yok</strong><span>Başka numara veya açıklama dene.</span></div>';
   box.classList.remove('hidden');
 }
 function openOrderFromSearch(id){
