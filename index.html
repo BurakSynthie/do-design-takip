@@ -3463,6 +3463,199 @@ table{
   }
 }
 
+
+/* ===== V58 MOBIL UYARI TEK SATIR FIX ===== */
+@media(max-width:650px){
+  #alertsTable tr.fixed-report-row{
+    display:block!important;
+    margin-bottom:9px!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  #alertsTable tr.fixed-report-row td{
+    border:0!important;
+    padding:0!important;
+  }
+
+  #alertsTable tr.fixed-report-row{
+    position:relative!important;
+    min-height:118px!important;
+    border-radius:18px!important;
+    background:linear-gradient(135deg,#262b35,#181b21)!important;
+    border:1px solid rgba(255,255,255,.17)!important;
+    border-left:4px solid rgba(226,232,240,.42)!important;
+    box-shadow:0 14px 32px rgba(0,0,0,.34)!important;
+    overflow:hidden!important;
+  }
+
+  /* NO */
+  #alertsTable .fixed-no-cell{
+    position:absolute!important;
+    left:12px!important;
+    top:14px!important;
+    width:78px!important;
+    z-index:3!important;
+  }
+
+  #alertsTable .order-no-strong{
+    font-size:16px!important;
+    padding:8px 9px!important;
+    border-radius:12px!important;
+  }
+
+  /* Görsel + kategori */
+  #alertsTable .fixed-image-cell{
+    position:absolute!important;
+    left:104px!important;
+    top:14px!important;
+    width:54px!important;
+    z-index:3!important;
+  }
+
+  #alertsTable .fixed-img-wrap{
+    margin:0!important;
+  }
+
+  #alertsTable .fixed-img-wrap .multi-thumbs{
+    max-width:52px!important;
+  }
+
+  #alertsTable .fixed-img-wrap .multi-thumbs img{
+    width:50px!important;
+    height:50px!important;
+    border-radius:11px!important;
+  }
+
+  #alertsTable .fixed-cat-wrap{
+    display:none!important;
+  }
+
+  /* Açıklama */
+  #alertsTable .fixed-desc-cell{
+    position:absolute!important;
+    left:170px!important;
+    right:12px!important;
+    top:13px!important;
+    min-width:0!important;
+    z-index:2!important;
+  }
+
+  #alertsTable .fixed-desc-text{
+    font-size:15px!important;
+    line-height:1.08!important;
+    max-height:68px!important;
+    overflow:hidden!important;
+    white-space:pre-line!important;
+  }
+
+  #alertsTable .fixed-note{
+    display:none!important;
+  }
+
+  /* Tarihler tek satır */
+  #alertsTable .fixed-date-cell{
+    position:absolute!important;
+    left:170px!important;
+    bottom:12px!important;
+    width:auto!important;
+    font-size:10px!important;
+    color:#cbd5e1!important;
+    z-index:2!important;
+  }
+
+  #alertsTable .fixed-date-cell:nth-of-type(5){
+    left:245px!important;
+  }
+
+  #alertsTable .fixed-date-cell strong{
+    font-size:10px!important;
+  }
+
+  #alertsTable .fixed-date-cell .mini{
+    display:none!important;
+  }
+
+  /* Kalan */
+  #alertsTable .fixed-status-cell{
+    position:absolute!important;
+    left:330px!important;
+    bottom:10px!important;
+    width:auto!important;
+    z-index:3!important;
+  }
+
+  #alertsTable .fixed-status-cell .due-pill{
+    font-size:9px!important;
+    padding:4px 7px!important;
+  }
+
+  /* Butonlar sağ altta tek sıra */
+  #alertsTable .fixed-action-cell{
+    position:absolute!important;
+    right:12px!important;
+    bottom:12px!important;
+    width:190px!important;
+    z-index:4!important;
+  }
+
+  #alertsTable .report-actions{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:5px!important;
+    min-width:0!important;
+    width:100%!important;
+  }
+
+  #alertsTable .report-actions .btn{
+    min-height:31px!important;
+    padding:5px 4px!important;
+    font-size:9px!important;
+    border-radius:10px!important;
+  }
+
+  /* Çok küçük ekranlarda butonları biraz aşağıda koru */
+  @media(max-width:430px){
+    #alertsTable tr.fixed-report-row{
+      min-height:150px!important;
+    }
+    #alertsTable .fixed-desc-cell{
+      left:168px!important;
+      right:10px!important;
+    }
+    #alertsTable .fixed-desc-text{
+      max-height:76px!important;
+      font-size:14px!important;
+    }
+    #alertsTable .fixed-date-cell{
+      left:12px!important;
+      bottom:64px!important;
+    }
+    #alertsTable .fixed-date-cell:nth-of-type(5){
+      left:92px!important;
+      bottom:64px!important;
+    }
+    #alertsTable .fixed-status-cell{
+      left:174px!important;
+      bottom:61px!important;
+    }
+    #alertsTable .fixed-action-cell{
+      left:12px!important;
+      right:12px!important;
+      bottom:12px!important;
+      width:auto!important;
+    }
+    #alertsTable .report-actions{
+      grid-template-columns:repeat(4,1fr)!important;
+    }
+    #alertsTable .report-actions .btn{
+      font-size:8px!important;
+      min-height:34px!important;
+    }
+  }
+}
+
 </style>
 </head>
 <body>
