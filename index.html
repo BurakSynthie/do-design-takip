@@ -3419,6 +3419,50 @@ table{
   }
 }
 
+
+/* ===== V57 RAPOR/UYARI AKSIYON BUTONLARI ===== */
+.report-actions{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:6px!important;
+  min-width:210px!important;
+}
+.report-actions .btn{
+  min-height:31px!important;
+  padding:6px 8px!important;
+  border-radius:10px!important;
+  font-size:10px!important;
+  font-weight:1000!important;
+}
+.fixed-action-cell{
+  width:230px!important;
+}
+.fixed-note-cell{
+  width:240px!important;
+}
+.report-note-text{
+  margin-bottom:6px!important;
+  color:#cbd5e1!important;
+  font-size:11px!important;
+  font-weight:800!important;
+}
+@media(max-width:650px){
+  .report-actions{
+    grid-template-columns:repeat(2,1fr)!important;
+    min-width:0!important;
+    width:100%!important;
+  }
+  .report-actions .btn{
+    min-height:38px!important;
+    font-size:11px!important;
+  }
+  .fixed-action-cell,
+  .fixed-note-cell{
+    grid-area:action!important;
+    width:auto!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4154,6 +4198,19 @@ async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if
 
 
 
+
+function actionButtons(o){
+  const shipped=o.status==='KARGO GÖNDERİLDİ';
+  return `<div class="report-actions">
+    <button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button>
+    ${shipped
+      ? `<button class="btn unship-btn" onclick="unmarkShipped('${o.id}')">Kargodan Geri Al</button>`
+      : `<button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>`}
+    <button class="btn btn-light" onclick="archiveOrder('${o.id}')">Arşiv</button>
+    <button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button>
+  </div>`;
+}
+
 function renderAlerts(){
   if(!$('alertsTable'))return;
   const list=getAlertOrders();
@@ -4187,9 +4244,7 @@ function renderAlerts(){
       <td class="fixed-status-cell">
         ${duePill(o)}
       </td>
-      <td class="fixed-action-cell">
-        <button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>
-      </td>
+      <td class="fixed-action-cell">${actionButtons(o)}</td>
     </tr>
   `).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`;
 }
@@ -4240,7 +4295,8 @@ function renderReports(showMsg=false){
         ${badge(o.status)}<br>${duePill(o)}
       </td>
       <td class="fixed-note-cell">
-        ${o.note||'-'}
+        <div class="report-note-text">${o.note||'-'}</div>
+        ${actionButtons(o)}
       </td>
     </tr>
   `).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`;
