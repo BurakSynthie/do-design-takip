@@ -1737,6 +1737,492 @@ table{
   font-weight:800;
 }
 
+
+/* ===== UI V29 - OKUNURLUK / A4 SECIM / CANLI ALT BAR ===== */
+
+/* Kategori renkleri */
+.product-pill.cat-oto{
+  background:rgba(59,130,246,.20)!important;
+  border-color:rgba(96,165,250,.32)!important;
+  color:#dbeafe!important;
+}
+.product-pill.cat-paspas{
+  background:rgba(34,197,94,.18)!important;
+  border-color:rgba(74,222,128,.30)!important;
+  color:#dcfce7!important;
+}
+.product-pill.cat-bardak{
+  background:rgba(168,85,247,.20)!important;
+  border-color:rgba(196,181,253,.32)!important;
+  color:#ede9fe!important;
+}
+.product-pill.cat-sirt{
+  background:rgba(245,158,11,.20)!important;
+  border-color:rgba(251,191,36,.32)!important;
+  color:#fef3c7!important;
+}
+
+/* Kargo çıktı butonu daha belirgin */
+.quick-ship-btn{
+  background:linear-gradient(135deg,#14532d,#22c55e)!important;
+  color:white!important;
+  border:1px solid rgba(134,239,172,.50)!important;
+  box-shadow:0 10px 22px rgba(34,197,94,.18)!important;
+  font-weight:1000!important;
+}
+.quick-ship-btn:before{
+  content:"✓ ";
+}
+
+/* A4 seçim ekranı daha okunur */
+.print-count-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-left:8px;
+  padding:5px 9px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.20);
+  color:#f8fafc;
+  font-size:12px;
+  font-weight:950;
+  vertical-align:middle;
+}
+.selection-box{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:9px;
+  max-height:520px!important;
+}
+.print-select-card{
+  position:relative;
+  display:grid!important;
+  grid-template-columns:24px 58px 1fr;
+  gap:8px;
+  align-items:center;
+  padding:10px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#262b35,#181b21);
+  border:1px solid rgba(255,255,255,.16);
+  cursor:pointer;
+}
+.print-select-card input{
+  width:18px;
+  height:18px;
+  accent-color:#22c55e;
+}
+.print-select-no{
+  position:absolute;
+  top:7px;
+  left:42px;
+  font-size:11px;
+  font-weight:1000;
+  color:#fff;
+}
+.print-select-img{
+  grid-column:2;
+  margin-top:13px;
+}
+.print-select-img .multi-thumbs img{
+  width:42px!important;
+  height:42px!important;
+}
+.print-select-img .multi-thumbs img:nth-child(n+2){
+  display:none!important;
+}
+.print-select-main{
+  grid-column:3;
+  min-width:0;
+}
+.print-select-main strong{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:#fff;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.print-select-main small{
+  display:block;
+  color:#b6beca;
+  font-size:10px;
+  margin-top:3px;
+}
+.mini-printed-btn{
+  grid-column:1 / -1;
+  padding:7px 9px;
+  border-radius:10px;
+  background:rgba(220,38,38,.20);
+  border:1px solid rgba(248,113,113,.34);
+  color:#fecaca;
+  font-weight:950;
+  font-size:11px;
+}
+.print-select-card.already-printed{
+  border-color:rgba(248,113,113,.45);
+  background:linear-gradient(135deg,#342126,#181b21);
+}
+.print-select-card.already-printed:after{
+  content:"ÇIKTI";
+  position:absolute;
+  right:8px;
+  top:7px;
+  color:#fca5a5;
+  font-size:10px;
+  font-weight:1000;
+  border:1px solid rgba(248,113,113,.35);
+  border-radius:999px;
+  padding:2px 6px;
+}
+.printed-a4-stamp{
+  display:inline-block;
+  margin-top:2px;
+  color:#dc2626;
+  border:1px solid #dc2626;
+  border-radius:999px;
+  padding:2px 5px;
+  font-size:8px;
+  font-weight:1000;
+  transform:rotate(-4deg);
+}
+.printed-print-row td{
+  background:#fff5f5!important;
+}
+
+/* Mobil kart okunurluğu */
+@media(max-width:650px){
+  #ordersTable tr,
+  #latestOrders tr,
+  #alertsTable tr,
+  #reportsTable tr{
+    grid-template-columns:78px 50px 1fr!important;
+    grid-template-areas:
+      "no img info"
+      "no img desc"
+      "no img meta"
+      "act act act"!important;
+    min-height:auto!important;
+    padding:10px!important;
+  }
+
+  /* Koku yazıları artık daha fazla satır gösterir */
+  .scent-list{
+    font-size:13px!important;
+    line-height:1.18!important;
+    max-height:96px!important;
+    overflow:auto!important;
+    padding-right:3px!important;
+  }
+  .scent-list::-webkit-scrollbar{
+    width:3px;
+  }
+  .scent-list::-webkit-scrollbar-thumb{
+    background:rgba(255,255,255,.22);
+    border-radius:999px;
+  }
+
+  /* Uyarılar da sipariş gibi tek kart düzeni */
+  #alertsTable td:nth-child(2){
+    grid-area:img!important;
+  }
+  #alertsTable td:nth-child(3){
+    grid-area:desc!important;
+  }
+  #alertsTable td:nth-child(4),
+  #alertsTable td:nth-child(5),
+  #alertsTable td:nth-child(6){
+    grid-area:meta!important;
+  }
+  #alertsTable td:nth-child(7){
+    grid-area:act!important;
+    margin-top:7px!important;
+  }
+  .alert-product-cell{
+    display:block!important;
+  }
+  .alert-product-cell > div:not(.multi-thumbs){
+    display:none!important;
+  }
+
+  /* Daha canlı ve büyük alt bar */
+  .bottom-mobile-nav{
+    left:7px!important;
+    right:7px!important;
+    bottom:7px!important;
+    padding:9px!important;
+    border-radius:24px!important;
+    gap:8px!important;
+    background:rgba(23,26,32,.97)!important;
+  }
+  .bottom-mobile-nav button{
+    height:64px!important;
+    border-radius:19px!important;
+    background:linear-gradient(180deg,#3a414f,#20242c)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 8px 20px rgba(0,0,0,.28)!important;
+  }
+  .bottom-mobile-nav button span{
+    font-size:24px!important;
+    line-height:1!important;
+  }
+  .bottom-mobile-nav button b{
+    font-size:10px!important;
+    margin-top:2px!important;
+  }
+  .bottom-mobile-nav .menu-open-btn{
+    background:linear-gradient(135deg,#64748b,#303743)!important;
+  }
+
+  /* A4 seçim mobil */
+  .selection-box{
+    grid-template-columns:1fr!important;
+    max-height:430px!important;
+  }
+  .print-select-card{
+    grid-template-columns:24px 52px 1fr;
+  }
+}
+
+
+/* ===== SIPARIS DETAY POPUP V30 ===== */
+#ordersTable tr,
+#latestOrders tr,
+#alertsTable tr,
+#reportsTable tr{
+  cursor:pointer;
+}
+.order-detail-modal{
+  position:fixed;
+  inset:0;
+  z-index:1200;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+}
+.order-detail-card{
+  position:relative;
+  width:min(920px,96vw);
+  max-height:88vh;
+  overflow:auto;
+  background:linear-gradient(135deg,#2b303a,#171a20);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:24px;
+  box-shadow:0 30px 90px rgba(0,0,0,.55);
+  padding:18px;
+}
+.order-detail-close{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width:38px;
+  height:38px;
+  border-radius:14px;
+  background:rgba(239,68,68,.18);
+  color:#fecaca;
+  border:1px solid rgba(248,113,113,.32);
+  font-size:24px;
+  font-weight:950;
+  z-index:2;
+}
+.detail-layout{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:18px;
+}
+.detail-left{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:20px;
+  padding:14px;
+}
+.detail-no{
+  display:inline-flex;
+  padding:10px 14px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#475569,#1f2937);
+  color:white;
+  font-size:28px;
+  font-weight:1000;
+  margin-bottom:10px;
+}
+.detail-important{
+  display:inline-flex;
+  margin-left:6px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(239,68,68,.22);
+  color:#fecaca;
+  font-size:12px;
+  font-weight:950;
+}
+.detail-img-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:9px;
+  margin-top:10px;
+}
+.detail-img-grid img{
+  width:100%;
+  aspect-ratio:1/1;
+  object-fit:contain;
+  background:#f8fafc;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.18);
+  cursor:zoom-in;
+}
+.detail-empty-img{
+  height:170px;
+  border-radius:16px;
+  background:rgba(255,255,255,.05);
+  border:1px dashed rgba(255,255,255,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#b6beca;
+  font-weight:950;
+}
+.detail-head h2{
+  font-size:25px;
+  line-height:1.18;
+  margin:10px 0 14px;
+  color:#fff;
+}
+.detail-info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.detail-info-grid div{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:15px;
+  padding:10px;
+}
+.detail-info-grid span{
+  display:block;
+  color:#b6beca;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+.detail-info-grid strong{
+  color:#f8fafc;
+  font-size:14px;
+  line-height:1.35;
+  word-break:break-word;
+}
+.detail-actions{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:14px;
+}
+@media(max-width:650px){
+  .order-detail-modal{
+    align-items:flex-end;
+    padding:8px;
+  }
+  .order-detail-card{
+    width:100%;
+    max-height:86vh;
+    border-radius:24px 24px 18px 18px;
+    padding:14px;
+  }
+  .detail-layout{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  .detail-left{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:10px;
+    align-items:start;
+    padding:11px;
+  }
+  .detail-no{
+    font-size:22px;
+    padding:9px 12px;
+    margin:0;
+  }
+  .detail-img-grid{
+    grid-template-columns:repeat(4,1fr);
+    margin-top:0;
+  }
+  .detail-head h2{
+    font-size:20px;
+    max-height:none!important;
+  }
+  .detail-info-grid{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .detail-actions{
+    grid-template-columns:1fr 1fr;
+  }
+  .detail-actions .btn{
+    min-height:42px!important;
+    font-size:12px!important;
+  }
+}
+
+
+/* ===== KARGO GERI AL BUTONU ===== */
+.unship-btn{
+  background:linear-gradient(135deg,#78350f,#f59e0b)!important;
+  color:#fff7ed!important;
+  border:1px solid rgba(251,191,36,.45)!important;
+  box-shadow:0 10px 22px rgba(245,158,11,.16)!important;
+  font-weight:1000!important;
+}
+.unship-btn:before{
+  content:"↩ ";
+}
+
+
+/* ===== TOPBAR LOGO SADELESTIRME V32 ===== */
+.topbar-logo-title{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:5px;
+}
+.topbar-logo-img{
+  width:150px;
+  max-height:42px;
+  object-fit:contain;
+  filter:brightness(0) invert(1);
+}
+.topbar-logo-title h1{
+  margin:0!important;
+  font-size:22px!important;
+  letter-spacing:.02em;
+  color:#f8fafc!important;
+}
+.topbar-logo-title p,
+.topbar p{
+  display:none!important;
+}
+@media(max-width:650px){
+  .topbar{
+    align-items:center!important;
+  }
+  .topbar-logo-img{
+    width:132px!important;
+    max-height:36px!important;
+  }
+  .topbar-logo-title h1{
+    font-size:17px!important;
+    color:#d4d4d8!important;
+  }
+  .topbar-tools{
+    align-items:center!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1747,9 +2233,9 @@ table{
 <p class="login-subtitle">Sipariş, üretim, tester ve kargo takip paneli</p><form id="loginForm" action="javascript:void(0)"><div class="field"><label>Email</label><input id="loginEmail" type="email" required></div><div class="field"><label>Şifre</label><input id="loginPassword" type="password" required></div><label class="remember-row"><input id="rememberMe" type="checkbox"> Beni hatırla</label><button class="btn btn-primary" style="width:100%" type="submit">Giriş Yap</button><div id="loginError" class="error-box hidden">Email veya şifre hatalı.</div></form></div></section>
 <section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><button class="sidebar-close" onclick="$('sidebar').classList.remove('open')">×</button><div class="logo-row logo-row-image"><img src="/do-logo.png" alt="DO DESIGN" class="sidebar-logo-img" onerror="this.style.display='none';document.querySelector('.fallback-logo').style.display='flex'"><div class="logo-mini fallback-logo" style="display:none">DO</div></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Aktif Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button><button data-status="ARŞİV">Arşiv</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="alerts">Uyarılar</button><button data-page="reports">Raporlar</button><button data-page="newOrder">Sipariş Ekle</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
 <main class="main"><div class="topbar no-print">
-  <div class="topbar-title">
+  <div class="topbar-title topbar-logo-title">
+    <img src="/do-logo.png" alt="DO DESIGN" class="topbar-logo-img">
     <h1 id="pageTitle">Dashboard</h1>
-    <p>İşleri takip et, güncelle, kullanıcı bilgilerini yönet ve A4 liste oluştur.</p>
   </div>
   <div class="topbar-tools">
     <div class="global-search">
@@ -1788,8 +2274,23 @@ table{
 </div><table class="print-table"><thead><tr><th style="width:30%">ÜRÜN</th><th style="width:46%">ADET / AÇIKLAMA</th><th style="width:24%">ONAY TARİHİ</th></tr></thead><tbody id="printBody"></tbody></table></div></div></div></section>
 <section id="profilePage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Profilim</h2><span class="mini">Sadece giriş yapan kullanıcı kendi bilgilerini düzenler.</span></div><form id="profileForm" action="javascript:void(0)"><div class="grid-2"><div class="field"><label>Profil Fotoğrafı</label><input id="profilePhotoInput" type="file" accept="image/*"><img id="profilePreview" class="profile-preview hidden"></div><div class="field"><label>Ad Soyad</label><input id="profileName" required></div></div><div class="grid-2"><div class="field"><label>Email</label><input id="profileEmail" type="email" disabled></div><div class="field"><label>Telefon</label><input id="profilePhone" placeholder="Opsiyonel"></div></div><div class="field"><label>Yeni Şifre</label><input id="profilePassword" type="password" placeholder="Boş bırakırsan değişmez"></div><button class="btn btn-primary" type="submit">Bilgilerimi Güncelle</button><div id="profileOk" class="ok-box hidden">Bilgiler güncellendi.</div></form></div></section>
 </main></section>
-<div class="bottom-mobile-nav no-print"><button class="menu-open-btn" onclick="$('sidebar').classList.toggle('open')"><span>☰</span><b>Menü</b></button><button onclick="goPage('dashboard')"><span>⌂</span><b>Panel</b></button><button onclick="openOrdersByStatus('ALL')"><span>▦</span><b>Sipariş</b></button><button onclick="goPage('alerts')"><span>!</span><b>Uyarı</b></button><button onclick="goPage('reports')"><span>↕</span><b>Rapor</b></button><button onclick="goPage('newOrder')"><span>＋</span><b>Ekle</b></button></div>
+<div class="bottom-mobile-nav no-print">
+  <button class="menu-open-btn" onclick="$('sidebar').classList.toggle('open')"><span>☰</span><b>Menü</b></button>
+  <button onclick="goPage('dashboard')"><span>⌂</span><b>Panel</b></button>
+  <button onclick="openOrdersByStatus('ALL')"><span>▦</span><b>Sipariş</b></button>
+  <button onclick="goPage('alerts')"><span>⚠</span><b>Uyarı</b></button>
+  <button onclick="openOrdersByStatus('KARGO GÖNDERİLDİ')"><span>↗</span><b>Kargo</b></button>
+  <button onclick="goPage('newOrder')"><span>＋</span><b>Ekle</b></button>
+</div>
 <div id="toastStack" class="toast-stack"></div>
+
+<div id="orderDetailModal" class="order-detail-modal hidden" onclick="closeOrderDetailModal(event)">
+  <div class="order-detail-card" onclick="event.stopPropagation()">
+    <button class="order-detail-close" onclick="closeOrderDetailModal()">×</button>
+    <div id="orderDetailContent"></div>
+  </div>
+</div>
+
 <div id="imageModal" class="image-modal hidden" onclick="closeImageModal()"><button class="image-modal-close" onclick="closeImageModal()">×</button><img id="imageModalImg" src="" alt="Büyük görsel"></div>
 <script>
 const SUPABASE_URL="https://rdptepmtjzxqxeyktwzg.supabase.co";
@@ -1924,9 +2425,18 @@ function lineText(i){
 function itxt(items){
   return (items||[]).map(lineText).join('\n');
 }
+
+function productClassName(p){
+  const v=String(p||'').toUpperCase();
+  if(v.includes('OTO')) return 'cat-oto';
+  if(v.includes('PASPAS')) return 'cat-paspas';
+  if(v.includes('BARDAK')) return 'cat-bardak';
+  if(v.includes('SIRT')) return 'cat-sirt';
+  return 'cat-default';
+}
 function productPills(items){
   const arr=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
-  return arr.map(p=>`<span class="product-pill">${p}</span>`).join('');
+  return arr.map(p=>`<span class="product-pill ${productClassName(p)}">${p}</span>`).join('');
 }
 
 function itemImages(items){
@@ -2082,7 +2592,7 @@ function rowHtml(o,latest=false){
   const shipped = o.status === 'KARGO GÖNDERİLDİ';
   const createdText = latest ? userName(o.createdBy) : (o.note || '-');
   const itemList = o.items || [];
-  return `<tr class="${o.important ? 'important-order' : ''}" data-order-id="${o.id}">
+  return `<tr class="${o.important ? 'important-order' : ''}" data-order-id="${o.id}" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
     <td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important ? '<span class="important-pill">ÖNEMLİ</span>' : ''}</td>
     <td>${productPills(itemList)}</td>
     <td>${itemImages(itemList)}</td>
@@ -2090,7 +2600,7 @@ function rowHtml(o,latest=false){
     <td><strong>${fdate(o.approvalDate)}</strong><br><span class="mini">Çıkış: ${fdate(dueDateForOrder(o))} ${extraProductionNote(o)}</span></td>
     <td>${badge(o.status)}${shipped ? '' : `<br>${duePill(o)}`}</td>
     <td>${createdText}</td>
-    ${latest ? '' : `<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-light" onclick="archiveOrder('${o.id}')">Arşiv</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}
+    ${latest ? '' : `<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button>${shipped?`<button class="btn unship-btn" onclick="unmarkShipped('${o.id}')">Kargodan Geri Al</button>`:`<button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>`}<button class="btn btn-light" onclick="archiveOrder('${o.id}')">Arşiv</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}
   </tr>`;
 }
 
@@ -2337,6 +2847,18 @@ $('orderForm').addEventListener('submit',async e=>{
 
 function resetForm(setNext=true,keepDate=''){$('orderForm').reset();$('editId').value='';$('formTitle').textContent='Sipariş Ekle';$('itemsBox').innerHTML='';$('important').checked=false;addItemRow();if(setNext){const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:2367;$('orderNo').value=max}if(keepDate){$('approvalDate').value=keepDate}else{$('approvalDate').valueAsDate=new Date()}$('status').value='İŞLEME ALINDI'}
 function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${o.orderNo} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
+async function unmarkShipped(id){
+  const o=orders.find(x=>x.id===id);
+  if(!o)return;
+  const {error}=await db.from('orders').update({
+    status:'İŞLEME ALINDI',
+    updated_by:currentUser.email,
+    updated_at:new Date().toISOString()
+  }).eq('id',id);
+  if(error){alert(error.message);return}
+  await refreshAll();
+  if(typeof showToast==='function')showToast('Kargo geri alındı',`No:${o.orderNo} tekrar işleme alındı olarak güncellendi.`,'success');
+}
 async function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;const {error}=await db.from('orders').update({status:'KARGO GÖNDERİLDİ',updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert(error.message);return}await refreshAll();showToast('Kargo çıkışı işlendi','Sipariş aktif listeden kaldırıldı ve Kargoya Çıkanlar bölümüne taşındı.','success')}
 async function archiveOrder(id){
   const o=orders.find(x=>x.id===id);
@@ -2347,10 +2869,10 @@ async function archiveOrder(id){
   if(typeof showToast==='function')showToast('Arşive taşındı',`No:${o.orderNo} siparişi arşive taşındı.`,'success');
 }
 async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if(!confirm(`No:${o.orderNo} siparişini silmek istediğine emin misin?`))return;const {error}=await db.from('orders').delete().eq('id',id);if(error)alert(error.message);await refreshAll()}
-function renderAlerts(){if(!$('alertsTable'))return;const list=getAlertOrders();const dueToday=list.filter(o=>daysUntilDate(dueDateForOrder(o))<=0).length;const dueSoon=list.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;$('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;$('alertsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span></td><td><div class="alert-product-cell">${itemImages(o.items)}<div>${productPills(o.items)}</div></div></td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span>`:''}</td><td>${duePill(o)}</td><td><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></td></tr>`).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`}
+function renderAlerts(){if(!$('alertsTable'))return;const list=getAlertOrders();const dueToday=list.filter(o=>daysUntilDate(dueDateForOrder(o))<=0).length;const dueSoon=list.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;$('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;$('alertsTable').innerHTML=list.map(o=>`<tr onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')"><td><span class="order-no-strong">No:${o.orderNo}</span></td><td><div class="alert-product-cell">${itemImages(o.items)}<div>${productPills(o.items)}</div></div></td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span>`:''}</td><td>${duePill(o)}</td><td><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></td></tr>`).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`}
 function setReportToday(){const today=toISODate(new Date());$('reportStart').value=today;$('reportEnd').value=today;renderReports()}
 function setReportThisWeek(){const now=new Date(),day=now.getDay()||7,start=new Date(now);start.setDate(now.getDate()-day+1);const end=new Date(start);end.setDate(start.getDate()+6);$('reportStart').value=toISODate(start);$('reportEnd').value=toISODate(end);renderReports()}
-function renderReports(showMsg=false){if(!$('reportsTable'))return;const start=$('reportStart')?.value||'',end=$('reportEnd')?.value||'',type=$('reportType')?.value||'received';let list=[...orders];if(type==='received')list=list.filter(o=>inRange(o.approvalDate,start,end));if(type==='shipping')list=list.filter(o=>inRange(dueDateForOrder(o),start,end));if(type==='important')list=list.filter(o=>o.important&&inRange(o.approvalDate,start,end));list=list.sort((a,b)=>a.orderNo-b.orderNo);const titleMap={received:'Gelen / İşleme Alınan Siparişler',shipping:'Çıkması Gereken Siparişler',important:'Önemli Siparişler'};$('reportTitle').textContent=titleMap[type]||'Rapor Sonuçları';$('reportCount').textContent=`${list.length} kayıt`;if(showMsg)showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');$('reportsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td><td><div class="alert-product-cell">${itemImages(o.items)}<div>${productPills(o.items)}</div></div></td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span><br>`:''}${duePill(o)}</td><td>${badge(o.status)}</td><td>${o.note||'-'}</td></tr>`).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`}
+function renderReports(showMsg=false){if(!$('reportsTable'))return;const start=$('reportStart')?.value||'',end=$('reportEnd')?.value||'',type=$('reportType')?.value||'received';let list=[...orders];if(type==='received')list=list.filter(o=>inRange(o.approvalDate,start,end));if(type==='shipping')list=list.filter(o=>inRange(dueDateForOrder(o),start,end));if(type==='important')list=list.filter(o=>o.important&&inRange(o.approvalDate,start,end));list=list.sort((a,b)=>a.orderNo-b.orderNo);const titleMap={received:'Gelen / İşleme Alınan Siparişler',shipping:'Çıkması Gereken Siparişler',important:'Önemli Siparişler'};$('reportTitle').textContent=titleMap[type]||'Rapor Sonuçları';$('reportCount').textContent=`${list.length} kayıt`;if(showMsg)showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');$('reportsTable').innerHTML=list.map(o=>`<tr onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')"><td><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td><td><div class="alert-product-cell">${itemImages(o.items)}<div>${productPills(o.items)}</div></div></td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span><br>`:''}${duePill(o)}</td><td>${badge(o.status)}</td><td>${o.note||'-'}</td></tr>`).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`}
 
 function updatePrintSelectedCount(){
   const el=$('printSelectedCount');
@@ -2360,7 +2882,38 @@ function updatePrintSelectedCount(){
   el.textContent=selectedCount ? `${selectedCount} seçildi` : `0 seçildi / ${totalCount} kayıt`;
 }
 
-function renderPrintSelector(){if(!$('printSelector'))return;const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk});$('printSelector').innerHTML=list.map(o=>`<label class="select-order"><input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint();updatePrintSelectedCount()"><strong>No:${o.orderNo}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span>${badge(o.status)}</label>`).join('')||'Kayıt bulunamadı.';updatePrintSelectedCount()}
+
+function renderPrintSelector(){
+  if(!$('printSelector'))return;
+  const q=($('printSearch')?.value||'').toLowerCase().trim();
+  const st=($('printStatusFilter')?.value||'ALL');
+  const start=$('printStart')?.value||'';
+  const end=$('printEnd')?.value||'';
+
+  const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{
+    const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();
+    const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);
+    return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk;
+  });
+
+  $('printSelector').innerHTML=list.map(o=>{
+    const printed=isPrinted(o.id);
+    return `<label class="print-select-card ${printed?'already-printed':''}">
+      <input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint();updatePrintSelectedCount()">
+      <div class="print-select-no">No:${o.orderNo}</div>
+      <div class="print-select-img">${itemImages(o.items)}</div>
+      <div class="print-select-main">
+        <div>${productPills(o.items)}</div>
+        <strong>${itxt(o.items).replaceAll('\n',' / ')}</strong>
+        <small>${fdate(o.approvalDate)} → ${fdate(dueDateForOrder(o))}</small>
+      </div>
+      <button type="button" class="mini-printed-btn" onclick="event.preventDefault();togglePrinted('${o.id}')">${printed?'Çıktı İşaretli':'Çıktı Alındı'}</button>
+    </label>`;
+  }).join('')||'Kayıt bulunamadı.';
+
+  updatePrintSelectedCount();
+}
+
 $('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;if($('printStart'))$('printStart').onchange=renderPrintSelector;if($('printEnd'))$('printEnd').onchange=renderPrintSelector;
 function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);if(ids.length)return orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk}).slice(0,12)}
 
@@ -2397,7 +2950,7 @@ function togglePrinted(orderId){
   renderPrint();
 }
 
-function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=uniquePrintProductCards(o.items||[]);const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
+function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=uniquePrintProductCards(o.items||[]);const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr class="${isPrinted(o.id)?'printed-print-row':''}"><td><div class="print-no">No:${o.orderNo}</div>${isPrinted(o.id)?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':''}<div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
   ${fdate(o.approvalDate)}
   <div style="font-size:10px;font-weight:900;margin-top:4px;color:#475569;border-top:1px dashed #cbd5e1;padding-top:3px">
     → Çıkış: ${fdate(dueDateForOrder(o))}${extraProductionNote(o)?`<br><span style="color:#9a3412">${extraProductionNote(o)}</span>`:''}
@@ -2413,6 +2966,56 @@ async function deleteTester(id){const t=testers.find(x=>x.id===id);if(!t)return;
 function fillProfile(){if(!currentUser)return;$('profileName').value=currentUser.name||'';$('profileEmail').value=currentUser.email;$('profilePhone').value=currentUser.phone||'';$('profilePassword').value='';profilePhotoCache=currentUser.photo_url||'';if(profilePhotoCache){$('profilePreview').src=profilePhotoCache;$('profilePreview').classList.remove('hidden')}else $('profilePreview').classList.add('hidden');$('profileOk').classList.add('hidden')}
 $('profilePhotoInput').onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{profilePhotoCache=r.result;$('profilePreview').src=profilePhotoCache;$('profilePreview').classList.remove('hidden');$('profilePreview')._file=file};r.readAsDataURL(file)};
 $('profileForm').addEventListener('submit',async e=>{e.preventDefault();try{let photoUrl=profilePhotoCache;if($('profilePreview')._file) photoUrl=await uploadFile($('profilePreview')._file,`profiles/${currentUser.email}`);const update={name:$('profileName').value.trim()||currentUser.name,phone:$('profilePhone').value.trim(),photo_url:photoUrl};if($('profilePassword').value.trim())update.password=$('profilePassword').value.trim();const {error}=await db.from('app_users').update(update).eq('email',currentUser.email);if(error)throw error;await loadUsers();currentUser=users.find(u=>u.email===currentUser.email);$('currentName').textContent=currentUser.name;if(currentUser.photo_url){$('sideAvatar').src=currentUser.photo_url;$('sideAvatar').classList.remove('hidden')}$('profileOk').classList.remove('hidden')}catch(err){alert('Profil güncellenemedi: '+err.message)}});
+
+function openOrderDetail(id){
+  const o=orders.find(x=>x.id===id);
+  if(!o)return;
+  const imgs=(o.items||[]).map(i=>i.image).filter(Boolean);
+  const uniqueImgs=[...new Set(imgs)];
+  const imgHtml=uniqueImgs.length
+    ? `<div class="detail-img-grid">${uniqueImgs.map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}</div>`
+    : `<div class="detail-empty-img">GÖRSEL YOK</div>`;
+
+  const content=`
+    <div class="detail-layout">
+      <div class="detail-left">
+        <div class="detail-no">No:${o.orderNo}</div>
+        ${o.important?'<div class="detail-important">ÖNEMLİ</div>':''}
+        ${imgHtml}
+      </div>
+      <div class="detail-right">
+        <div class="detail-head">
+          <div>${productPills(o.items)}</div>
+          <h2>${itxt(o.items).replaceAll('\n','<br>')}</h2>
+        </div>
+        <div class="detail-info-grid">
+          <div><span>Durum</span><strong>${badge(o.status)}</strong></div>
+          <div><span>İşleme Tarihi</span><strong>${fdate(o.approvalDate)}</strong></div>
+          <div><span>Çıkış Tarihi</span><strong>${fdate(dueDateForOrder(o))}</strong></div>
+          <div><span>Süre</span><strong>${extraProductionNote(o)||productionDayCount(o)+' iş günü'}</strong></div>
+          <div><span>Ekleyen</span><strong>${userName(o.createdBy)}</strong></div>
+          <div><span>Not</span><strong>${o.note||'-'}</strong></div>
+        </div>
+        <div class="detail-actions">
+          <button class="btn btn-light" onclick="editOrder('${o.id}');closeOrderDetailModal()">Düzenle</button>
+          ${o.status==='KARGO GÖNDERİLDİ'
+            ? `<button class="btn unship-btn" onclick="unmarkShipped('${o.id}');closeOrderDetailModal()">Kargodan Geri Al</button>`
+            : `<button class="btn quick-ship-btn" onclick="markShipped('${o.id}');closeOrderDetailModal()">Kargo Çıktı</button>`}
+          <button class="btn btn-light" onclick="archiveOrder('${o.id}');closeOrderDetailModal()">Arşiv</button>
+          <button class="btn btn-danger" onclick="deleteOrder('${o.id}');closeOrderDetailModal()">Sil</button>
+        </div>
+      </div>
+    </div>
+  `;
+  $('orderDetailContent').innerHTML=content;
+  $('orderDetailModal').classList.remove('hidden');
+}
+function closeOrderDetailModal(e){
+  if(e && e.target && e.target.id!=='orderDetailModal')return;
+  const modal=$('orderDetailModal');
+  if(modal)modal.classList.add('hidden');
+}
+
 function openImageModal(src){if(!src)return;$('imageModalImg').src=src;$('imageModal').classList.remove('hidden')}
 function closeImageModal(){$('imageModal').classList.add('hidden');$('imageModalImg').src=''}
 
