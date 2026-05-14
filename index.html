@@ -3150,6 +3150,120 @@ table{
   .a4-select-card{grid-template-columns:18px 40px minmax(0,1fr) 66px!important}
 }
 
+
+/* ===== V55 UYARI/RAPOR KART FIX + TAMAMLANAN SAYACI ===== */
+#alertsTable tr.clean-card-row,
+#reportsTable tr.clean-card-row{
+  display:table-row!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  margin:0!important;
+  padding:0!important;
+}
+#alertsTable tr.clean-card-row > td,
+#reportsTable tr.clean-card-row > td{
+  display:table-cell!important;
+  padding:0 0 10px!important;
+  border:0!important;
+  background:transparent!important;
+}
+.clean-wide-card{
+  display:grid!important;
+  grid-template-columns:96px 70px minmax(0,1fr) 150px!important;
+  gap:12px!important;
+  align-items:center!important;
+  width:100%!important;
+  min-height:98px!important;
+  padding:13px!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,#262b35,#181b21)!important;
+  border:1px solid rgba(255,255,255,.17)!important;
+  border-left:4px solid rgba(226,232,240,.42)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.34)!important;
+  cursor:pointer!important;
+}
+.clean-no{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:6px!important;
+  align-items:flex-start!important;
+}
+.clean-img .multi-thumbs{
+  max-width:64px!important;
+}
+.clean-img .multi-thumbs img{
+  width:54px!important;
+  height:54px!important;
+  object-fit:contain!important;
+}
+.clean-img .multi-thumbs img:nth-child(n+2){
+  display:none!important;
+}
+.clean-main{
+  min-width:0!important;
+}
+.clean-cats{
+  margin-bottom:5px!important;
+}
+.clean-items{
+  color:#fff!important;
+  font-size:15px!important;
+  font-weight:1000!important;
+  line-height:1.18!important;
+  white-space:pre-line!important;
+  word-break:break-word!important;
+}
+.clean-meta{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin-top:7px!important;
+  color:#cbd5e1!important;
+  font-size:11px!important;
+  font-weight:800!important;
+}
+.clean-note{
+  margin-top:6px!important;
+  color:#fecaca!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+.clean-action{
+  display:flex!important;
+  justify-content:flex-end!important;
+}
+@media(max-width:650px){
+  .clean-wide-card{
+    grid-template-columns:76px 52px minmax(0,1fr)!important;
+    grid-template-areas:
+      "no img main"
+      "act act act"!important;
+    gap:8px 9px!important;
+    min-height:auto!important;
+    padding:10px!important;
+  }
+  .clean-no{grid-area:no!important}
+  .clean-img{grid-area:img!important}
+  .clean-main{grid-area:main!important}
+  .clean-action{
+    grid-area:act!important;
+    justify-content:stretch!important;
+  }
+  .clean-action .btn{
+    width:100%!important;
+    min-height:42px!important;
+  }
+  .clean-items{
+    font-size:13.5px!important;
+  }
+  .clean-meta{
+    font-size:10.5px!important;
+    gap:4px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3555,7 +3669,12 @@ function renderAll(){
   safe('autoBackup',autoLocalBackup);
   safe('notify',()=>notifyCriticalOrders(false));
 }
-function countStatus(s){return orders.filter(o=>o.status===s).length}
+function countStatus(s){
+  if(s==='TAMAMLANDI'){
+    return orders.filter(o=>o.status==='TAMAMLANDI'||o.status==='KARGO GÖNDERİLDİ').length;
+  }
+  return orders.filter(o=>o.status===s).length;
+}
 function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler','orders','ALL'],['Önemli',importantTotal,'Öncelikli işler','orders','IMPORTANT'],['Uyarı',alertTotal,'Yaklaşan çıkış','alerts',''],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde','orders','İŞLEME ALINDI'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı','orders','KARGO GÖNDERİLDİ'],['Tester',testerTotal,'Paket çıkışı','testers','']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card pulse-alert':''}" onclick="handleStatClick('${x[3]}','${x[4]}')"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
 function handleStatClick(type,value){if(type==='alerts'){goPage('alerts');return}if(type==='testers'){goPage('testers');return}if(type==='orders'){openOrdersByStatus(value||'ALL');return}}
 function barsHtml(){const max=Math.max(orders.length,1);return['İŞLEME ALINDI','İPTAL','KARGO GÖNDERİLDİ','TAMAMLANDI'].map(s=>{const c=countStatus(s),w=Math.round(c/max*100);return`<div class="status-bar"><b>${s}</b><span>${c}</span><div class="barline"><div class="barfill" style="width:${w}%"></div></div></div>`}).join('')}
@@ -3878,6 +3997,7 @@ async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if
 
 
 
+
 function renderAlerts(){
   if(!$('alertsTable'))return;
   const list=getAlertOrders();
@@ -3889,24 +4009,22 @@ function renderAlerts(){
   }
 
   $('alertsTable').innerHTML=list.map(o=>`
-    <tr class="isolated-card-row">
+    <tr class="clean-card-row">
       <td colspan="7">
-        <div class="isolated-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-          <div class="iso-no">
-            <span class="order-no-strong">No:${o.orderNo}</span>
-          </div>
-          <div class="iso-img">${itemImages(o.items)}</div>
-          <div class="iso-main">
-            <div class="iso-cat">${productPills(o.items)}</div>
-            <div class="iso-items">${itxt(o.items)}</div>
-            <div class="iso-meta">
+        <div class="clean-wide-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
+          <div class="clean-no"><span class="order-no-strong">No:${o.orderNo}</span></div>
+          <div class="clean-img">${itemImages(o.items)}</div>
+          <div class="clean-main">
+            <div class="clean-cats">${productPills(o.items)}</div>
+            <div class="clean-items">${itxt(o.items)}</div>
+            <div class="clean-meta">
               <span>İşleme: <b>${fdate(o.approvalDate)}</b></span>
               <span>Çıkış: <b>${fdate(dueDateForOrder(o))}</b></span>
               ${extraProductionNote(o)?`<span>${extraProductionNote(o)}</span>`:''}
               ${duePill(o)}
             </div>
           </div>
-          <div class="iso-action">
+          <div class="clean-action">
             <button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button>
           </div>
         </div>
@@ -3917,6 +4035,7 @@ function renderAlerts(){
 
 function setReportToday(){const today=toISODate(new Date());$('reportStart').value=today;$('reportEnd').value=today;renderReports()}
 function setReportThisWeek(){const now=new Date(),day=now.getDay()||7,start=new Date(now);start.setDate(now.getDate()-day+1);const end=new Date(start);end.setDate(start.getDate()+6);$('reportStart').value=toISODate(start);$('reportEnd').value=toISODate(end);renderReports()}
+
 
 
 
@@ -3936,24 +4055,24 @@ function renderReports(showMsg=false){
   if(showMsg && typeof showToast==='function')showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');
 
   $('reportsTable').innerHTML=list.map(o=>`
-    <tr class="isolated-card-row">
+    <tr class="clean-card-row">
       <td colspan="7">
-        <div class="isolated-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
-          <div class="iso-no">
+        <div class="clean-wide-card" onclick="if(!event.target.closest('button,input,a,img'))openOrderDetail('${o.id}')">
+          <div class="clean-no">
             <span class="order-no-strong">No:${o.orderNo}</span>
             ${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}
           </div>
-          <div class="iso-img">${itemImages(o.items)}</div>
-          <div class="iso-main">
-            <div class="iso-cat">${productPills(o.items)}</div>
-            <div class="iso-items">${itxt(o.items)}</div>
-            <div class="iso-meta">
+          <div class="clean-img">${itemImages(o.items)}</div>
+          <div class="clean-main">
+            <div class="clean-cats">${productPills(o.items)}</div>
+            <div class="clean-items">${itxt(o.items)}</div>
+            <div class="clean-meta">
               <span>İşleme: <b>${fdate(o.approvalDate)}</b></span>
               <span>Çıkış: <b>${fdate(dueDateForOrder(o))}</b></span>
               ${duePill(o)}
               ${badge(o.status)}
             </div>
-            ${o.note?`<div class="iso-note">NOT: ${o.note}</div>`:''}
+            ${o.note?`<div class="clean-note">NOT: ${o.note}</div>`:''}
           </div>
         </div>
       </td>
