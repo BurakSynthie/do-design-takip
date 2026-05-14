@@ -2667,6 +2667,104 @@ table{
   }
 }
 
+
+/* ===== A4 TEKIL GORSEL KESIN FIX V41 ===== */
+.print-product-stack{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:4px!important;
+  overflow:hidden!important;
+}
+.print-product-card{
+  flex:0 1 auto!important;
+  width:30mm!important;
+  max-width:30mm!important;
+  min-width:22mm!important;
+  padding:3px!important;
+}
+.print-product-card:nth-child(n+4){
+  display:none!important;
+}
+.print-no-image{
+  height:15mm;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  color:#999;
+  font-size:7px;
+}
+.print-img{
+  max-width:18mm!important;
+  max-height:15mm!important;
+}
+@media print{
+  .print-product-card{
+    width:30mm!important;
+    max-width:30mm!important;
+  }
+}
+
+
+/* ===== GLOBAL TEK GORSEL SISTEMI V42 ===== */
+.single-thumb-wrap{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+}
+
+.single-thumb{
+  width:54px!important;
+  height:54px!important;
+  object-fit:contain!important;
+  border-radius:12px!important;
+  background:#f8fafc!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.18)!important;
+}
+
+.empty-thumb{
+  width:54px!important;
+  height:54px!important;
+  border-radius:12px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  line-height:1.05!important;
+  font-size:8px!important;
+  font-weight:1000!important;
+  background:rgba(255,255,255,.06)!important;
+  border:1px dashed rgba(255,255,255,.16)!important;
+  color:#94a3b8!important;
+}
+
+#ordersTable .multi-thumbs,
+#latestOrders .multi-thumbs,
+#alertsTable .multi-thumbs,
+#reportsTable .multi-thumbs{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  max-width:none!important;
+}
+
+@media(max-width:650px){
+  .single-thumb{
+    width:48px!important;
+    height:48px!important;
+  }
+
+  .empty-thumb{
+    width:48px!important;
+    height:48px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2882,44 +2980,42 @@ function itxt(items){
   return (items||[]).map(lineText).join('\n');
 }
 
-function productClassName(p){
-  const v=String(p||'').toUpperCase();
-  if(v.includes('OTO')) return 'cat-oto';
-  if(v.includes('PASPAS')) return 'cat-paspas';
-  if(v.includes('BARDAK')) return 'cat-bardak';
-  if(v.includes('SIRT')) return 'cat-sirt';
-  return 'cat-default';
-}
 
-function productClassName(p){
-  const v=String(p||'').toUpperCase();
-  if(v.includes('OTO')) return 'cat-oto';
-  if(v.includes('PASPAS')) return 'cat-paspas';
-  if(v.includes('BARDAK')) return 'cat-bardak';
-  if(v.includes('SIRT')) return 'cat-sirt';
-  return 'cat-default';
-}
-function productPills(items){
-  const arr=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
-  return arr.map(p=>`<span class="product-pill ${productClassName(p)}">${p}</span>`).join('');
+function getUniqueOrderVisual(items){
+  const first=(items||[]).find(i=>(i.image||i.image_url));
+  return first ? (first.image||first.image_url) : '';
 }
 
 function itemImages(items){
-  const seen=new Set();
-  const imgs=(items||[])
-    .map(i=>i.image||i.image_url)
-    .filter(Boolean)
-    .filter(src=>{
-      if(seen.has(src))return false;
-      seen.add(src);
-      return true;
-    });
+  const img=getUniqueOrderVisual(items);
 
-  if(!imgs.length){
-    return `<div class="empty-thumb">GÖRSEL<br>YOK</div>`;
+  if(!img){
+    return `<div class="single-thumb empty-thumb">GÖRSEL<br>YOK</div>`;
   }
 
-  return `<div class="multi-thumbs unique-thumbs">${imgs.slice(0,3).map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}${imgs.length>3?`<span class="more-img">+${imgs.length-3}</span>`:''}</div>`;
+  return `
+    <div class="single-thumb-wrap">
+      <img class="single-thumb" src="${img}" onclick="openImageModal('${img}')">
+    </div>
+  `;
+}
+
+function productClassName(p){
+  const v=String(p||'').toUpperCase();
+  if(v.includes('OTO')) return 'cat-oto';
+  if(v.includes('PASPAS')) return 'cat-paspas';
+  if(v.includes('BARDAK')) return 'cat-bardak';
+  if(v.includes('SIRT')) return 'cat-sirt';
+  return 'cat-default';
+}
+
+function productPills(items){
+  const unique=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
+
+  return unique
+    .slice(0,3)
+    .map(p=>`<span class="product-pill ${productClassName(p)}">${p}</span>`)
+    .join('');
 }
 
 function badge(s){
@@ -3480,46 +3576,61 @@ function renderPrintSelector(){
 $('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;if($('printStart'))$('printStart').onchange=renderPrintSelector;if($('printEnd'))$('printEnd').onchange=renderPrintSelector;
 function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);if(ids.length)return orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk}).slice(0,12)}
 
+
 function uniquePrintProductCards(items){
   const seen=new Set();
-  return (items||[])
-    .filter(i=>{
-      const key=(i.product||'')+'|'+(i.image||'');
-      if(!i.image) return true;
-      if(seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    })
-    .map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:15mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999;font-size:8px">GÖRSEL YOK</div>`}</div>`)
-    .join('');
+  const cards=[];
+  (items||[]).forEach(i=>{
+    const product=i.product||'ÜRÜN';
+    const img=i.image||'';
+    const key=img ? `${product}|${img}` : `${product}|NO_IMAGE`;
+    if(seen.has(key))return;
+    seen.add(key);
+    cards.push({product,img});
+  });
+
+  return cards.map(c=>`<div class="print-product-card">
+    <div class="print-product-label">${c.product}</div>
+    ${c.img
+      ? `<img class="print-img" src="${c.img}">`
+      : `<div class="print-no-image">GÖRSEL YOK</div>`}
+  </div>`).join('');
 }
 
 
-function getPrintedOrders(){
-  try{
-    return JSON.parse(localStorage.getItem('printedOrders')||'[]');
-  }catch(e){
-    return [];
-  }
-}
-function isPrinted(orderId){
-  return getPrintedOrders().includes(orderId);
-}
-function togglePrinted(orderId){
-  const arr=getPrintedOrders();
-  const exists=arr.includes(orderId);
-  const next=exists ? arr.filter(x=>x!==orderId) : [...arr,orderId];
-  localStorage.setItem('printedOrders',JSON.stringify(next));
-  renderPrint();
+function renderPrint(){
+  if(!$('printRows'))return;
+  const ids=[...document.querySelectorAll('.print-check:checked')].map(c=>c.value);
+  const selected=orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);
+
+  $('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
+
+  $('printRows').innerHTML=selected.map(o=>{
+    const productHtml=uniquePrintProductCards(o.items||[]);
+    return `<tr class="${isPrinted(o.id)?'printed-print-row':''}">
+      <td>
+        <div class="print-no">No:${o.orderNo}</div>
+        ${isPrinted(o.id)?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':''}
+        <div class="print-product-stack">${productHtml}</div>
+      </td>
+      <td>
+        <div class="print-items">${itxt(o.items)}</div>
+        ${o.note?`<div class="print-note">NOT: ${o.note}</div>`:''}
+      </td>
+      <td>
+        <div class="print-date">
+          ${fdate(o.approvalDate)}
+          <div style="font-size:10px;font-weight:900;margin-top:4px;color:#475569;border-top:1px dashed #cbd5e1;padding-top:3px">
+            → Çıkış: ${fdate(dueDateForOrder(o))}${extraProductionNote(o)?`<br><span style="color:#9a3412">${extraProductionNote(o)}</span>`:''}
+          </div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="3">Yazdırmak için sipariş seç.</td></tr>';
+
+  updatePrintSelectedCount();
 }
 
-function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=uniquePrintProductCards(o.items||[]);const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr class="${isPrinted(o.id)?'printed-print-row':''}"><td><div class="print-no">No:${o.orderNo}</div>${isPrinted(o.id)?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':''}<div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
-  ${fdate(o.approvalDate)}
-  <div style="font-size:10px;font-weight:900;margin-top:4px;color:#475569;border-top:1px dashed #cbd5e1;padding-top:3px">
-    → Çıkış: ${fdate(dueDateForOrder(o))}${extraProductionNote(o)?`<br><span style="color:#9a3412">${extraProductionNote(o)}</span>`:''}
-  </div>
-</div></td></tr>`}).join('')}
-function setPrintToday(){const today=toISODate(new Date());$('printStart').value=today;$('printEnd').value=today;renderPrintSelector();renderPrint()}
 function selectAllPrint(v){document.querySelectorAll('.print-check').forEach(c=>c.checked=v);renderPrint();updatePrintSelectedCount()}
 function resetTesterForm(){if(!$('testerForm'))return;$('testerForm').reset();$('testerEditId').value='';$('testerDate').valueAsDate=new Date()}
 function renderTesters(){if(!$('testerTable'))return;const list=[...testers].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('testerCount').textContent=`Toplam ${list.length} kayıt`;$('testerTable').innerHTML=list.map(t=>`<tr><td><strong>${fdate(t.date)}</strong></td><td><strong>${t.qty} Paket</strong></td><td>${t.target||'-'}</td><td>${t.note||'-'}</td><td>${userName(t.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editTester('${t.id}')">Düzenle</button><button class="btn btn-danger" onclick="deleteTester('${t.id}')">Sil</button></div></td></tr>`).join('')||`<tr><td colspan="6">Henüz tester çıkışı yok.</td></tr>`}
