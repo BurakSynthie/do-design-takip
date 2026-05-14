@@ -705,6 +705,70 @@ button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer
   }
 }
 
+
+/* ===== UYARILARDA GORSEL GOSTERIMI ===== */
+.alert-product-cell{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.alert-product-cell .multi-thumbs{
+  max-width:150px;
+  flex-wrap:nowrap;
+  overflow:hidden;
+}
+.alert-product-cell .multi-thumbs img{
+  width:46px;
+  height:46px;
+}
+.alert-product-cell .empty-thumb{
+  width:62px;
+  height:44px;
+  font-size:9px;
+}
+@media(max-width:650px){
+  .alert-product-cell{
+    align-items:flex-start;
+    gap:8px;
+  }
+  .alert-product-cell .multi-thumbs{
+    max-width:120px;
+  }
+  .alert-product-cell .multi-thumbs img{
+    width:40px;
+    height:40px;
+  }
+}
+
+
+/* ===== A4 CIKTI ALINDI ISARETI ===== */
+.printed-mark{
+  position:absolute;
+  top:6px;
+  right:8px;
+  background:rgba(220,38,38,.16);
+  color:#dc2626;
+  border:2px solid rgba(220,38,38,.35);
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:1000;
+  letter-spacing:.4px;
+  transform:rotate(-7deg);
+  box-shadow:0 0 18px rgba(220,38,38,.18);
+}
+.print-card.printed{
+  border:2px dashed rgba(220,38,38,.45)!important;
+  background:linear-gradient(180deg,#fff,#fff5f5)!important;
+}
+.print-card{
+  position:relative;
+}
+.print-history-btn{
+  background:linear-gradient(135deg,#7f1d1d,#dc2626)!important;
+  color:#fff!important;
+}
+
 </style>
 </head>
 <body>
@@ -737,7 +801,7 @@ button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer
   <button class="btn btn-light" onclick="setOrdersToday()">Bugün</button>
   <button class="btn btn-light" onclick="clearFilters()">Temizle</button>
 </div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay Tarihi</th><th>Durum</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div></section>
-<section id="alertsPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Yaklaşan Kargo Uyarıları</h2><span class="mini">12 iş günü hesabına göre yaklaşan işler. Kargo çıktı butonuna basınca uyarı kapanır.</span></div><div id="alertSummary" class="status-bars"></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Adet / Açıklama</th><th>İşleme Tarihi</th><th>Çıkış Tarihi</th><th>Kalan</th><th>İşlem</th></tr></thead><tbody id="alertsTable"></tbody></table></div></div></section>
+<section id="alertsPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Yaklaşan Kargo Uyarıları</h2><span class="mini">12 iş günü hesabına göre yaklaşan işler. Kargo çıktı butonuna basınca uyarı kapanır.</span></div><div id="alertSummary" class="status-bars"></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Görsel / Kategori</th><th>Adet / Açıklama</th><th>İşleme Tarihi</th><th>Çıkış Tarihi</th><th>Kalan</th><th>İşlem</th></tr></thead><tbody id="alertsTable"></tbody></table></div></div></section>
 <section id="reportsPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tarih Aralığı Raporları</h2><span class="mini">Belirli tarih aralığında gelen veya çıkması gereken siparişleri gör.</span></div><div class="grid-3"><div class="field"><label>Başlangıç</label><input id="reportStart" type="date"></div><div class="field"><label>Bitiş</label><input id="reportEnd" type="date"></div><div class="field"><label>Rapor Tipi</label><select id="reportType"><option value="received">Bu aralıkta işleme alınan siparişler</option><option value="shipping">Bu aralıkta çıkması gereken siparişler</option><option value="important">Bu aralıktaki önemli siparişler</option></select></div></div><div class="actions"><button class="btn btn-primary" onclick="renderReports(true)">Raporu Göster</button><button class="btn btn-light" onclick="setReportToday()">Bugün</button><button class="btn btn-light" onclick="setReportThisWeek()">Bu Hafta</button></div></div><div class="panel"><div class="panel-head"><h2 id="reportTitle">Rapor Sonuçları</h2><span id="reportCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Adet / Açıklama</th><th>İşleme Tarihi</th><th>Çıkış Tarihi</th><th>Durum</th><th>Not</th></tr></thead><tbody id="reportsTable"></tbody></table></div></div></section>
 <section id="newOrderPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="formTitle">Sipariş Ekle</h2><button class="btn btn-light" onclick="resetForm()">Formu Temizle</button></div><form id="orderForm" action="javascript:void(0)"><input type="hidden" id="editId"><div class="grid-3"><div class="field"><label>İş No</label><input id="orderNo" type="number" required placeholder="2367"></div><div class="field"><label>İşleme Alınma Tarihi</label><input id="approvalDate" type="date" required></div><div class="field"><label>Durum</label><select id="status"><option>İŞLEME ALINDI</option><option>BEKLEMEDE</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option><option>ARŞİV</option></select></div></div><label class="important-row"><input id="important" type="checkbox"> Önemli sipariş olarak işaretle</label><div class="field"><label>Ürün / Adet Satırları</label><div id="itemsBox" class="items-box"></div><div class="actions"><button type="button" class="btn btn-light" onclick="addItemRow()">+ Boş Satır</button><button type="button" class="btn btn-light" onclick="copyLastImageRow()">+ Aynı Görselle Satır</button></div><div class="bulk-entry-box"><label>Hızlı koku/adet ekle</label><textarea id="bulkItemsText" placeholder="Örn:
 250 NEW CAR
@@ -1309,10 +1373,10 @@ async function archiveOrder(id){
   if(typeof showToast==='function')showToast('Arşive taşındı',`No:${o.orderNo} siparişi arşive taşındı.`,'success');
 }
 async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if(!confirm(`No:${o.orderNo} siparişini silmek istediğine emin misin?`))return;const {error}=await db.from('orders').delete().eq('id',id);if(error)alert(error.message);await refreshAll()}
-function renderAlerts(){if(!$('alertsTable'))return;const list=getAlertOrders();const dueToday=list.filter(o=>daysUntilDate(dueDateForOrder(o))<=0).length;const dueSoon=list.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;$('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;$('alertsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span></td><td>${productPills(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span>`:''}</td><td>${duePill(o)}</td><td><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></td></tr>`).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`}
+function renderAlerts(){if(!$('alertsTable'))return;const list=getAlertOrders();const dueToday=list.filter(o=>daysUntilDate(dueDateForOrder(o))<=0).length;const dueSoon=list.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;$('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;$('alertsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span></td><td><div class="alert-product-cell">${itemImages(o.items)}<div>${productPills(o.items)}</div></div></td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span>`:''}</td><td>${duePill(o)}</td><td><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></td></tr>`).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`}
 function setReportToday(){const today=toISODate(new Date());$('reportStart').value=today;$('reportEnd').value=today;renderReports()}
 function setReportThisWeek(){const now=new Date(),day=now.getDay()||7,start=new Date(now);start.setDate(now.getDate()-day+1);const end=new Date(start);end.setDate(start.getDate()+6);$('reportStart').value=toISODate(start);$('reportEnd').value=toISODate(end);renderReports()}
-function renderReports(showMsg=false){if(!$('reportsTable'))return;const start=$('reportStart')?.value||'',end=$('reportEnd')?.value||'',type=$('reportType')?.value||'received';let list=[...orders];if(type==='received')list=list.filter(o=>inRange(o.approvalDate,start,end));if(type==='shipping')list=list.filter(o=>inRange(dueDateForOrder(o),start,end));if(type==='important')list=list.filter(o=>o.important&&inRange(o.approvalDate,start,end));list=list.sort((a,b)=>a.orderNo-b.orderNo);const titleMap={received:'Gelen / İşleme Alınan Siparişler',shipping:'Çıkması Gereken Siparişler',important:'Önemli Siparişler'};$('reportTitle').textContent=titleMap[type]||'Rapor Sonuçları';$('reportCount').textContent=`${list.length} kayıt`;if(showMsg)showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');$('reportsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span><br>`:''}${duePill(o)}</td><td>${badge(o.status)}</td><td>${o.note||'-'}</td></tr>`).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`}
+function renderReports(showMsg=false){if(!$('reportsTable'))return;const start=$('reportStart')?.value||'',end=$('reportEnd')?.value||'',type=$('reportType')?.value||'received';let list=[...orders];if(type==='received')list=list.filter(o=>inRange(o.approvalDate,start,end));if(type==='shipping')list=list.filter(o=>inRange(dueDateForOrder(o),start,end));if(type==='important')list=list.filter(o=>o.important&&inRange(o.approvalDate,start,end));list=list.sort((a,b)=>a.orderNo-b.orderNo);const titleMap={received:'Gelen / İşleme Alınan Siparişler',shipping:'Çıkması Gereken Siparişler',important:'Önemli Siparişler'};$('reportTitle').textContent=titleMap[type]||'Rapor Sonuçları';$('reportCount').textContent=`${list.length} kayıt`;if(showMsg)showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');$('reportsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td><td><div class="alert-product-cell">${itemImages(o.items)}<div>${productPills(o.items)}</div></div></td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span><br>`:''}${duePill(o)}</td><td>${badge(o.status)}</td><td>${o.note||'-'}</td></tr>`).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`}
 
 function updatePrintSelectedCount(){
   const el=$('printSelectedCount');
@@ -1338,6 +1402,25 @@ function uniquePrintProductCards(items){
     })
     .map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:15mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999;font-size:8px">GÖRSEL YOK</div>`}</div>`)
     .join('');
+}
+
+
+function getPrintedOrders(){
+  try{
+    return JSON.parse(localStorage.getItem('printedOrders')||'[]');
+  }catch(e){
+    return [];
+  }
+}
+function isPrinted(orderId){
+  return getPrintedOrders().includes(orderId);
+}
+function togglePrinted(orderId){
+  const arr=getPrintedOrders();
+  const exists=arr.includes(orderId);
+  const next=exists ? arr.filter(x=>x!==orderId) : [...arr,orderId];
+  localStorage.setItem('printedOrders',JSON.stringify(next));
+  renderPrint();
 }
 
 function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=uniquePrintProductCards(o.items||[]);const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
