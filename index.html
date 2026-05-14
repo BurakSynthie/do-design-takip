@@ -3656,6 +3656,90 @@ table{
   }
 }
 
+
+/* ===== V59 UYARI ROZET/TARIH FIX ===== */
+@media(max-width:650px){
+
+  /* açıklama alanını genişlet */
+  #alertsTable .fixed-desc-cell{
+    left:162px!important;
+    right:10px!important;
+    top:13px!important;
+  }
+
+  #alertsTable .fixed-desc-text{
+    font-size:14px!important;
+    line-height:1.10!important;
+    max-height:84px!important;
+    padding-right:4px!important;
+  }
+
+  /* gün kaldı rozeti artık açıklamanın altında */
+  #alertsTable .fixed-status-cell{
+    position:absolute!important;
+    left:162px!important;
+    bottom:58px!important;
+    width:auto!important;
+    z-index:4!important;
+  }
+
+  #alertsTable .fixed-status-cell .due-pill{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-height:24px!important;
+    padding:4px 10px!important;
+    border-radius:999px!important;
+    font-size:10px!important;
+    font-weight:1000!important;
+    white-space:nowrap!important;
+  }
+
+  /* tarihleri alta düzgün hizala */
+  #alertsTable .fixed-date-cell{
+    position:absolute!important;
+    bottom:16px!important;
+    left:16px!important;
+    width:auto!important;
+    font-size:11px!important;
+    color:#dbe4f0!important;
+    z-index:3!important;
+  }
+
+  #alertsTable .fixed-date-cell strong{
+    font-size:11px!important;
+    font-weight:1000!important;
+  }
+
+  /* çıkış tarihi sağa */
+  #alertsTable .fixed-date-cell:nth-of-type(5){
+    left:118px!important;
+  }
+
+  /* kart yüksekliği artsın */
+  #alertsTable tr.fixed-report-row{
+    min-height:168px!important;
+  }
+
+  /* butonlar altta sabit */
+  #alertsTable .fixed-action-cell{
+    left:12px!important;
+    right:12px!important;
+    bottom:10px!important;
+    width:auto!important;
+  }
+
+  #alertsTable .report-actions{
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:6px!important;
+  }
+
+  #alertsTable .report-actions .btn{
+    min-height:34px!important;
+    font-size:9px!important;
+  }
+}
+
 </style>
 </head>
 <body>
