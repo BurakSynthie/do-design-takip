@@ -8,6 +8,273 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#06b6d4">
+  /* Login ekranında alt mobil menü görünmesin */
+#loginPage:not(.hidden) ~ .bottom-mobile-nav {
+  display: none !important;
+}
+
+/* Mobil genel sıkılaştırma */
+@media (max-width: 650px) {
+  body {
+    background:
+      radial-gradient(circle at 15% 5%, rgba(6,182,212,.18), transparent 28%),
+      linear-gradient(135deg,#06101d,#030712) !important;
+  }
+
+  .main {
+    padding: 12px 10px 76px !important;
+  }
+
+  .topbar {
+    margin-bottom: 12px !important;
+    gap: 8px !important;
+  }
+
+  .topbar h1 {
+    font-size: 28px !important;
+    line-height: 1.05 !important;
+  }
+
+  .topbar p {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+    max-width: 94% !important;
+  }
+
+  .mobile-menu {
+    padding: 9px 13px !important;
+    border-radius: 14px !important;
+    font-size: 13px !important;
+  }
+
+  /* Dashboard kartları 2'li ve kompakt olsun */
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .stat-card {
+    min-height: 88px !important;
+    padding: 11px 12px !important;
+    border-radius: 15px !important;
+  }
+
+  .stat-card span {
+    font-size: 10.5px !important;
+  }
+
+  .stat-card strong {
+    font-size: 25px !important;
+    margin-top: 6px !important;
+    line-height: 1 !important;
+  }
+
+  .stat-card small {
+    font-size: 10.5px !important;
+    margin-top: 5px !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Durum kutuları da 2'li ve küçük */
+  .status-bars {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 9px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .status-bar {
+    padding: 10px 11px !important;
+    border-radius: 15px !important;
+    min-height: 78px !important;
+  }
+
+  .status-bar b {
+    font-size: 10.5px !important;
+    margin-bottom: 5px !important;
+    line-height: 1.2 !important;
+  }
+
+  .status-bar span {
+    font-size: 23px !important;
+    line-height: 1 !important;
+  }
+
+  .barline {
+    height: 5px !important;
+    margin-top: 8px !important;
+  }
+
+  /* Paneller daha az yer kaplasın */
+  .panel {
+    padding: 12px !important;
+    border-radius: 17px !important;
+    margin-bottom: 12px !important;
+  }
+
+  .panel-head {
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  .panel-head h2 {
+    font-size: 17px !important;
+  }
+
+  .panel-head .btn,
+  .actions .btn {
+    padding: 9px 11px !important;
+    font-size: 12px !important;
+  }
+
+  /* Form alanları daha mobil */
+  .field {
+    margin-bottom: 10px !important;
+    gap: 6px !important;
+  }
+
+  .field label {
+    font-size: 12px !important;
+  }
+
+  .field input,
+  .field select,
+  .field textarea,
+  .filters input,
+  .filters select {
+    padding: 10px 11px !important;
+    font-size: 14px !important;
+    border-radius: 12px !important;
+  }
+
+  .field textarea {
+    min-height: 76px !important;
+  }
+
+  .filters {
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Ürün satırı mobilde daha okunaklı */
+  .item-row {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 9px !important;
+    border-radius: 14px !important;
+  }
+
+  .item-photo-box {
+    justify-content: space-between !important;
+  }
+
+  .item-photo-box img {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Tablolar mobilde kart gibi görünsün */
+  .orders-table-wrap {
+    border: 0 !important;
+    overflow: visible !important;
+  }
+
+  table,
+  thead,
+  tbody,
+  tr,
+  td {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  thead {
+    display: none !important;
+  }
+
+  tr {
+    margin-bottom: 10px !important;
+    background: #0b1728 !important;
+    border: 1px solid var(--line) !important;
+    border-radius: 16px !important;
+    padding: 8px !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,.18) !important;
+  }
+
+  td {
+    border-bottom: 1px solid rgba(125,211,252,.09) !important;
+    padding: 7px 5px !important;
+    font-size: 13px !important;
+  }
+
+  td:last-child {
+    border-bottom: 0 !important;
+  }
+
+  .scent-list {
+    font-size: 13px !important;
+    line-height: 1.3 !important;
+  }
+
+  .product-pill {
+    font-size: 10px !important;
+    padding: 4px 7px !important;
+  }
+
+  .badge {
+    font-size: 10.5px !important;
+    padding: 6px 8px !important;
+  }
+
+  .multi-thumbs {
+    max-width: none !important;
+    gap: 5px !important;
+  }
+
+  .multi-thumbs img {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .empty-thumb {
+    width: 62px !important;
+    height: 54px !important;
+    font-size: 9.5px !important;
+  }
+
+  /* Alt menü daha küçük ve login hariç sabit */
+  .bottom-mobile-nav {
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 5px !important;
+    padding: 7px 7px calc(7px + env(safe-area-inset-bottom)) !important;
+    background: rgba(3,7,18,.96) !important;
+  }
+
+  .bottom-mobile-nav button {
+    padding: 8px 3px !important;
+    border-radius: 11px !important;
+    font-size: 10.5px !important;
+    line-height: 1 !important;
+  }
+
+  /* A4 önizleme mobilde daha az yer kaplasın */
+  .print-layout {
+    padding: 0 !important;
+    border-radius: 0 !important;
+    margin-left: -10px !important;
+    margin-right: -10px !important;
+    height: 660px !important;
+  }
+
+  .print-page {
+    transform: scale(.46) !important;
+    transform-origin: top left !important;
+    margin: 0 !important;
+    width: 210mm !important;
+  }
+}
+
   <style>
     :root{
       --bg:#07111f;
