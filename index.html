@@ -1383,6 +1383,360 @@ tr:hover{
   }
 }
 
+
+/* ===== BALANCED MOBILE UI V27 - DAHA OKUNUR FUME TASARIM ===== */
+:root{
+  --bg:#121417!important;
+  --panel:#1f2329!important;
+  --panel2:#242933!important;
+  --line:rgba(255,255,255,.18)!important;
+  --text:#f8fafc!important;
+  --muted:#b6beca!important;
+  --blue:#94a3b8!important;
+  --blue2:#f8fafc!important;
+}
+
+/* Genel tema: çok siyah değil, füme / grafit */
+body{
+  background:
+    radial-gradient(circle at 18% 8%,rgba(148,163,184,.16),transparent 32%),
+    linear-gradient(135deg,#111318,#1c2027 50%,#101216)!important;
+}
+.panel,
+.stat-card,
+.status-bar,
+.login-card,
+.sidebar,
+.user-box,
+.global-search input,
+.field input,
+.field select,
+.field textarea,
+.filters input,
+.filters select,
+.orders-table-wrap,
+table{
+  background:linear-gradient(180deg,#242933,#181b21)!important;
+  border-color:rgba(255,255,255,.18)!important;
+}
+.panel{
+  box-shadow:0 16px 42px rgba(0,0,0,.28)!important;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#f8fafc,#b8c0cc)!important;
+  color:#111318!important;
+}
+.btn-light,
+.btn-dark,
+.quick-ship-btn{
+  background:linear-gradient(180deg,#2c323c,#20242b)!important;
+  color:#f8fafc!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+}
+.btn-danger{
+  background:rgba(127,29,29,.45)!important;
+  color:#fecaca!important;
+  border:1px solid rgba(248,113,113,.34)!important;
+}
+.product-pill{
+  background:rgba(226,232,240,.13)!important;
+  color:#f1f5f9!important;
+  border:1px solid rgba(226,232,240,.18)!important;
+}
+.badge{
+  background:rgba(148,163,184,.18)!important;
+  color:#f8fafc!important;
+  border:1px solid rgba(226,232,240,.16)!important;
+}
+.due-pill{
+  background:rgba(234,179,8,.20)!important;
+  color:#fde68a!important;
+  border:1px solid rgba(234,179,8,.26)!important;
+}
+.important-pill{
+  background:rgba(239,68,68,.22)!important;
+  color:#fecaca!important;
+  border:1px solid rgba(248,113,113,.32)!important;
+}
+.order-no-strong{
+  background:linear-gradient(135deg,#334155,#1e293b)!important;
+  border-color:rgba(226,232,240,.24)!important;
+  color:#fff!important;
+}
+
+/* Alt bar daha büyük ve parmak dostu */
+.bottom-mobile-nav{
+  background:rgba(20,23,29,.96)!important;
+  border-color:rgba(255,255,255,.20)!important;
+  box-shadow:0 18px 60px rgba(0,0,0,.55)!important;
+}
+.bottom-mobile-nav button{
+  background:linear-gradient(180deg,#313743,#20242c)!important;
+  color:#f8fafc!important;
+  border-color:rgba(255,255,255,.18)!important;
+}
+.bottom-mobile-nav button span{
+  color:#ffffff!important;
+}
+
+/* Mobilde tüm liste tabloları aynı kompakt kart mantığı */
+@media(max-width:650px){
+  body{
+    background:linear-gradient(145deg,#121417,#20242c,#111318)!important;
+  }
+
+  .main{
+    padding:9px 8px 104px!important;
+  }
+
+  .topbar{
+    background:linear-gradient(180deg,rgba(18,20,24,.98),rgba(24,27,33,.92))!important;
+    border-bottom:1px solid rgba(255,255,255,.13)!important;
+  }
+
+  /* Sipariş / son işler / uyarı / rapor tabloları kart gibi */
+  #ordersTable tr,
+  #latestOrders tr,
+  #alertsTable tr,
+  #reportsTable tr{
+    display:grid!important;
+    grid-template-columns:78px 48px 1fr!important;
+    grid-template-areas:
+      "no img info"
+      "no img desc"
+      "no img meta"
+      "act act act"!important;
+    min-height:auto!important;
+    padding:9px!important;
+    gap:5px 9px!important;
+    background:linear-gradient(135deg,#262b35,#181b21)!important;
+    border:1px solid rgba(255,255,255,.17)!important;
+    border-left:4px solid rgba(226,232,240,.40)!important;
+    border-radius:16px!important;
+    box-shadow:0 14px 32px rgba(0,0,0,.34)!important;
+    margin-bottom:9px!important;
+  }
+
+  #ordersTable td,
+  #latestOrders td,
+  #alertsTable td,
+  #reportsTable td{
+    border:0!important;
+    padding:0!important;
+    margin:0!important;
+  }
+
+  /* 1. kolon: no */
+  #ordersTable td:nth-child(1),
+  #latestOrders td:nth-child(1),
+  #alertsTable td:nth-child(1),
+  #reportsTable td:nth-child(1){
+    grid-area:no!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:5px!important;
+  }
+
+  .order-no-strong{
+    font-size:14px!important;
+    padding:7px 8px!important;
+    border-radius:11px!important;
+    min-width:70px!important;
+    text-align:center!important;
+  }
+
+  /* 2. kolon: kategori ya da görsel/kategori hücresi */
+  #ordersTable td:nth-child(2),
+  #latestOrders td:nth-child(2),
+  #alertsTable td:nth-child(2),
+  #reportsTable td:nth-child(2){
+    grid-area:info!important;
+    display:block!important;
+    line-height:1!important;
+  }
+
+  /* 3. kolon: görseller */
+  #ordersTable td:nth-child(3),
+  #latestOrders td:nth-child(3){
+    grid-area:img!important;
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    padding-top:2px!important;
+  }
+
+  /* Uyarı sayfasında görsel/kategori aynı hücredeyse ayrıştır */
+  .alert-product-cell{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    align-items:flex-start!important;
+  }
+  .alert-product-cell .multi-thumbs{
+    max-width:48px!important;
+  }
+
+  .multi-thumbs{
+    max-width:48px!important;
+    gap:0!important;
+  }
+  .multi-thumbs img{
+    width:44px!important;
+    height:44px!important;
+    border-radius:10px!important;
+    object-fit:contain!important;
+    background:#f8fafc!important;
+  }
+  .multi-thumbs img:nth-child(n+2){
+    display:none!important;
+  }
+  .empty-thumb{
+    width:44px!important;
+    height:44px!important;
+    font-size:7px!important;
+    border-radius:10px!important;
+  }
+
+  /* Açıklama/koku metni: kesilmesin, 4 satıra kadar gözüksün */
+  #ordersTable td:nth-child(4),
+  #latestOrders td:nth-child(4),
+  #alertsTable td:nth-child(3),
+  #reportsTable td:nth-child(3){
+    grid-area:desc!important;
+    display:block!important;
+    margin-top:2px!important;
+  }
+
+  .scent-list{
+    font-size:13.5px!important;
+    line-height:1.16!important;
+    max-height:64px!important;
+    overflow:hidden!important;
+    white-space:pre-line!important;
+    word-break:break-word!important;
+  }
+
+  /* Tarih/çıkış */
+  #ordersTable td:nth-child(5),
+  #latestOrders td:nth-child(5),
+  #alertsTable td:nth-child(4),
+  #reportsTable td:nth-child(4){
+    grid-area:meta!important;
+    font-size:10.5px!important;
+    color:#cbd5e1!important;
+    line-height:1.18!important;
+    display:block!important;
+  }
+  #ordersTable td:nth-child(5) strong,
+  #latestOrders td:nth-child(5) strong,
+  #alertsTable td:nth-child(4) strong,
+  #reportsTable td:nth-child(4) strong{
+    font-size:10.5px!important;
+  }
+  .mini{
+    font-size:10px!important;
+    color:#a3aab5!important;
+  }
+
+  /* Durum badge no altında ama üst üste binmeden */
+  #ordersTable td:nth-child(6),
+  #latestOrders td:nth-child(6){
+    grid-area:no!important;
+    margin-top:38px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    align-items:flex-start!important;
+  }
+
+  .badge,
+  .due-pill,
+  .product-pill,
+  .important-pill{
+    font-size:8.5px!important;
+    padding:4px 6px!important;
+    border-radius:999px!important;
+    line-height:1.05!important;
+  }
+
+  /* Not/ekleyen kalabalık yapmasın */
+  #ordersTable td:nth-child(7),
+  #ordersTable td:nth-child(8),
+  #latestOrders td:nth-child(7){
+    display:none!important;
+  }
+
+  /* Aksiyonlar: daha büyük ama düzenli */
+  #ordersTable td:nth-child(9){
+    grid-area:act!important;
+    margin-top:7px!important;
+  }
+  #ordersTable .actions{
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:6px!important;
+  }
+  #ordersTable .actions .btn{
+    font-size:10px!important;
+    min-height:34px!important;
+    padding:7px 4px!important;
+    border-radius:11px!important;
+  }
+
+  /* Uyarı / rapor aksiyon kolonları */
+  #alertsTable td:nth-child(7),
+  #reportsTable td:nth-child(7){
+    grid-area:act!important;
+    margin-top:7px!important;
+  }
+
+  /* Alt bar daha büyük */
+  .bottom-mobile-nav{
+    left:8px!important;
+    right:8px!important;
+    bottom:8px!important;
+    padding:8px!important;
+    border-radius:22px!important;
+    gap:7px!important;
+  }
+  .bottom-mobile-nav button{
+    height:58px!important;
+    border-radius:17px!important;
+    gap:4px!important;
+  }
+  .bottom-mobile-nav button span{
+    font-size:21px!important;
+    line-height:1!important;
+  }
+  .bottom-mobile-nav button b{
+    font-size:10px!important;
+  }
+
+  /* Dashboard çok boğulmasın */
+  .stats{
+    grid-template-columns:repeat(3,1fr)!important;
+    gap:7px!important;
+  }
+  .stat-card{
+    min-height:68px!important;
+    padding:9px!important;
+  }
+  .stat-card strong{
+    font-size:21px!important;
+  }
+}
+
+
+/* ===== AKTIF / KARGO AYRIMI ===== */
+.orders-active-note{
+  display:block;
+  margin-top:4px;
+  font-size:11px;
+  color:var(--muted);
+  font-weight:800;
+}
+
 </style>
 </head>
 <body>
@@ -1391,7 +1745,7 @@ tr:hover{
   <div class="brand-mark" style="display:none">DO</div>
 </div>
 <p class="login-subtitle">Sipariş, üretim, tester ve kargo takip paneli</p><form id="loginForm" action="javascript:void(0)"><div class="field"><label>Email</label><input id="loginEmail" type="email" required></div><div class="field"><label>Şifre</label><input id="loginPassword" type="password" required></div><label class="remember-row"><input id="rememberMe" type="checkbox"> Beni hatırla</label><button class="btn btn-primary" style="width:100%" type="submit">Giriş Yap</button><div id="loginError" class="error-box hidden">Email veya şifre hatalı.</div></form></div></section>
-<section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><button class="sidebar-close" onclick="$('sidebar').classList.remove('open')">×</button><div class="logo-row logo-row-image"><img src="/do-logo.png" alt="DO DESIGN" class="sidebar-logo-img" onerror="this.style.display='none';document.querySelector('.fallback-logo').style.display='flex'"><div class="logo-mini fallback-logo" style="display:none">DO</div></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Tüm Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button><button data-status="ARŞİV">Arşiv</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="alerts">Uyarılar</button><button data-page="reports">Raporlar</button><button data-page="newOrder">Sipariş Ekle</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
+<section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><button class="sidebar-close" onclick="$('sidebar').classList.remove('open')">×</button><div class="logo-row logo-row-image"><img src="/do-logo.png" alt="DO DESIGN" class="sidebar-logo-img" onerror="this.style.display='none';document.querySelector('.fallback-logo').style.display='flex'"><div class="logo-mini fallback-logo" style="display:none">DO</div></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Aktif Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button><button data-status="ARŞİV">Arşiv</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="alerts">Uyarılar</button><button data-page="reports">Raporlar</button><button data-page="newOrder">Sipariş Ekle</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
 <main class="main"><div class="topbar no-print">
   <div class="topbar-title">
     <h1 id="pageTitle">Dashboard</h1>
@@ -1406,8 +1760,8 @@ tr:hover{
     <button id="menuBtn" class="btn btn-dark mobile-menu">Menü</button>
   </div>
 </div>
-<section id="dashboardPage" class="page"><div class="stats" id="stats"></div><div class="panel"><div class="panel-head"><h2>Durum Dağılımı</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş</button></div><div id="statusBars" class="status-bars"></div></div><div class="panel"><div class="panel-head"><h2>Son Eklenen İşler</h2><button class="btn btn-light" onclick="openOrdersByStatus('ALL')">Tümünü Gör</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay</th><th>Durum</th><th>Ekleyen</th></tr></thead><tbody id="latestOrders"></tbody></table></div></div></section>
-<section id="ordersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="ordersTitle">Sipariş Listesi</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş Ekle</button></div><div id="ordersStatusBars" class="status-bars"></div><div class="filters order-filters">
+<section id="dashboardPage" class="page"><div class="stats" id="stats"></div><div class="panel"><div class="panel-head"><h2>Durum Dağılımı</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş</button></div><div id="statusBars" class="status-bars"></div></div><div class="panel"><div class="panel-head"><h2>Son Eklenen İşler</h2><button class="btn btn-light" onclick="openOrdersByStatus('ALL')">Aktifleri Gör</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay</th><th>Durum</th><th>Ekleyen</th></tr></thead><tbody id="latestOrders"></tbody></table></div></div></section>
+<section id="ordersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="ordersTitle">Aktif Siparişler</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş Ekle</button></div><div id="ordersStatusBars" class="status-bars"></div><div class="filters order-filters">
   <input id="searchInput" placeholder="No, kategori, açıklama, not veya ekleyen ara...">
   <select id="statusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option><option>ARŞİV</option></select>
   <input id="orderStart" type="date" title="Başlangıç tarihi">
@@ -1714,7 +2068,7 @@ $('loginForm').addEventListener('submit',async e=>{
 });
 $('logoutBtn').onclick=()=>{document.body.classList.remove('logged-in');localStorage.removeItem(SESSION_KEY);location.reload()};
 $('menuBtn').onclick=()=>$('sidebar').classList.toggle('open'); document.querySelectorAll('.nav button[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page)); $('ordersToggle').onclick=()=>$('ordersSubnav').classList.toggle('open'); $('categoryToggle').onclick=()=>$('categorySubnav').classList.toggle('open'); document.querySelectorAll('#ordersSubnav button').forEach(b=>b.onclick=()=>openOrdersByStatus(b.dataset.status)); document.querySelectorAll('#categorySubnav button').forEach(b=>b.onclick=()=>openOrdersByCategory(b.dataset.category));
-function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':'Sipariş Listesi';renderOrders()}
+function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':(st==='KARGO GÖNDERİLDİ'?'Kargoya Çıkanlar':(st==='ALL'?'Aktif Siparişler':'Sipariş Listesi'));renderOrders()}
 function openOrdersByCategory(cat){currentSpecial='ALL';currentCategory=cat||'ALL';goPage('orders');$('categorySubnav').classList.add('open');$('statusFilter').value='ALL';$('ordersTitle').textContent=cat+' Ürünler';renderOrders()}
 function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',alerts:'Uyarılar',reports:'Raporlar',newOrder:'Sipariş Ekle',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
 function renderAll(){renderStats();renderStatusBars();renderLatest();renderOrders();renderAlerts();renderReports();renderTesters();renderPrintSelector();renderPrint();updateBell()}
@@ -1761,7 +2115,13 @@ function filtered(searchId='searchInput',statusId='statusFilter'){
       const items = o.items || [];
       const hay = `${o.orderNo||''} ${o.status||''} ${o.note||''} ${itxt(items)} ${items.map(i=>i.product).join(' ')} ${userName(o.createdBy)}`.toLowerCase();
       const matchSearch = !q || hay.includes(q);
-      const matchStatus = st === 'ALL' || o.status === st;
+
+      // Ana sipariş listesi artık sadece aktif işleri gösterir.
+      // Kargo gönderilenler ve arşivlenenler ayrı menüden görünür.
+      const matchStatus = st === 'ALL'
+        ? (o.status !== 'KARGO GÖNDERİLDİ' && o.status !== 'ARŞİV')
+        : o.status === st;
+
       const matchCategory = currentCategory === 'ALL' || items.some(i=>i.product === currentCategory);
       const matchSpecial = currentSpecial !== 'IMPORTANT' || o.important;
       const matchDate = (!start || o.approvalDate >= start) && (!end || o.approvalDate <= end);
@@ -1777,7 +2137,7 @@ function renderOrders(){
   body.innerHTML = list.map(o=>rowHtml(o,false)).join('') || `<tr><td colspan="9">Kayıt bulunamadı.</td></tr>`;
 }
 
-$('searchInput').oninput=renderOrders;$('statusFilter').onchange=renderOrders;if($('orderStart'))$('orderStart').onchange=renderOrders;if($('orderEnd'))$('orderEnd').onchange=renderOrders;function clearFilters(){$('searchInput').value='';$('statusFilter').value='ALL';if($('orderStart'))$('orderStart').value='';if($('orderEnd'))$('orderEnd').value='';currentCategory='ALL';currentSpecial='ALL';$('ordersTitle').textContent='Sipariş Listesi';renderOrders()}
+$('searchInput').oninput=renderOrders;$('statusFilter').onchange=renderOrders;if($('orderStart'))$('orderStart').onchange=renderOrders;if($('orderEnd'))$('orderEnd').onchange=renderOrders;function clearFilters(){$('searchInput').value='';$('statusFilter').value='ALL';if($('orderStart'))$('orderStart').value='';if($('orderEnd'))$('orderEnd').value='';currentCategory='ALL';currentSpecial='ALL';$('ordersTitle').textContent='Aktif Siparişler';renderOrders()}
 function setOrdersToday(){const today=toISODate(new Date());$('orderStart').value=today;$('orderEnd').value=today;renderOrders()}
 function addItemRow(product='OTO KOKUSU',q='',d='',image='',file=null){
   const rowId=uid();
@@ -1977,7 +2337,7 @@ $('orderForm').addEventListener('submit',async e=>{
 
 function resetForm(setNext=true,keepDate=''){$('orderForm').reset();$('editId').value='';$('formTitle').textContent='Sipariş Ekle';$('itemsBox').innerHTML='';$('important').checked=false;addItemRow();if(setNext){const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:2367;$('orderNo').value=max}if(keepDate){$('approvalDate').value=keepDate}else{$('approvalDate').valueAsDate=new Date()}$('status').value='İŞLEME ALINDI'}
 function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${o.orderNo} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
-async function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;const {error}=await db.from('orders').update({status:'KARGO GÖNDERİLDİ',updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert(error.message);return}await refreshAll();showToast('Kargo çıkışı işlendi','Sipariş kargolandı olarak güncellendi ve uyarı listesinden düşürüldü.','success')}
+async function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;const {error}=await db.from('orders').update({status:'KARGO GÖNDERİLDİ',updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert(error.message);return}await refreshAll();showToast('Kargo çıkışı işlendi','Sipariş aktif listeden kaldırıldı ve Kargoya Çıkanlar bölümüne taşındı.','success')}
 async function archiveOrder(id){
   const o=orders.find(x=>x.id===id);
   if(!o)return;
