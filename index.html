@@ -635,24 +635,18 @@ button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer
 }
 
 
-/* ===== SIPARIS LISTESI GORUNURLUK FIX ===== */
-#latestOrders tr,
-#ordersTable tr{
-  visibility:visible!important;
-  opacity:1!important;
-}
-#latestOrders td,
-#ordersTable td{
-  visibility:visible!important;
-}
+/* ===== STABIL SIPARIS LISTESI FIX V15 ===== */
 @media(min-width:651px){
   #latestOrders tr,
   #ordersTable tr{
     display:table-row!important;
+    visibility:visible!important;
+    opacity:1!important;
   }
   #latestOrders td,
   #ordersTable td{
     display:table-cell!important;
+    visibility:visible!important;
   }
 }
 
@@ -767,54 +761,61 @@ async function loadUsers(){
 }
 
 
+
 function mapOrder(row){
-  const items=(row.order_items||[]).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map(i=>({
-    id:i.id,
-    product:i.product||'OTO KOKUSU',
-    quantity:Number(i.quantity)||0,
-    desc:i.description||'',
-    image:i.image_url||'',
-    sort:i.sort_order||0
-  }));
+  const rawItems = row.order_items || [];
+  const items = rawItems
+    .sort((a,b)=>(a.sort_order||0)-(b.sort_order||0))
+    .map(i=>({
+      id:i.id,
+      product:i.product || 'OTO KOKUSU',
+      quantity:Number(i.quantity)||0,
+      desc:i.description || '',
+      image:i.image_url || '',
+      sort:i.sort_order || 0
+    }));
   return {
-    id:row.id,
-    orderNo:row.order_no,
-    approvalDate:row.approval_date,
-    status:row.status||'İŞLEME ALINDI',
-    important:!!row.important,
-    note:row.note||'',
-    createdBy:row.created_by||'',
-    updatedBy:row.updated_by||'',
-    createdAt:new Date(row.created_at||Date.now()).getTime(),
-    updatedAt:new Date(row.updated_at||row.created_at||Date.now()).getTime(),
+    id: row.id,
+    orderNo: row.order_no,
+    approvalDate: row.approval_date,
+    status: row.status || 'İŞLEME ALINDI',
+    important: !!row.important,
+    note: row.note || '',
+    createdBy: row.created_by || '',
+    updatedBy: row.updated_by || '',
+    createdAt: new Date(row.created_at || Date.now()).getTime(),
+    updatedAt: new Date(row.updated_at || row.created_at || Date.now()).getTime(),
     items
   };
 }
 
+
+
 async function loadOrders(){
   try{
-    let {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no');
-    if(error){
-      console.warn('Join ile sipariş çekilemedi, ayrı tablo yöntemi deneniyor:', error);
-      const ordersRes=await db.from('orders').select('*').order('order_no');
-      if(ordersRes.error) throw ordersRes.error;
-      const itemsRes=await db.from('order_items').select('*').order('sort_order');
-      if(itemsRes.error) throw itemsRes.error;
-      const rawOrders=ordersRes.data||[];
-      const rawItems=itemsRes.data||[];
-      orders=rawOrders.map(row=>{
-        const related=rawItems.filter(i=>i.order_id===row.id);
-        return mapOrder({...row, order_items: related});
-      });
-      return;
-    }
-    orders=(data||[]).map(mapOrder);
+    const ordersRes = await db.from('orders').select('*').order('order_no', { ascending:true });
+    if(ordersRes.error) throw ordersRes.error;
+    const itemsRes = await db.from('order_items').select('*').order('sort_order', { ascending:true });
+    if(itemsRes.error) throw itemsRes.error;
+
+    const rawOrders = ordersRes.data || [];
+    const rawItems = itemsRes.data || [];
+
+    orders = rawOrders.map(row=>{
+      const relatedItems = rawItems.filter(i=>i.order_id === row.id);
+      return mapOrder({ ...row, order_items: relatedItems });
+    });
   }catch(err){
-    console.error('Siparişler yüklenemedi:',err);
-    showToast('Siparişler yüklenemedi','Supabase verileri silinmedi; sadece çekme hatası var: '+err.message,'danger');
-    orders=[];
+    console.error('Siparişler yüklenemedi:', err);
+    orders = [];
+    if(typeof showToast === 'function'){
+      showToast('Siparişler yüklenemedi', 'Supabase verileri silinmedi. Hata: '+err.message, 'danger');
+    }else{
+      alert('Siparişler yüklenemedi: '+err.message);
+    }
   }
 }
+
 async function loadTesters(){
   try{
     const {data,error}=await db.from('testers').select('*').order('date',{ascending:false});
@@ -884,38 +885,114 @@ $('menuBtn').onclick=()=>$('sidebar').classList.toggle('open'); document.querySe
 function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':'Sipariş Listesi';renderOrders()}
 function openOrdersByCategory(cat){currentSpecial='ALL';currentCategory=cat||'ALL';goPage('orders');$('categorySubnav').classList.add('open');$('statusFilter').value='ALL';$('ordersTitle').textContent=cat+' Ürünler';renderOrders()}
 function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',alerts:'Uyarılar',reports:'Raporlar',newOrder:'Sipariş Ekle',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
-function renderAll(){
-  try{renderStats()}catch(e){console.error('stats',e)}
-  try{renderStatusBars()}catch(e){console.error('bars',e)}
-  try{renderLatest()}catch(e){console.error('latest',e)}
-  try{renderOrders()}catch(e){console.error('orders',e)}
-  try{renderAlerts()}catch(e){console.error('alerts',e)}
-  try{renderReports()}catch(e){console.error('reports',e)}
-  try{renderTesters()}catch(e){console.error('testers',e)}
-  try{renderPrintSelector()}catch(e){console.error('printSelector',e)}
-  try{renderPrint()}catch(e){console.error('print',e)}
-  try{updateBell()}catch(e){console.error('bell',e)}
-}
+function renderAll(){renderStats();renderStatusBars();renderLatest();renderOrders();renderAlerts();renderReports();renderTesters();renderPrintSelector();renderPrint();updateBell()}
 function countStatus(s){return orders.filter(o=>o.status===s).length}
 function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler','orders','ALL'],['Önemli',importantTotal,'Öncelikli işler','orders','IMPORTANT'],['Uyarı',alertTotal,'Yaklaşan çıkış','alerts',''],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde','orders','İŞLEME ALINDI'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı','orders','KARGO GÖNDERİLDİ'],['Tester',testerTotal,'Paket çıkışı','testers','']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card pulse-alert':''}" onclick="handleStatClick('${x[3]}','${x[4]}')"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
 function handleStatClick(type,value){if(type==='alerts'){goPage('alerts');return}if(type==='testers'){goPage('testers');return}if(type==='orders'){openOrdersByStatus(value||'ALL');return}}
 function barsHtml(){const max=Math.max(orders.length,1);return['İŞLEME ALINDI','İPTAL','KARGO GÖNDERİLDİ','TAMAMLANDI'].map(s=>{const c=countStatus(s),w=Math.round(c/max*100);return`<div class="status-bar"><b>${s}</b><span>${c}</span><div class="barline"><div class="barfill" style="width:${w}%"></div></div></div>`}).join('')}
 function renderStatusBars(){$('statusBars').innerHTML=barsHtml();$('ordersStatusBars').innerHTML=barsHtml()}
+
 function rowHtml(o,latest=false){
-  const shipped=o.status==='KARGO GÖNDERİLDİ';
-  const noteOrUser=latest ? userName(o.createdBy) : (o.note||'-');
-  const actions=latest ? '' : `<td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`;
-  return `<tr class="${o.important?'important-order':''}" data-order-id="${o.id}">
-    <td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}</td>
-    <td>${productPills(o.items)}</td>
-    <td>${itemImages(o.items)}</td>
-    <td class="scent-list">${itxt(o.items)}</td>
+  const shipped = o.status === 'KARGO GÖNDERİLDİ';
+  const createdText = latest ? userName(o.createdBy) : (o.note || '-');
+  const itemList = o.items || [];
+  return `<tr class="${o.important ? 'important-order' : ''}" data-order-id="${o.id}">
+    <td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important ? '<span class="important-pill">ÖNEMLİ</span>' : ''}</td>
+    <td>${productPills(itemList)}</td>
+    <td>${itemImages(itemList)}</td>
+    <td class="scent-list">${itxt(itemList)}</td>
     <td><strong>${fdate(o.approvalDate)}</strong><br><span class="mini">Çıkış: ${fdate(dueDateForOrder(o))} ${extraProductionNote(o)}</span></td>
-    <td>${badge(o.status)}${shipped?'':`<br>${duePill(o)}`}</td>
-    <td>${noteOrUser}</td>
-    ${latest?'':`<td>${userName(o.createdBy)}</td>`}
-    ${actions}
+    <td>${badge(o.status)}${shipped ? '' : `<br>${duePill(o)}`}</td>
+    <td>${createdText}</td>
+    ${latest ? '' : `<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}
   </tr>`;
+}
+
+
+function renderLatest(){
+  const body = $('latestOrders');
+  if(!body) return;
+  const list = [...orders].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,6);
+  body.innerHTML = list.map(o=>rowHtml(o,true)).join('') || `<tr><td colspan="7">Henüz kayıt yok.</td></tr>`;
+}
+
+
+function filtered(searchId='searchInput',statusId='statusFilter'){
+  const q = ($(searchId)?.value || '').toLowerCase().trim();
+  const st = ($(statusId)?.value || 'ALL');
+  const start = $('orderStart')?.value || '';
+  const end = $('orderEnd')?.value || '';
+
+  return [...orders]
+    .sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0))
+    .filter(o=>{
+      const items = o.items || [];
+      const hay = `${o.orderNo||''} ${o.status||''} ${o.note||''} ${itxt(items)} ${items.map(i=>i.product).join(' ')} ${userName(o.createdBy)}`.toLowerCase();
+      const matchSearch = !q || hay.includes(q);
+      const matchStatus = st === 'ALL' || o.status === st;
+      const matchCategory = currentCategory === 'ALL' || items.some(i=>i.product === currentCategory);
+      const matchSpecial = currentSpecial !== 'IMPORTANT' || o.important;
+      const matchDate = (!start || o.approvalDate >= start) && (!end || o.approvalDate <= end);
+      return matchSearch && matchStatus && matchCategory && matchSpecial && matchDate;
+    });
+}
+
+
+function renderOrders(){
+  const body = $('ordersTable');
+  if(!body) return;
+  const list = filtered();
+  body.innerHTML = list.map(o=>rowHtml(o,false)).join('') || `<tr><td colspan="9">Kayıt bulunamadı.</td></tr>`;
+}
+
+$('searchInput').oninput=renderOrders;$('statusFilter').onchange=renderOrders;if($('orderStart'))$('orderStart').onchange=renderOrders;if($('orderEnd'))$('orderEnd').onchange=renderOrders;function clearFilters(){$('searchInput').value='';$('statusFilter').value='ALL';if($('orderStart'))$('orderStart').value='';if($('orderEnd'))$('orderEnd').value='';currentCategory='ALL';currentSpecial='ALL';$('ordersTitle').textContent='Sipariş Listesi';renderOrders()}
+function setOrdersToday(){const today=toISODate(new Date());$('orderStart').value=today;$('orderEnd').value=today;renderOrders()}
+function addItemRow(product='OTO KOKUSU',q='',d='',image='',file=null){const rowId=uid();const div=document.createElement('div');div.className='item-row';div.dataset.image=image||'';div.dataset.rowid=rowId;div.innerHTML=`<select class="item-product">${PRODUCTS.map(p=>`<option ${p===product?'selected':''}>${p}</option>`).join('')}</select><input type="number" class="item-qty" placeholder="250" value="${q}" required><input class="item-desc" placeholder="NEW CAR / PASPAS / SIRT KARTONU" value="${d}" required><div class="item-photo-box"><input id="file_${rowId}" type="file" accept="image/*" class="item-file hidden"><button type="button" class="btn btn-light" onclick="document.getElementById('file_${rowId}').click()">Fotoğraf</button><span class="item-preview">${image?`<img src="${image}">`:''}</span></div><button type="button" class="btn btn-danger" onclick="this.parentElement.remove()">×</button>`;$('itemsBox').appendChild(div);div.querySelector('.item-file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;div._file=f;const r=new FileReader();r.onload=()=>{div.querySelector('.item-preview').innerHTML=`<img src="${r.result}">`};r.readAsDataURL(f)})}
+$('orderForm').addEventListener('submit',async e=>{e.preventDefault();try{document.body.classList.add('loading');const id=$('editId').value,orderNo=Number($('orderNo').value);const rows=[...document.querySelectorAll('.item-row')];if(!rows.length){alert('En az 1 adet ürün/adet satırı ekle.');return}const items=[];for(const [idx,row] of rows.entries()){const product=row.querySelector('.item-product').value;const quantity=Number(row.querySelector('.item-qty').value);const desc=row.querySelector('.item-desc').value.trim().toUpperCase();if(!quantity||!desc)continue;let image=row.dataset.image||'';if(row._file) image=await uploadFile(row._file,`orders/${orderNo}`);items.push({product,quantity,desc,image,sort:idx})}if(!items.length){alert('En az 1 adet ürün/adet satırı ekle.');return}let orderId=id;if(id){const {error}=await db.from('orders').update({order_no:orderNo,approval_date:$('approvalDate').value,status:$('status').value,important:$('important').checked,note:$('note').value.trim(),updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);if(error)throw error;await db.from('order_items').delete().eq('order_id',id)}else{const {data,error}=await db.from('orders').insert({order_no:orderNo,approval_date:$('approvalDate').value,status:$('status').value,important:$('important').checked,note:$('note').value.trim(),created_by:currentUser.email,updated_by:currentUser.email}).select().single();if(error)throw error;orderId=data.id}const payload=items.map(i=>({order_id:orderId,product:i.product,quantity:i.quantity,description:i.desc,image_url:i.image,sort_order:i.sort}));const {error:itemError}=await db.from('order_items').insert(payload);if(itemError)throw itemError;resetForm();await refreshAll();showToast('Sipariş kaydedildi',`No:${orderNo} siparişi başarıyla sisteme eklendi.`,'success','Siparişi Gör',()=>openOrdersByStatus('ALL'));openOrdersByStatus('ALL')}catch(err){alert('Sipariş kaydedilemedi: '+err.message)}finally{document.body.classList.remove('loading')}});
+function resetForm(setNext=true){$('orderForm').reset();$('editId').value='';$('formTitle').textContent='Sipariş Ekle';$('itemsBox').innerHTML='';$('important').checked=false;addItemRow();if(setNext){const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:2367;$('orderNo').value=max}$('approvalDate').valueAsDate=new Date();$('status').value='İŞLEME ALINDI'}
+function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${o.orderNo} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
+async function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;const {error}=await db.from('orders').update({status:'KARGO GÖNDERİLDİ',updated_by:currentUser.email,updated_at:new Date().toISOString()}).eq('id',id);if(error){alert(error.message);return}await refreshAll();showToast('Kargo çıkışı işlendi','Sipariş kargolandı olarak güncellendi ve uyarı listesinden düşürüldü.','success')}
+async function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if(!confirm(`No:${o.orderNo} siparişini silmek istediğine emin misin?`))return;const {error}=await db.from('orders').delete().eq('id',id);if(error)alert(error.message);await refreshAll()}
+function renderAlerts(){if(!$('alertsTable'))return;const list=getAlertOrders();const dueToday=list.filter(o=>daysUntilDate(dueDateForOrder(o))<=0).length;const dueSoon=list.filter(o=>daysUntilDate(dueDateForOrder(o))>0).length;$('alertSummary').innerHTML=`<div class="status-bar alert-card"><b>Bugün / Geciken</b><span>${dueToday}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueToday*20)}%"></div></div></div><div class="status-bar"><b>Yaklaşan</b><span>${dueSoon}</span><div class="barline"><div class="barfill" style="width:${Math.min(100,dueSoon*20)}%"></div></div></div>`;$('alertsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span></td><td>${productPills(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span>`:''}</td><td>${duePill(o)}</td><td><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button></td></tr>`).join('')||`<tr><td colspan="7">Şu an yaklaşan kargo uyarısı yok.</td></tr>`}
+function setReportToday(){const today=toISODate(new Date());$('reportStart').value=today;$('reportEnd').value=today;renderReports()}
+function setReportThisWeek(){const now=new Date(),day=now.getDay()||7,start=new Date(now);start.setDate(now.getDate()-day+1);const end=new Date(start);end.setDate(start.getDate()+6);$('reportStart').value=toISODate(start);$('reportEnd').value=toISODate(end);renderReports()}
+function renderReports(showMsg=false){if(!$('reportsTable'))return;const start=$('reportStart')?.value||'',end=$('reportEnd')?.value||'',type=$('reportType')?.value||'received';let list=[...orders];if(type==='received')list=list.filter(o=>inRange(o.approvalDate,start,end));if(type==='shipping')list=list.filter(o=>inRange(dueDateForOrder(o),start,end));if(type==='important')list=list.filter(o=>o.important&&inRange(o.approvalDate,start,end));list=list.sort((a,b)=>a.orderNo-b.orderNo);const titleMap={received:'Gelen / İşleme Alınan Siparişler',shipping:'Çıkması Gereken Siparişler',important:'Önemli Siparişler'};$('reportTitle').textContent=titleMap[type]||'Rapor Sonuçları';$('reportCount').textContent=`${list.length} kayıt`;if(showMsg)showToast('Rapor hazır',`${list.length} kayıt listelendi.`,'success');$('reportsTable').innerHTML=list.map(o=>`<tr><td><span class="order-no-strong">No:${o.orderNo}</span>${o.important?'<br><span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong></td><td><strong>${fdate(dueDateForOrder(o))}</strong><br>${extraProductionNote(o)?`<span class="due-pill">${extraProductionNote(o)}</span><br>`:''}${duePill(o)}</td><td>${badge(o.status)}</td><td>${o.note||'-'}</td></tr>`).join('')||`<tr><td colspan="7">Bu aralıkta kayıt bulunamadı.</td></tr>`}
+function renderPrintSelector(){if(!$('printSelector'))return;const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk});$('printSelector').innerHTML=list.map(o=>`<label class="select-order"><input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint()"><strong>No:${o.orderNo}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span>${badge(o.status)}</label>`).join('')||'Kayıt bulunamadı.'}
+$('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;if($('printStart'))$('printStart').onchange=renderPrintSelector;if($('printEnd'))$('printEnd').onchange=renderPrintSelector;
+function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);if(ids.length)return orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk}).slice(0,12)}
+function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=(o.items||[]).map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:20mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999">GÖRSEL YOK</div>`}</div>`).join('');const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return`<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">
+  ${fdate(o.approvalDate)}
+  <div style="font-size:10px;font-weight:900;margin-top:4px;color:#475569;border-top:1px dashed #cbd5e1;padding-top:3px">
+    → Çıkış: ${fdate(dueDateForOrder(o))}${extraProductionNote(o)?`<br><span style="color:#9a3412">${extraProductionNote(o)}</span>`:''}
+  </div>
+</div></td></tr>`}).join('')}
+function setPrintToday(){const today=toISODate(new Date());$('printStart').value=today;$('printEnd').value=today;renderPrintSelector();renderPrint()}
+function selectAllPrint(v){document.querySelectorAll('.print-check').forEach(c=>c.checked=v);renderPrint()}
+function resetTesterForm(){if(!$('testerForm'))return;$('testerForm').reset();$('testerEditId').value='';$('testerDate').valueAsDate=new Date()}
+function renderTesters(){if(!$('testerTable'))return;const list=[...testers].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('testerCount').textContent=`Toplam ${list.length} kayıt`;$('testerTable').innerHTML=list.map(t=>`<tr><td><strong>${fdate(t.date)}</strong></td><td><strong>${t.qty} Paket</strong></td><td>${t.target||'-'}</td><td>${t.note||'-'}</td><td>${userName(t.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editTester('${t.id}')">Düzenle</button><button class="btn btn-danger" onclick="deleteTester('${t.id}')">Sil</button></div></td></tr>`).join('')||`<tr><td colspan="6">Henüz tester çıkışı yok.</td></tr>`}
+$('testerForm').addEventListener('submit',async e=>{e.preventDefault();const id=$('testerEditId').value,old=id?testers.find(t=>t.id===id):null;const payload={date:$('testerDate').value,qty:Number($('testerQty').value),target:$('testerTarget').value.trim(),note:$('testerNote').value.trim(),created_by:old?old.createdBy:currentUser.email,updated_at:new Date().toISOString()};let error;if(id)({error}=await db.from('testers').update(payload).eq('id',id));else({error}=await db.from('testers').insert(payload));if(error){alert(error.message);return}resetTesterForm();await refreshAll();showToast('Tester çıkışı kaydedildi','Tester kaydı başarıyla sisteme eklendi.','success','Testerları Gör',()=>goPage('testers'))});
+function editTester(id){const t=testers.find(x=>x.id===id);if(!t)return;goPage('testers');$('testerEditId').value=t.id;$('testerDate').value=t.date;$('testerQty').value=t.qty;$('testerTarget').value=t.target||'';$('testerNote').value=t.note||''}
+async function deleteTester(id){const t=testers.find(x=>x.id===id);if(!t)return;if(!confirm(`${fdate(t.date)} tarihli tester kaydını silmek istediğine emin misin?`))return;const {error}=await db.from('testers').delete().eq('id',id);if(error)alert(error.message);await refreshAll()}
+function fillProfile(){if(!currentUser)return;$('profileName').value=currentUser.name||'';$('profileEmail').value=currentUser.email;$('profilePhone').value=currentUser.phone||'';$('profilePassword').value='';profilePhotoCache=currentUser.photo_url||'';if(profilePhotoCache){$('profilePreview').src=profilePhotoCache;$('profilePreview').classList.remove('hidden')}else $('profilePreview').classList.add('hidden');$('profileOk').classList.add('hidden')}
+$('profilePhotoInput').onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{profilePhotoCache=r.result;$('profilePreview').src=profilePhotoCache;$('profilePreview').classList.remove('hidden');$('profilePreview')._file=file};r.readAsDataURL(file)};
+$('profileForm').addEventListener('submit',async e=>{e.preventDefault();try{let photoUrl=profilePhotoCache;if($('profilePreview')._file) photoUrl=await uploadFile($('profilePreview')._file,`profiles/${currentUser.email}`);const update={name:$('profileName').value.trim()||currentUser.name,phone:$('profilePhone').value.trim(),photo_url:photoUrl};if($('profilePassword').value.trim())update.password=$('profilePassword').value.trim();const {error}=await db.from('app_users').update(update).eq('email',currentUser.email);if(error)throw error;await loadUsers();currentUser=users.find(u=>u.email===currentUser.email);$('currentName').textContent=currentUser.name;if(currentUser.photo_url){$('sideAvatar').src=currentUser.photo_url;$('sideAvatar').classList.remove('hidden')}$('profileOk').classList.remove('hidden')}catch(err){alert('Profil güncellenemedi: '+err.message)}});
+function openImageModal(src){if(!src)return;$('imageModalImg').src=src;$('imageModal').classList.remove('hidden')}
+function closeImageModal(){$('imageModal').classList.add('hidden');$('imageModalImg').src=''}
+
+function showToast(title,message,type='success',actionText='',actionFn=null){
+  const stack=$('toastStack');
+  if(!stack)return;
+  const el=document.createElement('div');
+  el.className=`toast-card ${type}`;
+  el.innerHTML=`<h3>${title}</h3><p>${message}</p>${actionText?`<button type="button">${actionText}</button>`:''}`;
+  if(actionText && actionFn){
+    el.querySelector('button').onclick=actionFn;
+  }
+  stack.appendChild(el);
+  setTimeout(()=>{
+    el.style.animation='toastOut .22s ease forwards';
+    setTimeout(()=>el.remove(),240);
+  },4200);
 }
 function updateBell(){
   const count=getAlertOrders().length;
