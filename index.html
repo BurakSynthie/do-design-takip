@@ -2858,6 +2858,83 @@ table{
   .print-mark-btn{grid-column:1/-1!important}
 }
 
+
+/* ===== V45 A4 SECIM ALANI KOMPAKT + ONIZLEME FIX ===== */
+#printSelector.compact-print-select-list{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important;
+  gap:5px!important;
+  max-height:220px!important;
+  overflow:auto!important;
+  padding:4px!important;
+  margin-top:8px!important;
+  background:rgba(255,255,255,.03)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+  border-radius:14px!important;
+}
+.print-select-chip{
+  display:grid!important;
+  grid-template-columns:16px 62px 34px 1fr 54px!important;
+  gap:5px!important;
+  align-items:center!important;
+  min-height:30px!important;
+  padding:4px 6px!important;
+  border-radius:10px!important;
+  background:rgba(255,255,255,.05)!important;
+  border:1px solid rgba(255,255,255,.10)!important;
+}
+.print-select-chip input{
+  width:14px!important;
+  height:14px!important;
+  accent-color:#64748b!important;
+}
+.chip-no{
+  color:#fff!important;
+  font-size:10px!important;
+  font-weight:1000!important;
+  white-space:nowrap!important;
+}
+.chip-job{
+  color:#cbd5e1!important;
+  font-size:8px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+}
+.chip-text{
+  color:#fff!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  min-width:0!important;
+}
+.chip-print-btn{
+  min-height:22px!important;
+  padding:2px 5px!important;
+  border-radius:8px!important;
+  background:rgba(220,38,38,.18)!important;
+  border:1px solid rgba(248,113,113,.28)!important;
+  color:#fecaca!important;
+  font-size:8px!important;
+  font-weight:1000!important;
+}
+.print-select-chip.printed-row{
+  background:rgba(34,197,94,.10)!important;
+  border-color:rgba(34,197,94,.22)!important;
+}
+#printSelector.compact-print-select-list::-webkit-scrollbar{height:6px;width:6px}
+#printSelector.compact-print-select-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:999px}
+@media(max-width:650px){
+  #printSelector.compact-print-select-list{
+    grid-template-columns:1fr!important;
+    max-height:250px!important;
+  }
+  .print-select-chip{
+    grid-template-columns:16px 60px 34px 1fr 52px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3719,35 +3796,49 @@ function bindPrintControls(){
 }
 
 
+
 function renderPrintSelector(){
   const box=$('printSelector');
   if(!box)return;
   ensurePrintDates();
+
   const q=($('printSearch')?.value||'').toLowerCase().trim();
   const st=$('printStatusFilter')?.value||'ALL';
   const start=$('printStart')?.value||getMinOrderDate();
   const end=$('printEnd')?.value||toISODate(new Date());
-  const list=[...orders].filter(o=>printMatches(o,q,st,start,end)).sort((a,b)=>(Number(getOrderGroupBase(a.orderNo))||0)-(Number(getOrderGroupBase(b.orderNo))||0));
-  box.className='print-select-list';
+
+  const list=[...orders]
+    .filter(o=>printMatches(o,q,st,start,end))
+    .sort((a,b)=>(Number(getOrderGroupBase(a.orderNo))||0)-(Number(getOrderGroupBase(b.orderNo))||0));
+
+  box.className='print-select-list compact-print-select-list';
   box.innerHTML=list.map(o=>{
     const txt=itxt(o.items).replaceAll('\n',' / ');
-    return `<label class="print-select-row ${isPrinted(o.id)?'printed-row':''}">
+    return `<label class="print-select-chip ${isPrinted(o.id)?'printed-row':''}">
       <input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint();updatePrintSelectedCount()">
-      <div class="print-select-mini"><strong>No:${getDisplayOrderNo(o.orderNo)}</strong><span>${getSubOrderLabel(o.orderNo)}</span></div>
-      <div class="print-select-desc"><b>${txt}</b><small>${fdate(o.approvalDate)} → ${fdate(dueDateForOrder(o))}</small></div>
-      <button type="button" class="print-mark-btn" onclick="event.preventDefault();togglePrinted('${o.id}')">${isPrinted(o.id)?'Basıldı ✓':'Basıldı İşaretle'}</button>
+      <span class="chip-no">No:${getDisplayOrderNo(o.orderNo)}</span>
+      <span class="chip-job">${getSubOrderLabel(o.orderNo)}</span>
+      <span class="chip-text">${txt}</span>
+      <button type="button" class="chip-print-btn" onclick="event.preventDefault();togglePrinted('${o.id}')">${isPrinted(o.id)?'✓':'Basıldı'}</button>
     </label>`;
   }).join('') || `<div class="empty-print-state">${currentPrintFilter==='printed'?'Basılan kayıt yok.':'Basılmayan kayıt yok.'}</div>`;
+
   updatePrintSelectedCount();
+  renderPrint();
 }
 
 
 function renderPrint(){
-  if(!$('printRows'))return;
-  const ids=[...document.querySelectorAll('.print-check:checked')].map(c=>c.value);
-  const selected=orders.filter(o=>ids.includes(o.id)).sort((a,b)=>(Number(getOrderGroupBase(a.orderNo))||0)-(Number(getOrderGroupBase(b.orderNo))||0));
-  $('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
-  $('printRows').innerHTML=selected.map(o=>{
+  const rows=$('printRows');
+  if(!rows)return;
+  const ids=[...document.querySelectorAll('.print-check:checked')].map(c=>String(c.value));
+  const selected=orders
+    .filter(o=>ids.includes(String(o.id)))
+    .sort((a,b)=>(Number(getOrderGroupBase(a.orderNo))||0)-(Number(getOrderGroupBase(b.orderNo))||0));
+
+  if($('printTopDate'))$('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
+
+  rows.innerHTML=selected.map(o=>{
     const productHtml=uniquePrintProductCards(o.items||[]);
     return `<tr class="${isPrinted(o.id)?'printed-print-row':''}">
       <td>
@@ -3769,6 +3860,7 @@ function renderPrint(){
       </td>
     </tr>`;
   }).join('') || '<tr><td colspan="3">Yazdırmak için sipariş seç.</td></tr>';
+
   updatePrintSelectedCount();
 }
 
