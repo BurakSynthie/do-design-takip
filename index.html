@@ -12,7 +12,7 @@
 <style>
 :root{--bg:#06101d;--panel:#101f33;--line:rgba(125,211,252,.2);--text:#eef8ff;--muted:#8fb2c7;--blue:#06b6d4;--blue2:#38bdf8;--red:#ef4444}
 *{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at 15% 10%,rgba(6,182,212,.22),transparent 30%),linear-gradient(135deg,var(--bg),#030712);color:var(--text);overflow-x:hidden}
-button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer} .hidden{display:none!important} .mini{font-size:12px;color:var(--muted)} .loading{opacity:.55;pointer-events:none}
+button,input,select,textarea{font-family:inherit} button{border:0;cursor:pointer} .hidden{display:none!important} .mini{font-size:12px;color:var(--muted)} .loading{opacity:.85}
 .login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:22px} .login-card{width:100%;max-width:430px;background:rgba(16,31,51,.94);border:1px solid var(--line);border-radius:28px;padding:30px;box-shadow:0 24px 60px rgba(0,0,0,.32)} .brand-mark{width:70px;height:70px;border-radius:22px;background:linear-gradient(135deg,var(--blue),var(--blue2));display:flex;align-items:center;justify-content:center;color:#00111d;font-size:25px;font-weight:950;margin-bottom:18px} h1,h2,p{margin-top:0} .login-card h1{font-size:29px;margin-bottom:8px} .login-card p{color:var(--muted);line-height:1.5}
 .field{display:flex;flex-direction:column;gap:8px;margin-bottom:14px} .field label{font-size:13px;font-weight:900;color:#cdeeff} .field input,.field select,.field textarea,.filters input,.filters select{width:100%;border:1px solid var(--line);background:#071827;color:var(--text);border-radius:14px;padding:12px 13px;font-size:15px;outline:none} .field textarea{min-height:90px;resize:vertical}
 .remember-row,.important-row{display:flex;align-items:center;gap:10px;margin:4px 0 18px;color:#cdeeff;font-weight:800;font-size:14px} .remember-row input,.important-row input{width:18px;height:18px;accent-color:var(--blue)}
@@ -746,7 +746,21 @@ async function loadUsers(){
 
 async function loadOrders(){const {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no'); if(error){alert('Siparişler yüklenemedi: '+error.message);orders=[];return} orders=(data||[]).map(mapOrder)}
 async function loadTesters(){const {data,error}=await db.from('testers').select('*').order('date',{ascending:false}); if(error){alert('Tester kayıtları yüklenemedi: '+error.message);testers=[];return} testers=(data||[]).map(t=>({id:t.id,date:t.date,qty:t.qty,target:t.target||'',note:t.note||'',createdBy:t.created_by||'',createdAt:new Date(t.created_at||Date.now()).getTime()}))}
-async function refreshAll(){document.body.classList.add('loading');await Promise.all([loadOrders(),loadTesters(),loadUsers()]);document.body.classList.remove('loading');renderAll()}
+async function refreshAll(){
+  document.body.classList.add('loading');
+  try{
+    await Promise.allSettled([loadOrders(),loadTesters(),loadUsers()]);
+  }catch(err){
+    console.warn('Veri yükleme genel hata:',err);
+  }finally{
+    document.body.classList.remove('loading');
+    try{renderAll()}catch(renderErr){console.error('Ekran render hatası:',renderErr);showFallbackDashboard(renderErr)}
+  }
+}
+function showFallbackDashboard(err){
+  const msg=err?.message||'Bilinmeyen ekran hatası';
+  if($('dashboardPage'))$('dashboardPage').innerHTML=`<div class="panel"><h2>Panel yüklenirken küçük bir hata oluştu</h2><p class="mini">${msg}</p><button class="btn btn-primary" onclick="location.reload()">Sayfayı Yenile</button></div>`;
+}
 async function uploadFile(file,pathPrefix){if(!file)return'';const ext=(file.name.split('.').pop()||'png').toLowerCase();const path=`${pathPrefix}/${Date.now()}-${uid()}.${ext}`;const {error}=await db.storage.from(BUCKET).upload(path,file,{upsert:true});if(error)throw error;return db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}
 async function startApp(email){
   await loadUsers();
@@ -757,6 +771,7 @@ async function startApp(email){
     return location.reload();
   }
   document.body.classList.add('logged-in');
+  document.body.classList.remove('loading');
   $('loginPage').classList.add('hidden');
   $('app').classList.remove('hidden');
   $('currentUser').textContent=currentUser.email;
@@ -764,8 +779,8 @@ async function startApp(email){
   if(currentUser.photo_url){$('sideAvatar').src=currentUser.photo_url;$('sideAvatar').classList.remove('hidden')}else $('sideAvatar').classList.add('hidden');
   resetForm(false);
   resetTesterForm();
-  await refreshAll();
   goPage('dashboard');
+  await refreshAll();
 }
 async function prefillRemember(){await loadUsers();const r=localStorage.getItem(REMEMBER_KEY);if(r){$('loginEmail').value=r;$('rememberMe').checked=true}}
 $('loginForm').addEventListener('submit',async e=>{
@@ -790,7 +805,18 @@ $('menuBtn').onclick=()=>$('sidebar').classList.toggle('open'); document.querySe
 function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':'Sipariş Listesi';renderOrders()}
 function openOrdersByCategory(cat){currentSpecial='ALL';currentCategory=cat||'ALL';goPage('orders');$('categorySubnav').classList.add('open');$('statusFilter').value='ALL';$('ordersTitle').textContent=cat+' Ürünler';renderOrders()}
 function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',alerts:'Uyarılar',reports:'Raporlar',newOrder:'Sipariş Ekle',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
-function renderAll(){renderStats();renderStatusBars();renderLatest();renderOrders();renderAlerts();renderReports();renderTesters();renderPrintSelector();renderPrint();updateBell()}
+function renderAll(){
+  try{renderStats()}catch(e){console.error('stats',e)}
+  try{renderStatusBars()}catch(e){console.error('bars',e)}
+  try{renderLatest()}catch(e){console.error('latest',e)}
+  try{renderOrders()}catch(e){console.error('orders',e)}
+  try{renderAlerts()}catch(e){console.error('alerts',e)}
+  try{renderReports()}catch(e){console.error('reports',e)}
+  try{renderTesters()}catch(e){console.error('testers',e)}
+  try{renderPrintSelector()}catch(e){console.error('printSelector',e)}
+  try{renderPrint()}catch(e){console.error('print',e)}
+  try{updateBell()}catch(e){console.error('bell',e)}
+}
 function countStatus(s){return orders.filter(o=>o.status===s).length}
 function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler','orders','ALL'],['Önemli',importantTotal,'Öncelikli işler','orders','IMPORTANT'],['Uyarı',alertTotal,'Yaklaşan çıkış','alerts',''],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde','orders','İŞLEME ALINDI'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı','orders','KARGO GÖNDERİLDİ'],['Tester',testerTotal,'Paket çıkışı','testers','']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card pulse-alert':''}" onclick="handleStatClick('${x[3]}','${x[4]}')"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
 function handleStatClick(type,value){if(type==='alerts'){goPage('alerts');return}if(type==='testers'){goPage('testers');return}if(type==='orders'){openOrdersByStatus(value||'ALL');return}}
