@@ -2709,59 +2709,114 @@ table{
 }
 
 
-/* ===== GLOBAL TEK GORSEL SISTEMI V42 ===== */
-.single-thumb-wrap{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:100%!important;
+/* ===== V42 A4 LISTE UX FIX ===== */
+.print-filter-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
+}
+.print-filter-btn{
+  min-height:38px;
+  padding:8px 14px;
+  border-radius:12px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.14);
+  color:#fff;
+  font-weight:900;
+}
+.print-filter-btn.active{
+  background:linear-gradient(135deg,#475569,#1e293b);
+  border-color:rgba(255,255,255,.28);
 }
 
-.single-thumb{
-  width:54px!important;
-  height:54px!important;
-  object-fit:contain!important;
-  border-radius:12px!important;
-  background:#f8fafc!important;
-  border:1px solid rgba(255,255,255,.18)!important;
-  box-shadow:0 8px 18px rgba(0,0,0,.18)!important;
+#printSelector{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
 }
 
-.empty-thumb{
-  width:54px!important;
-  height:54px!important;
-  border-radius:12px!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  text-align:center!important;
-  line-height:1.05!important;
-  font-size:8px!important;
-  font-weight:1000!important;
-  background:rgba(255,255,255,.06)!important;
-  border:1px dashed rgba(255,255,255,.16)!important;
-  color:#94a3b8!important;
+.print-select-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  min-height:52px;
 }
 
-#ordersTable .multi-thumbs,
-#latestOrders .multi-thumbs,
-#alertsTable .multi-thumbs,
-#reportsTable .multi-thumbs{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  max-width:none!important;
+.print-select-row input{
+  width:16px;
+  height:16px;
+  accent-color:#64748b;
+}
+
+.print-select-content{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+
+.print-select-no{
+  font-size:13px;
+  font-weight:1000;
+  color:#fff;
+}
+
+.print-select-date,
+.print-select-items{
+  font-size:11px;
+  color:#cbd5e1;
+}
+
+.print-select-badge{
+  padding:3px 7px;
+  border-radius:999px;
+  background:rgba(34,197,94,.18);
+  border:1px solid rgba(34,197,94,.28);
+  color:#bbf7d0;
+  font-size:10px;
+  font-weight:1000;
+}
+
+.empty-print-state{
+  grid-column:1/-1;
+  padding:16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  text-align:center;
+  color:#cbd5e1;
+  font-weight:800;
 }
 
 @media(max-width:650px){
-  .single-thumb{
-    width:48px!important;
-    height:48px!important;
+  #printSelector{
+    grid-template-columns:1fr;
+    gap:6px;
   }
 
-  .empty-thumb{
-    width:48px!important;
-    height:48px!important;
+  .print-select-row{
+    min-height:46px;
+    padding:7px 9px;
+    border-radius:12px;
+  }
+
+  .print-select-no{
+    font-size:12px;
+  }
+
+  .print-select-date,
+  .print-select-items{
+    font-size:10px;
+  }
+
+  .print-filter-btn{
+    flex:1;
+    min-height:34px;
+    font-size:11px;
   }
 }
 
@@ -2816,7 +2871,13 @@ table{
 250 BLACK ICE
 500 VANILLA"></textarea><div class="actions"><button type="button" class="btn btn-primary" onclick="addBulkItems()">Kokuları Satıra Çevir</button><button type="button" class="btn btn-light" onclick="$('bulkItemsText').value=''">Temizle</button></div><span class="mini">İlk satıra görseli yükle, buraya kokuları yaz; sistem aynı görselle satırlara böler.</span></div><span class="mini">Aynı görselli çoklu koku için tekrar fotoğraf yüklemene gerek yok.</span></div><div class="field"><label>Not</label><textarea id="note" placeholder="Örn: 14.05 acil çıkış, öncelikli üretim..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Kaydet</button><button class="btn btn-dark" type="button" onclick="openOrdersByStatus('ALL')">Listeye Dön</button></div></form></div></section>
 <section id="testersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tester Çıkışı</h2><span class="mini">Siparişten bağımsız tester paketlerini buradan takip et.</span></div><form id="testerForm" action="javascript:void(0)"><input type="hidden" id="testerEditId"><div class="grid-3"><div class="field"><label>Tarih</label><input id="testerDate" type="date" required></div><div class="field"><label>Paket Adedi</label><input id="testerQty" type="number" required placeholder="10"></div><div class="field"><label>Gönderilen Yer / Kişi</label><input id="testerTarget" placeholder="Firma / kişi adı"></div></div><div class="field"><label>Not</label><textarea id="testerNote" placeholder="Örn: 5 paket oto kokusu tester, 2 paket paspas numunesi..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Tester Kaydet</button><button class="btn btn-light" type="button" onclick="resetTesterForm()">Temizle</button></div></form></div><div class="panel"><div class="panel-head"><h2>Tester Geçmişi</h2><span id="testerCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>Tarih</th><th>Paket</th><th>Gönderilen</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="testerTable"></tbody></table></div></div></section>
-<section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi <span id="printSelectedCount" class="print-count-pill">0 seçildi</span></h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters print-filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option><option>ARŞİV</option></select><input id="printStart" type="date"><input id="printEnd" type="date"><button class="btn btn-light" onclick="setPrintToday()">Bugün</button><button class="btn btn-dark" onclick="renderPrintSelector();renderPrint()">A4 Güncelle</button></div><div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header">
+<section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi <span id="printSelectedCount" class="print-count-pill">0 seçildi</span></h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters print-filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option><option>ARŞİV</option></select><input id="printStart" type="date"><input id="printEnd" type="date"><button class="btn btn-light" onclick="setPrintToday()">Bugün</button><button class="btn btn-dark" onclick="renderPrintSelector();renderPrint()">A4 Güncelle</button></div>
+<div class="print-filter-tabs">
+  <button id="printFilterPendingBtn" class="print-filter-btn active" onclick="setPrintFilter('pending')">Basılmayanlar</button>
+  <button id="printFilterPrintedBtn" class="print-filter-btn" onclick="setPrintFilter('printed')">Basılanlar</button>
+</div>
+
+<div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header">
   <div class="print-logo-side">
     <img src="/do-logo.png" alt="DO DESIGN" class="print-logo-img">
     <div>
@@ -2980,24 +3041,13 @@ function itxt(items){
   return (items||[]).map(lineText).join('\n');
 }
 
-
-function getUniqueOrderVisual(items){
-  const first=(items||[]).find(i=>(i.image||i.image_url));
-  return first ? (first.image||first.image_url) : '';
-}
-
-function itemImages(items){
-  const img=getUniqueOrderVisual(items);
-
-  if(!img){
-    return `<div class="single-thumb empty-thumb">GÖRSEL<br>YOK</div>`;
-  }
-
-  return `
-    <div class="single-thumb-wrap">
-      <img class="single-thumb" src="${img}" onclick="openImageModal('${img}')">
-    </div>
-  `;
+function productClassName(p){
+  const v=String(p||'').toUpperCase();
+  if(v.includes('OTO')) return 'cat-oto';
+  if(v.includes('PASPAS')) return 'cat-paspas';
+  if(v.includes('BARDAK')) return 'cat-bardak';
+  if(v.includes('SIRT')) return 'cat-sirt';
+  return 'cat-default';
 }
 
 function productClassName(p){
@@ -3008,14 +3058,27 @@ function productClassName(p){
   if(v.includes('SIRT')) return 'cat-sirt';
   return 'cat-default';
 }
-
 function productPills(items){
-  const unique=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
+  const arr=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
+  return arr.map(p=>`<span class="product-pill ${productClassName(p)}">${p}</span>`).join('');
+}
 
-  return unique
-    .slice(0,3)
-    .map(p=>`<span class="product-pill ${productClassName(p)}">${p}</span>`)
-    .join('');
+function itemImages(items){
+  const seen=new Set();
+  const imgs=(items||[])
+    .map(i=>i.image||i.image_url)
+    .filter(Boolean)
+    .filter(src=>{
+      if(seen.has(src))return false;
+      seen.add(src);
+      return true;
+    });
+
+  if(!imgs.length){
+    return `<div class="empty-thumb">GÖRSEL<br>YOK</div>`;
+  }
+
+  return `<div class="multi-thumbs unique-thumbs">${imgs.slice(0,3).map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}${imgs.length>3?`<span class="more-img">+${imgs.length-3}</span>`:''}</div>`;
 }
 
 function badge(s){
@@ -3542,61 +3605,56 @@ function renderReports(showMsg=false){
   </tr>`).join('')||`<tr><td colspan="3">Bu aralıkta kayıt bulunamadı.</td></tr>`;
 }
 
+
+let currentPrintFilter='pending';
+
+function setPrintFilter(type){
+  currentPrintFilter=type;
+  $('printFilterPendingBtn')?.classList.toggle('active',type==='pending');
+  $('printFilterPrintedBtn')?.classList.toggle('active',type==='printed');
+  renderPrintSelector();
+}
+
+function filteredPrintOrders(){
+  const start=$('printStart')?.value||getMinOrderDate();
+  const end=$('printEnd')?.value||toISODate(new Date());
+
+  return orders
+    .filter(o=>inRange(o.approvalDate,start,end))
+    .filter(o=>{
+      const printed=isPrinted(o.id);
+      return currentPrintFilter==='printed' ? printed : !printed;
+    })
+    .sort((a,b)=>a.orderNo-b.orderNo);
+}
+
+
 function renderPrintSelector(){
   if(!$('printSelector'))return;
-  const q=($('printSearch')?.value||'').toLowerCase().trim();
-  const st=($('printStatusFilter')?.value||'ALL');
-  const start=$('printStart')?.value||'';
-  const end=$('printEnd')?.value||'';
 
-  const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{
-    const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();
-    const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);
-    return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk;
-  });
+  if($('printStart') && !$('printStart').value){
+    $('printStart').value=getMinOrderDate();
+  }
+  if($('printEnd') && !$('printEnd').value){
+    $('printEnd').value=toISODate(new Date());
+  }
 
-  $('printSelector').innerHTML=list.map(o=>{
-    const printed=isPrinted(o.id);
-    return `<label class="print-select-card ${printed?'already-printed':''}">
+  const list=filteredPrintOrders();
+
+  $('printSelector').innerHTML=list.map(o=>`
+    <label class="print-select-row ${isPrinted(o.id)?'printed-row':''}">
       <input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint();updatePrintSelectedCount()">
-      <div class="print-select-no">No:${o.orderNo}</div>
-      <div class="print-select-img">${itemImages(o.items)}</div>
-      <div class="print-select-main">
-        <div>${productPills(o.items)}</div>
-        <strong>${itxt(o.items).replaceAll('\n',' / ')}</strong>
-        <small>${fdate(o.approvalDate)} → ${fdate(dueDateForOrder(o))}</small>
+      <div class="print-select-content">
+        <span class="print-select-no">No:${o.orderNo}</span>
+        <span class="print-select-date">${fdate(o.approvalDate)}</span>
+        <span class="print-select-items">${(o.items||[]).length} ürün</span>
+        ${isPrinted(o.id)?'<span class="print-select-badge">Basıldı</span>':''}
       </div>
-      <button type="button" class="mini-printed-btn" onclick="event.preventDefault();togglePrinted('${o.id}')">${printed?'Çıktı İşaretli':'Çıktı Alındı'}</button>
-    </label>`;
-  }).join('')||'Kayıt bulunamadı.';
+    </label>
+  `).join('') || `<div class="empty-print-state">${currentPrintFilter==='printed'?'Basılmış kayıt yok.':'Basılacak kayıt yok.'}</div>`;
 
   updatePrintSelectedCount();
 }
-
-$('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;if($('printStart'))$('printStart').onchange=renderPrintSelector;if($('printEnd'))$('printEnd').onchange=renderPrintSelector;
-function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);if(ids.length)return orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL'),start=$('printStart')?.value||'',end=$('printEnd')?.value||'';return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk}).slice(0,12)}
-
-
-function uniquePrintProductCards(items){
-  const seen=new Set();
-  const cards=[];
-  (items||[]).forEach(i=>{
-    const product=i.product||'ÜRÜN';
-    const img=i.image||'';
-    const key=img ? `${product}|${img}` : `${product}|NO_IMAGE`;
-    if(seen.has(key))return;
-    seen.add(key);
-    cards.push({product,img});
-  });
-
-  return cards.map(c=>`<div class="print-product-card">
-    <div class="print-product-label">${c.product}</div>
-    ${c.img
-      ? `<img class="print-img" src="${c.img}">`
-      : `<div class="print-no-image">GÖRSEL YOK</div>`}
-  </div>`).join('');
-}
-
 
 function renderPrint(){
   if(!$('printRows'))return;
