@@ -2866,6 +2866,26 @@ table{
   }
 }
 
+
+/* ===== V48 A4 Cakisma Temiz Fix ===== */
+.chip-print-btn{
+  min-height:22px!important;
+  padding:2px 6px!important;
+  border-radius:8px!important;
+  font-size:8px!important;
+  font-weight:1000!important;
+}
+.print-select-chip:not(.printed-row) .chip-print-btn{
+  background:rgba(148,163,184,.14)!important;
+  border:1px solid rgba(203,213,225,.22)!important;
+  color:#e5e7eb!important;
+}
+.print-select-chip.printed-row .chip-print-btn{
+  background:rgba(34,197,94,.18)!important;
+  border:1px solid rgba(34,197,94,.30)!important;
+  color:#bbf7d0!important;
+}
+
 </style>
 </head>
 <body>
@@ -3652,89 +3672,113 @@ function renderReports(showMsg=false){
 }
 
 
-let currentPrintFilter='all';
 
+let currentPrintFilter='all';
+let selectedPrintIds=[];
+
+function getPrintedOrders(){
+  try{
+    const raw=localStorage.getItem('printedOrders')||'[]';
+    const arr=JSON.parse(raw);
+    return Array.isArray(arr)?arr.map(String):[];
+  }catch(e){
+    return [];
+  }
+}
+function savePrintedOrders(arr){
+  localStorage.setItem('printedOrders',JSON.stringify([...new Set(arr.map(String))]));
+}
+function isPrinted(orderId){
+  return getPrintedOrders().includes(String(orderId));
+}
+function togglePrinted(orderId){
+  orderId=String(orderId);
+  const arr=getPrintedOrders();
+  const next=arr.includes(orderId)?arr.filter(x=>x!==orderId):[...arr,orderId];
+  savePrintedOrders(next);
+  renderPrintSelector();
+  renderPrint();
+  updatePrintSelectedCount();
+}
 function setPrintFilter(type){
   currentPrintFilter=type;
-  if($('printFilterAllBtn'))$('printFilterAllBtn').classList.toggle('active',type==='all');
-  if($('printFilterPendingBtn'))$('printFilterPendingBtn').classList.toggle('active',type==='pending');
-  if($('printFilterPrintedBtn'))$('printFilterPrintedBtn').classList.toggle('active',type==='printed');
+  ['all','pending','printed'].forEach(k=>{
+    const btn=$('printFilter'+(k==='all'?'All':k==='pending'?'Pending':'Printed')+'Btn');
+    if(btn)btn.classList.toggle('active',type===k);
+  });
   renderPrintSelector();
   renderPrint();
 }
-
-function filteredPrintOrders(){
-  const start=$('printStart')?.value||getMinOrderDate();
-  const end=$('printEnd')?.value||toISODate(new Date());
-
-  return orders
-    .filter(o=>inRange(o.approvalDate,start,end))
-    .filter(o=>{
-      const printed=isPrinted(o.id);
-      return currentPrintFilter==='printed' ? printed : !printed;
-    })
-    .sort((a,b)=>a.orderNo-b.orderNo);
+function updatePrintSelectedCount(){
+  const el=$('printSelectedCount');
+  if(!el)return;
+  el.textContent=selectedPrintIds.length?`${selectedPrintIds.length} seçildi`:'0 seçildi';
 }
-
-
-
-let selectedPrintIds=[];
-
 function togglePrintSelection(orderId,checked){
   orderId=String(orderId);
   if(checked){
-    if(!selectedPrintIds.includes(orderId)) selectedPrintIds.push(orderId);
+    if(!selectedPrintIds.includes(orderId))selectedPrintIds.push(orderId);
   }else{
     selectedPrintIds=selectedPrintIds.filter(id=>id!==orderId);
   }
   renderPrint();
   updatePrintSelectedCount();
 }
-
-function selectedPrintOrders(){
-  const ids=selectedPrintIds.map(String);
-  return orders.filter(o=>ids.includes(String(o.id))).sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0));
+function getPrintDateStart(){
+  return $('printStart')?.value || getMinOrderDate();
 }
+function getPrintDateEnd(){
+  return $('printEnd')?.value || toISODate(new Date());
+}
+function ensurePrintDates(){
+  if($('printStart')&&!$('printStart').value)$('printStart').value=getMinOrderDate();
+  if($('printEnd')&&!$('printEnd').value)$('printEnd').value=toISODate(new Date());
+}
+function printOrderVisible(o,q,st,start,end){
+  const printed=isPrinted(o.id);
+  if(currentPrintFilter==='pending' && printed)return false;
+  if(currentPrintFilter==='printed' && !printed)return false;
+  if(st!=='ALL' && o.status!==st)return false;
+  if(start && o.approvalDate<start)return false;
+  if(end && o.approvalDate>end)return false;
 
+  const hay=(String(o.orderNo||'')+' '+String(o.status||'')+' '+String(o.note||'')+' '+itxt(o.items)+' '+(o.items||[]).map(i=>i.product).join(' ')).toLowerCase();
+  return !q || hay.includes(q);
+}
 function renderPrintSelector(){
   const box=$('printSelector');
   if(!box)return;
 
-  if($('printStart') && !$('printStart').value)$('printStart').value=getMinOrderDate();
-  if($('printEnd') && !$('printEnd').value)$('printEnd').value=toISODate(new Date());
+  ensurePrintDates();
 
   const q=($('printSearch')?.value||'').toLowerCase().trim();
   const st=$('printStatusFilter')?.value||'ALL';
-  const start=$('printStart')?.value||'';
-  const end=$('printEnd')?.value||'';
+  const start=getPrintDateStart();
+  const end=getPrintDateEnd();
 
-  const list=[...orders].sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0)).filter(o=>{
-    const printed=isPrinted(o.id);
-    const hay=(String(o.orderNo||'')+' '+String(o.status||'')+' '+String(o.note||'')+' '+itxt(o.items)+' '+(o.items||[]).map(i=>i.product).join(' ')).toLowerCase();
-    const matchPrinted=currentPrintFilter==='all'?true:(currentPrintFilter==='printed'?printed:!printed);
-    const matchStatus=st==='ALL'||o.status===st;
-    const matchDate=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);
-    const matchSearch=!q||hay.includes(q);
-    return matchPrinted&&matchStatus&&matchDate&&matchSearch;
-  });
+  const list=[...orders]
+    .filter(o=>printOrderVisible(o,q,st,start,end))
+    .sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0));
 
   box.className='print-select-list compact-print-select-list';
   box.innerHTML=list.map(o=>{
-    const checked=selectedPrintIds.includes(String(o.id))?'checked':'';
+    const id=String(o.id);
+    const checked=selectedPrintIds.includes(id)?'checked':'';
+    const printed=isPrinted(id);
     const txt=itxt(o.items).replaceAll('\\n',' / ');
-    return '<label class="print-select-chip '+(isPrinted(o.id)?'printed-row':'')+'">'+
-      '<input type="checkbox" class="print-check" data-order-id="'+o.id+'" value="'+o.id+'" '+checked+'>'+
+    return '<label class="print-select-chip '+(printed?'printed-row':'')+'">'+
+      '<input type="checkbox" class="print-check" data-order-id="'+id+'" value="'+id+'" '+checked+'>'+
       '<span class="chip-no">No:'+o.orderNo+'</span>'+
       '<span class="chip-text">'+txt+'</span>'+
-      '<button type="button" class="chip-print-btn" data-printed-id="'+o.id+'">'+(isPrinted(o.id)?'✓':'Basıldı')+'</button>'+
+      '<button type="button" class="chip-print-btn" data-printed-id="'+id+'">'+(printed?'✓ Basıldı':'Basılmadı')+'</button>'+
     '</label>';
-  }).join('') || '<div class="empty-print-state">'+(currentPrintFilter==='all'?'Kayıt bulunamadı.':(currentPrintFilter==='printed'?'Basılan kayıt yok.':'Basılmayan kayıt yok.'))+'</div>';
+  }).join('') || '<div class="empty-print-state">'+(currentPrintFilter==='printed'?'Basılan kayıt yok.':currentPrintFilter==='pending'?'Basılmayan kayıt yok.':'Kayıt bulunamadı.')+'</div>';
 
   box.querySelectorAll('.print-check').forEach(ch=>{
     ch.addEventListener('change',()=>togglePrintSelection(ch.dataset.orderId,ch.checked));
   });
   box.querySelectorAll('.chip-print-btn').forEach(btn=>{
-    btn.addEventListener('click',(e)=>{
+    btn.addEventListener('click',e=>{
       e.preventDefault();
       togglePrinted(btn.dataset.printedId);
     });
@@ -3743,19 +3787,25 @@ function renderPrintSelector(){
   updatePrintSelectedCount();
 }
 
+
 function renderPrint(){
   const rows=$('printRows');
   if(!rows)return;
 
-  const selected=selectedPrintOrders();
+  const ids=selectedPrintIds.map(String);
+  const selected=orders
+    .filter(o=>ids.includes(String(o.id)))
+    .sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0));
+
   if($('printTopDate'))$('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
 
   rows.innerHTML=selected.map(o=>{
     const productHtml=uniquePrintProductCards(o.items||[]);
-    return '<tr class="'+(isPrinted(o.id)?'printed-print-row':'')+'">'+
+    const printed=isPrinted(o.id);
+    return '<tr class="'+(printed?'printed-print-row':'')+'">'+
       '<td>'+
         '<div class="print-no">No:'+o.orderNo+'</div>'+
-        (isPrinted(o.id)?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':'')+
+        (printed?'<div class="printed-a4-stamp">ÇIKTI ALINDI</div>':'')+
         '<div class="print-product-stack">'+productHtml+'</div>'+
       '</td>'+
       '<td>'+
@@ -3773,6 +3823,7 @@ function renderPrint(){
 
   updatePrintSelectedCount();
 }
+
 
 function selectAllPrint(v){
   const visible=[...document.querySelectorAll('.print-check')];
