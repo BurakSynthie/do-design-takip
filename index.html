@@ -146,6 +146,10 @@ const SUPABASE_URL="https://rdptepmtjzxqxeyktwzg.supabase.co";
 const SUPABASE_ANON_KEY="sb_publishable_0MCnBQyDMHH9uaEq_OC8NA_O1YlORjo";
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const BUCKET="do-design-images";
+const DEFAULT_USERS=[
+  {email:'akyapromosyon@gmail.com',password:'akyapromo123',name:'Akya Promosyon',phone:'',photo_url:''},
+  {email:'deryaaydogan@gmail.com',password:'deryaaydogan123',name:'Derya Aydoğan',phone:'',photo_url:''}
+];
 const SESSION_KEY='do_design_session_supabase_v1',REMEMBER_KEY='do_design_remember_supabase_v1';
 let orders=[],testers=[],users=[],profilePhotoCache='',currentUser=null,currentCategory='ALL',currentSpecial='ALL';
 const PRODUCTS=['OTO KOKUSU','PASPAS','BARDAK ALTLIĞI','SIRT KARTONU']; const $=id=>document.getElementById(id); const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);
@@ -167,14 +171,65 @@ function itemImages(items){const imgs=(items||[]).map(i=>i.image).filter(Boolean
 function badge(s){return`<span class="badge ${norm(s)}">${s}</span>`}
 function userName(email){return users.find(u=>u.email===email)?.name||email||'-'}
 function mapOrder(row){return{id:row.id,orderNo:row.order_no,approvalDate:row.approval_date,status:row.status,important:!!row.important,note:row.note||'',createdBy:row.created_by||'',updatedBy:row.updated_by||'',createdAt:new Date(row.created_at||Date.now()).getTime(),items:(row.order_items||[]).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map(i=>({id:i.id,product:i.product,quantity:i.quantity,desc:i.description,image:i.image_url||'',sort:i.sort_order||0}))}}
-async function loadUsers(){const {data,error}=await db.from('app_users').select('*').order('created_at'); if(error){alert('Kullanıcılar yüklenemedi: '+error.message);return} users=data||[]}
+async function loadUsers(){
+  try{
+    const {data,error}=await db.from('app_users').select('*').order('created_at');
+    if(error || !data || !data.length){
+      console.warn('Supabase kullanıcıları çekilemedi, yedek kullanıcılar kullanılıyor:', error);
+      users=DEFAULT_USERS;
+      return;
+    }
+    users=data.map(u=>({
+      ...u,
+      email:String(u.email||'').trim().toLowerCase(),
+      password:String(u.password||'').trim()
+    }));
+  }catch(err){
+    console.warn('Kullanıcı yükleme hatası, yedek kullanıcılar kullanılıyor:', err);
+    users=DEFAULT_USERS;
+  }
+}
 async function loadOrders(){const {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no'); if(error){alert('Siparişler yüklenemedi: '+error.message);orders=[];return} orders=(data||[]).map(mapOrder)}
 async function loadTesters(){const {data,error}=await db.from('testers').select('*').order('date',{ascending:false}); if(error){alert('Tester kayıtları yüklenemedi: '+error.message);testers=[];return} testers=(data||[]).map(t=>({id:t.id,date:t.date,qty:t.qty,target:t.target||'',note:t.note||'',createdBy:t.created_by||'',createdAt:new Date(t.created_at||Date.now()).getTime()}))}
 async function refreshAll(){document.body.classList.add('loading');await Promise.all([loadOrders(),loadTesters(),loadUsers()]);document.body.classList.remove('loading');renderAll()}
 async function uploadFile(file,pathPrefix){if(!file)return'';const ext=(file.name.split('.').pop()||'png').toLowerCase();const path=`${pathPrefix}/${Date.now()}-${uid()}.${ext}`;const {error}=await db.storage.from(BUCKET).upload(path,file,{upsert:true});if(error)throw error;return db.storage.from(BUCKET).getPublicUrl(path).data.publicUrl}
-async function startApp(email){await loadUsers();currentUser=users.find(u=>u.email===email);if(!currentUser){localStorage.removeItem(SESSION_KEY);return location.reload()}document.body.classList.add('logged-in');$('loginPage').classList.add('hidden');$('app').classList.remove('hidden');$('currentUser').textContent=currentUser.email;$('currentName').textContent=currentUser.name;if(currentUser.photo_url){$('sideAvatar').src=currentUser.photo_url;$('sideAvatar').classList.remove('hidden')}else $('sideAvatar').classList.add('hidden');resetForm(false);resetTesterForm();await refreshAll();goPage('dashboard')}
+async function startApp(email){
+  await loadUsers();
+  if(!users || !users.length) users=DEFAULT_USERS;
+  currentUser=users.find(u=>String(u.email||'').trim().toLowerCase()===String(email||'').trim().toLowerCase());
+  if(!currentUser){
+    localStorage.removeItem(SESSION_KEY);
+    return location.reload();
+  }
+  document.body.classList.add('logged-in');
+  $('loginPage').classList.add('hidden');
+  $('app').classList.remove('hidden');
+  $('currentUser').textContent=currentUser.email;
+  $('currentName').textContent=currentUser.name;
+  if(currentUser.photo_url){$('sideAvatar').src=currentUser.photo_url;$('sideAvatar').classList.remove('hidden')}else $('sideAvatar').classList.add('hidden');
+  resetForm(false);
+  resetTesterForm();
+  await refreshAll();
+  goPage('dashboard');
+}
 async function prefillRemember(){await loadUsers();const r=localStorage.getItem(REMEMBER_KEY);if(r){$('loginEmail').value=r;$('rememberMe').checked=true}}
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();await loadUsers();const email=$('loginEmail').value.trim().toLowerCase(),pass=$('loginPassword').value;const ok=users.find(u=>u.email===email&&u.password===pass);if(!ok){$('loginError').classList.remove('hidden');return}if($('rememberMe').checked)localStorage.setItem(REMEMBER_KEY,email);else localStorage.removeItem(REMEMBER_KEY);localStorage.setItem(SESSION_KEY,email);await startApp(email)});
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  $('loginError').classList.add('hidden');
+  await loadUsers();
+  if(!users || !users.length) users=DEFAULT_USERS;
+  const email=$('loginEmail').value.trim().toLowerCase();
+  const pass=$('loginPassword').value.trim();
+  const ok=users.find(u=>String(u.email||'').trim().toLowerCase()===email && String(u.password||'').trim()===pass);
+  if(!ok){
+    $('loginError').textContent='Email veya şifre hatalı.';
+    $('loginError').classList.remove('hidden');
+    return;
+  }
+  if($('rememberMe').checked)localStorage.setItem(REMEMBER_KEY,email);else localStorage.removeItem(REMEMBER_KEY);
+  localStorage.setItem(SESSION_KEY,email);
+  await startApp(email);
+});
 $('logoutBtn').onclick=()=>{document.body.classList.remove('logged-in');localStorage.removeItem(SESSION_KEY);location.reload()};
 $('menuBtn').onclick=()=>$('sidebar').classList.toggle('open'); document.querySelectorAll('.nav button[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page)); $('ordersToggle').onclick=()=>$('ordersSubnav').classList.toggle('open'); $('categoryToggle').onclick=()=>$('categorySubnav').classList.toggle('open'); document.querySelectorAll('#ordersSubnav button').forEach(b=>b.onclick=()=>openOrdersByStatus(b.dataset.status)); document.querySelectorAll('#categorySubnav button').forEach(b=>b.onclick=()=>openOrdersByCategory(b.dataset.category));
 function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':'Sipariş Listesi';renderOrders()}
