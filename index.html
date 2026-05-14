@@ -714,13 +714,13 @@ function parseLocalDate(value){if(!value)return null;const [y,m,d]=value.split('
 function toISODate(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`}
 function addBusinessDays(startDateStr,businessDays=12){
   const date=parseLocalDate(startDateStr);
-  if(!date)return'';
+  if(!date)return '';
   let added=0;
   while(added<businessDays){
     date.setDate(date.getDate()+1);
     const day=date.getDay();
     const isWeekend=day===0||day===6;
-    const isOff=isExtraOffDate(date);
+    const isOff=typeof isExtraOffDate==='function' ? isExtraOffDate(date) : false;
     if(!isWeekend && !isOff) added++;
   }
   return toISODate(date);
