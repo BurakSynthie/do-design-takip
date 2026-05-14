@@ -1056,6 +1056,333 @@ td{
   }
 }
 
+
+/* ===== GRAY COMPACT MOBILE UI V26 ===== */
+:root{
+  --bg:#090909!important;
+  --panel:#151515!important;
+  --panel2:#101010!important;
+  --line:rgba(255,255,255,.14)!important;
+  --text:#f5f5f5!important;
+  --muted:#a3a3a3!important;
+  --blue:#d4d4d4!important;
+  --blue2:#ffffff!important;
+}
+
+/* Genel renk düzeni: siyah / gri / beyaz */
+body{
+  background:
+    radial-gradient(circle at 15% 10%,rgba(255,255,255,.08),transparent 28%),
+    linear-gradient(135deg,#050505,#151515 45%,#0a0a0a)!important;
+}
+.panel,
+.stat-card,
+.status-bar,
+.login-card,
+.sidebar,
+.user-box,
+.global-search input,
+.field input,
+.field select,
+.field textarea,
+.filters input,
+.filters select,
+.orders-table-wrap,
+table{
+  background:linear-gradient(180deg,#181818,#0f0f0f)!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
+.btn-primary{
+  background:linear-gradient(135deg,#f5f5f5,#a3a3a3)!important;
+  color:#050505!important;
+}
+.btn-light,
+.btn-dark,
+.quick-ship-btn{
+  background:#1f1f1f!important;
+  color:#f5f5f5!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+}
+.product-pill,
+.badge,
+.due-pill,
+.important-pill{
+  background:rgba(255,255,255,.10)!important;
+  color:#f5f5f5!important;
+  border:1px solid rgba(255,255,255,.14)!important;
+}
+.ISLEME,
+.KARGO,
+.TAMAMLANDI,
+.BEKLEMEDE,
+.IPTAL,
+.ARSIV{
+  background:rgba(255,255,255,.10)!important;
+  color:#f5f5f5!important;
+}
+.barfill{
+  background:linear-gradient(90deg,#f5f5f5,#737373)!important;
+}
+.order-no-strong{
+  background:linear-gradient(135deg,#262626,#111)!important;
+  border-color:rgba(255,255,255,.22)!important;
+  color:#fff!important;
+  box-shadow:none!important;
+}
+.bottom-mobile-nav{
+  background:rgba(5,5,5,.95)!important;
+  border-color:rgba(255,255,255,.16)!important;
+}
+.bottom-mobile-nav button{
+  background:linear-gradient(180deg,#1f1f1f,#0f0f0f)!important;
+  color:#f5f5f5!important;
+  border-color:rgba(255,255,255,.14)!important;
+}
+.bottom-mobile-nav button span{
+  color:#fff!important;
+}
+.bottom-mobile-nav .menu-open-btn{
+  background:linear-gradient(135deg,#3a3a3a,#171717)!important;
+}
+
+/* Web tarafı da biraz daha sade */
+tr:hover{
+  background:#1d1d1d!important;
+}
+
+/* Mobil sipariş kartlarını tek sıra / kompakt hale getir */
+@media(max-width:650px){
+  body{
+    background:linear-gradient(145deg,#050505,#111,#050505)!important;
+  }
+
+  .main{
+    padding:8px 7px 82px!important;
+  }
+
+  .topbar{
+    background:linear-gradient(180deg,rgba(5,5,5,.98),rgba(10,10,10,.90))!important;
+    border-bottom:1px solid rgba(255,255,255,.10)!important;
+  }
+
+  /* Mobil kart satır görünümü */
+  #ordersTable tr,
+  #latestOrders tr{
+    display:grid!important;
+    grid-template-columns:72px 42px 1fr!important;
+    grid-template-areas:
+      "no img info"
+      "no img meta"
+      "act act act"!important;
+    min-height:92px!important;
+    padding:8px!important;
+    gap:5px 8px!important;
+    background:linear-gradient(135deg,#181818,#0d0d0d)!important;
+    border:1px solid rgba(255,255,255,.14)!important;
+    border-left:3px solid rgba(255,255,255,.38)!important;
+    border-radius:15px!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.30)!important;
+    margin-bottom:8px!important;
+  }
+
+  /* No alanı */
+  #ordersTable td:nth-child(1),
+  #latestOrders td:nth-child(1){
+    grid-area:no!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:4px!important;
+  }
+
+  .order-no-strong{
+    font-size:13px!important;
+    padding:6px 7px!important;
+    border-radius:10px!important;
+    min-width:64px!important;
+    text-align:center!important;
+  }
+
+  /* Kategori üstte küçük */
+  #ordersTable td:nth-child(2),
+  #latestOrders td:nth-child(2){
+    grid-area:info!important;
+    margin:0!important;
+    padding:0!important;
+    display:block!important;
+    line-height:1!important;
+  }
+
+  .product-pill{
+    font-size:8.5px!important;
+    padding:3px 6px!important;
+    margin:0 3px 3px 0!important;
+    border-radius:999px!important;
+  }
+
+  /* Görsel solda minicik */
+  #ordersTable td:nth-child(3),
+  #latestOrders td:nth-child(3){
+    grid-area:img!important;
+    margin:0!important;
+    padding:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+
+  .multi-thumbs{
+    max-width:42px!important;
+    gap:0!important;
+  }
+
+  .multi-thumbs img{
+    width:38px!important;
+    height:38px!important;
+    border-radius:9px!important;
+    object-fit:contain!important;
+  }
+
+  .multi-thumbs img:nth-child(n+2){
+    display:none!important;
+  }
+
+  .empty-thumb{
+    width:38px!important;
+    height:38px!important;
+    font-size:7px!important;
+    border-radius:9px!important;
+  }
+
+  /* Adet / açıklama tek satıra yakın */
+  #ordersTable td:nth-child(4),
+  #latestOrders td:nth-child(4){
+    grid-area:info!important;
+    margin:20px 0 0!important;
+    padding:0!important;
+    display:block!important;
+  }
+
+  .scent-list{
+    font-size:14px!important;
+    line-height:1.1!important;
+    max-height:34px!important;
+    overflow:hidden!important;
+  }
+
+  /* Tarih bilgisi metanın içine */
+  #ordersTable td:nth-child(5),
+  #latestOrders td:nth-child(5){
+    grid-area:meta!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:10.5px!important;
+    color:#bdbdbd!important;
+    display:block!important;
+    line-height:1.15!important;
+  }
+
+  #ordersTable td:nth-child(5) strong,
+  #latestOrders td:nth-child(5) strong{
+    font-size:10.5px!important;
+  }
+
+  #ordersTable td:nth-child(5) .mini,
+  #latestOrders td:nth-child(5) .mini{
+    font-size:10px!important;
+    color:#8c8c8c!important;
+  }
+
+  /* Durum badge no alanının altında */
+  #ordersTable td:nth-child(6),
+  #latestOrders td:nth-child(6){
+    grid-area:no!important;
+    margin:32px 0 0!important;
+    padding:0!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:4px!important;
+    align-items:flex-start!important;
+  }
+
+  .badge,
+  .due-pill{
+    font-size:8.5px!important;
+    padding:4px 6px!important;
+    border-radius:999px!important;
+    line-height:1.05!important;
+  }
+
+  /* Ekleyen/not mobil listede kalabalık yapmasın */
+  #ordersTable td:nth-child(7),
+  #ordersTable td:nth-child(8),
+  #latestOrders td:nth-child(7){
+    display:none!important;
+  }
+
+  /* İşlem butonları sadece sipariş sayfasında altta ince */
+  #ordersTable td:nth-child(9){
+    grid-area:act!important;
+    margin:2px 0 0!important;
+    padding:0!important;
+  }
+
+  #ordersTable .actions{
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:5px!important;
+  }
+
+  #ordersTable .actions .btn{
+    font-size:9px!important;
+    min-height:28px!important;
+    padding:5px 4px!important;
+    border-radius:9px!important;
+  }
+
+  /* Son eklenenlerde aksiyon yok, kart daha ince */
+  #latestOrders tr{
+    min-height:76px!important;
+  }
+
+  /* Dashboard daha da kompakt */
+  .stats{
+    grid-template-columns:repeat(3,1fr)!important;
+  }
+
+  .stat-card{
+    min-height:58px!important;
+  }
+
+  .status-bars{
+    grid-template-columns:repeat(2,1fr)!important;
+  }
+
+  /* Alt bar daha az göz yorsun */
+  .bottom-mobile-nav{
+    left:10px!important;
+    right:10px!important;
+    bottom:8px!important;
+    padding:6px!important;
+    border-radius:18px!important;
+  }
+
+  .bottom-mobile-nav button{
+    height:44px!important;
+    border-radius:13px!important;
+  }
+
+  .bottom-mobile-nav button span{
+    font-size:14px!important;
+  }
+
+  .bottom-mobile-nav button b{
+    font-size:8px!important;
+  }
+}
+
 </style>
 </head>
 <body>
