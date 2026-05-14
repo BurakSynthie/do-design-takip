@@ -822,6 +822,32 @@ function inRange(dateStr,start,end){
   return(!start||dateStr>=start)&&(!end||dateStr<=end);
 }
 
+
+function userName(email){
+  if(!email)return '-';
+  const u=(users||[]).find(x=>String(x.email||'').trim().toLowerCase()===String(email||'').trim().toLowerCase());
+  return u?.name || email || '-';
+}
+function lineText(i){
+  return `${Number(i.quantity)||0} ${i.desc||i.description||''}`.trim();
+}
+function itxt(items){
+  return (items||[]).map(lineText).join('\n');
+}
+function productPills(items){
+  const arr=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
+  return arr.map(p=>`<span class="product-pill">${p}</span>`).join('');
+}
+function itemImages(items){
+  const imgs=(items||[]).map(i=>i.image||i.image_url).filter(Boolean);
+  return imgs.length
+    ? `<div class="multi-thumbs">${imgs.map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}</div>`
+    : `<div class="empty-thumb">GÖRSEL<br>YOK</div>`;
+}
+function badge(s){
+  return `<span class="badge ${norm(s||'BEKLEMEDE')}">${s||'BEKLEMEDE'}</span>`;
+}
+
 function mapOrder(row){
   const rawItems = row.order_items || [];
   const items = rawItems
