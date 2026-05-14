@@ -744,6 +744,31 @@ async function loadUsers(){
   }
 }
 
+
+function mapOrder(row){
+  const items=(row.order_items||[]).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map(i=>({
+    id:i.id,
+    product:i.product||'OTO KOKUSU',
+    quantity:Number(i.quantity)||0,
+    desc:i.description||'',
+    image:i.image_url||'',
+    sort:i.sort_order||0
+  }));
+  return {
+    id:row.id,
+    orderNo:row.order_no,
+    approvalDate:row.approval_date,
+    status:row.status||'İŞLEME ALINDI',
+    important:!!row.important,
+    note:row.note||'',
+    createdBy:row.created_by||'',
+    updatedBy:row.updated_by||'',
+    createdAt:new Date(row.created_at||Date.now()).getTime(),
+    updatedAt:new Date(row.updated_at||row.created_at||Date.now()).getTime(),
+    items
+  };
+}
+
 async function loadOrders(){
   try{
     let {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no');
