@@ -696,42 +696,34 @@ const DEFAULT_USERS=[
 ];
 const SESSION_KEY='do_design_session_supabase_v1',REMEMBER_KEY='do_design_remember_supabase_v1';
 let orders=[],testers=[],users=[],profilePhotoCache='',currentUser=null,currentCategory='ALL',currentSpecial='ALL';
-const PRODUCTS=['OTO KOKUSU','PASPAS','BARDAK ALTLIĞI','SIRT KARTONU']; const $=id=>document.getElementById(id); const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);
+const PRODUCTS=['OTO KOKUSU','PASPAS','BARDAK ALTLIĞI','SIRT KARTONU'];
+
+const EXTRA_OFF_DATES=[
+  // Bu aya özel bayram/tatil aralığı: 23-31 Mayıs 2026
+  '2026-05-23','2026-05-24','2026-05-25','2026-05-26','2026-05-27',
+  '2026-05-28','2026-05-29','2026-05-30','2026-05-31'
+];
+function isExtraOffDate(date){
+  return EXTRA_OFF_DATES.includes(toISODate(date));
+}
+ const $=id=>document.getElementById(id); const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,9);
 function norm(s){return s.replace('İŞLEME ALINDI','ISLEME').replace('İPTAL','IPTAL').replace('KARGO GÖNDERİLDİ','KARGO')}
 function fdate(d){if(!d)return'-';const a=d.split('-');return a.length===3?`${a[2]}.${a[1]}.${a[0]}`:d}
 function todayTR(){return new Date().toLocaleDateString('tr-TR')}
 function parseLocalDate(value){if(!value)return null;const [y,m,d]=value.split('-').map(Number);return new Date(y,m-1,d)}
 function toISODate(date){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`}
-function addBusinessDays(dateStr,days){const date=parseLocalDate(dateStr);if(!date)return'';let added=0;while(added<days){date.setDate(date.getDate()+1);const day=date.getDay();if(day!==0&&day!==6)added++}return toISODate(date)}
-function daysUntilDate(dateStr){const d=parseLocalDate(dateStr);if(!d)return 999;const t=new Date();const today=new Date(t.getFullYear(),t.getMonth(),t.getDate());return Math.ceil((d-today)/(1000*60*60*24))}
-function dueDateForOrder(o){return addBusinessDays(o.approvalDate,12)}
-function getAlertOrders(){return orders.filter(o=>{if(o.status==='KARGO GÖNDERİLDİ'||o.status==='TAMAMLANDI'||o.status==='İPTAL')return false;const due=dueDateForOrder(o);const remaining=daysUntilDate(due);return remaining<=2}).sort((a,b)=>dueDateForOrder(a).localeCompare(dueDateForOrder(b)))}
-function duePill(o){const due=dueDateForOrder(o);const r=daysUntilDate(due);if(o.status==='KARGO GÖNDERİLDİ')return`<span class="due-pill done">Kargolandı</span>`;if(r<0)return`<span class="due-pill danger">${Math.abs(r)} gün gecikti</span>`;if(r===0)return`<span class="due-pill danger">Bugün çıkmalı</span>`;if(r<=2)return`<span class="due-pill">${r} gün kaldı</span>`;return`<span class="due-pill">${r} gün</span>`}
-function inRange(dateStr,start,end){if(!dateStr)return false;return(!start||dateStr>=start)&&(!end||dateStr<=end)}
-function lineText(i){return`${i.quantity} ${i.desc}`.trim()}
-function itxt(items){return(items||[]).map(lineText).join('\n')}
-function productPills(items){return[...new Set((items||[]).map(i=>i.product))].map(p=>`<span class="product-pill">${p}</span>`).join('')}
-function itemImages(items){const imgs=(items||[]).map(i=>i.image).filter(Boolean);return imgs.length?`<div class="multi-thumbs">${imgs.map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}</div>`:`<div class="empty-thumb">GÖRSEL<br>YOK</div>`}
-function badge(s){return`<span class="badge ${norm(s)}">${s}</span>`}
-function userName(email){return users.find(u=>u.email===email)?.name||email||'-'}
-function mapOrder(row){return{id:row.id,orderNo:row.order_no,approvalDate:row.approval_date,status:row.status,important:!!row.important,note:row.note||'',createdBy:row.created_by||'',updatedBy:row.updated_by||'',createdAt:new Date(row.created_at||Date.now()).getTime(),items:(row.order_items||[]).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0)).map(i=>({id:i.id,product:i.product,quantity:i.quantity,desc:i.description,image:i.image_url||'',sort:i.sort_order||0}))}}
-async function loadUsers(){
-  try{
-    const {data,error}=await db.from('app_users').select('*').order('created_at');
-    if(error || !data || !data.length){
-      console.warn('Supabase kullanıcıları çekilemedi, yedek kullanıcılar kullanılıyor:', error);
-      users=DEFAULT_USERS;
-      return;
-    }
-    users=data.map(u=>({
-      ...u,
-      email:String(u.email||'').trim().toLowerCase(),
-      password:String(u.password||'').trim()
-    }));
-  }catch(err){
-    console.warn('Kullanıcı yükleme hatası, yedek kullanıcılar kullanılıyor:', err);
-    users=DEFAULT_USERS;
+function addBusinessDays(startDateStr,businessDays=12){
+  const date=parseLocalDate(startDateStr);
+  if(!date)return'';
+  let added=0;
+  while(added<businessDays){
+    date.setDate(date.getDate()+1);
+    const day=date.getDay();
+    const isWeekend=day===0||day===6;
+    const isOff=isExtraOffDate(date);
+    if(!isWeekend && !isOff) added++;
   }
+  return toISODate(date);
 }
 async function loadOrders(){const {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no'); if(error){alert('Siparişler yüklenemedi: '+error.message);orders=[];return} orders=(data||[]).map(mapOrder)}
 async function loadTesters(){const {data,error}=await db.from('testers').select('*').order('date',{ascending:false}); if(error){alert('Tester kayıtları yüklenemedi: '+error.message);testers=[];return} testers=(data||[]).map(t=>({id:t.id,date:t.date,qty:t.qty,target:t.target||'',note:t.note||'',createdBy:t.created_by||'',createdAt:new Date(t.created_at||Date.now()).getTime()}))}
