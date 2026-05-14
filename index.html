@@ -377,11 +377,298 @@ h1,h2,p{margin-top:0}.login-card h1{font-size:29px;margin-bottom:8px}.login-card
   }
 }
 
+
+/* ===== FINAL KULLANIM RUTUSLARI V6 ===== */
+.sidebar-close{
+  display:none;
+  position:absolute;
+  right:14px;
+  top:14px;
+  width:38px;
+  height:38px;
+  border-radius:14px;
+  background:rgba(239,68,68,.16);
+  border:1px solid rgba(239,68,68,.34);
+  color:#fecaca;
+  font-size:24px;
+  font-weight:950;
+  z-index:40;
+}
+.image-modal{
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+.image-modal img{
+  max-width:94vw;
+  max-height:86vh;
+  object-fit:contain;
+  background:white;
+  border-radius:18px;
+  box-shadow:0 30px 90px rgba(0,0,0,.45);
+}
+.image-modal-close{
+  position:fixed;
+  top:18px;
+  right:18px;
+  width:46px;
+  height:46px;
+  border-radius:16px;
+  background:rgba(239,68,68,.92);
+  color:white;
+  font-size:28px;
+  font-weight:950;
+}
+.multi-thumbs img{cursor:zoom-in}
+.important-pill{
+  background:linear-gradient(135deg,rgba(239,68,68,.35),rgba(245,158,11,.18))!important;
+  border:1px solid rgba(248,113,113,.46);
+  box-shadow:0 8px 20px rgba(239,68,68,.14);
+}
+tr.important-order{
+  border-left-color:#ef4444!important;
+}
+.print-filters{
+  grid-template-columns:1fr 190px 150px 150px 100px 130px;
+}
+body:not(.logged-in) .bottom-mobile-nav{display:none!important}
+@media(max-width:1050px){
+  .sidebar{
+    box-shadow:18px 0 60px rgba(0,0,0,.45);
+  }
+  .sidebar-close{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+}
+@media(max-width:650px){
+  .bottom-mobile-nav{
+    display:grid!important;
+    grid-template-columns:repeat(6,1fr)!important;
+    gap:7px!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:8px!important;
+    padding:8px!important;
+    border-radius:24px!important;
+    background:rgba(3,7,18,.95)!important;
+    border:1px solid rgba(125,211,252,.26)!important;
+    box-shadow:0 18px 55px rgba(0,0,0,.55)!important;
+    backdrop-filter:blur(18px)!important;
+    transform:translateZ(0);
+  }
+  .bottom-mobile-nav button{
+    height:54px!important;
+    padding:5px 2px!important;
+    border-radius:17px!important;
+    background:linear-gradient(180deg,#12263e,#081827)!important;
+    border:1px solid rgba(125,211,252,.18)!important;
+    color:#d9f5ff!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:2px!important;
+    box-shadow:0 8px 18px rgba(0,0,0,.22);
+  }
+  .bottom-mobile-nav button span{
+    display:block;
+    font-size:18px;
+    line-height:1;
+    font-weight:950;
+    color:#7dd3fc;
+  }
+  .bottom-mobile-nav button b{
+    display:block;
+    font-size:9px;
+    line-height:1;
+    font-weight:950;
+  }
+  .bottom-mobile-nav .menu-open-btn{
+    background:linear-gradient(135deg,#075985,#0e7490)!important;
+    border-color:rgba(125,211,252,.38)!important;
+  }
+  .main{
+    padding-bottom:96px!important;
+  }
+  .print-filters{
+    grid-template-columns:1fr!important;
+  }
+  #ordersTable tr.important-order{
+    background:linear-gradient(135deg,#2a1720,#081827)!important;
+    border-left-color:#ef4444!important;
+  }
+  .order-no-strong{
+    font-size:22px!important;
+    min-width:90px!important;
+    border-color:rgba(125,211,252,.55)!important;
+    background:linear-gradient(135deg,rgba(6,182,212,.36),rgba(56,189,248,.12))!important;
+  }
+  .image-modal img{
+    max-width:96vw;
+    max-height:78vh;
+  }
+}
+
+
+/* ===== SON CANLILIK VE MIKRO ANIMASYONLAR V7 ===== */
+.stat-card{
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+.stat-card:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(125,211,252,.10),transparent);
+  transform:translateX(-120%);
+  transition:.55s;
+}
+.stat-card:hover:before{
+  transform:translateX(120%);
+}
+.stat-card:hover{
+  transform:translateY(-4px) scale(1.015);
+  border-color:rgba(125,211,252,.48)!important;
+  box-shadow:0 18px 44px rgba(6,182,212,.14);
+}
+.btn{
+  position:relative;
+  overflow:hidden;
+}
+.btn:active{
+  transform:scale(.96)!important;
+}
+.btn:after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.35);
+  left:50%;
+  top:50%;
+  opacity:0;
+  transform:translate(-50%,-50%) scale(1);
+  transition:.25s;
+}
+.btn:active:after{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(16);
+}
+.panel{
+  transition:.24s ease;
+}
+.panel:hover{
+  border-color:rgba(125,211,252,.32);
+  box-shadow:0 20px 50px rgba(0,0,0,.30);
+}
+tr{
+  transition:.18s ease;
+}
+tr:hover{
+  background:#10243b!important;
+}
+.nav button,.nav-main,.bottom-mobile-nav button{
+  transition:.18s ease;
+}
+.nav button:active,.nav-main:active,.bottom-mobile-nav button:active{
+  transform:scale(.96);
+}
+.order-no-strong{
+  transition:.2s ease;
+}
+tr:hover .order-no-strong{
+  box-shadow:0 0 0 4px rgba(6,182,212,.08),0 12px 28px rgba(6,182,212,.18);
+}
+.pulse-alert{
+  animation:pulseAlert 1.8s infinite;
+}
+@keyframes pulseAlert{
+  0%{box-shadow:0 0 0 0 rgba(239,68,68,.22)}
+  70%{box-shadow:0 0 0 12px rgba(239,68,68,0)}
+  100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}
+}
+.page{
+  animation:softPageIn .28s ease;
+}
+@keyframes softPageIn{
+  from{opacity:0;transform:translateY(10px) scale(.995)}
+  to{opacity:1;transform:none}
+}
+.multi-thumbs img{
+  transition:.2s ease;
+}
+.multi-thumbs img:hover{
+  transform:scale(1.12) rotate(-1deg);
+  border-color:rgba(125,211,252,.52);
+}
+.badge,.product-pill,.important-pill,.due-pill{
+  transition:.18s ease;
+}
+.badge:hover,.product-pill:hover,.important-pill:hover,.due-pill:hover{
+  transform:translateY(-1px);
+}
+.sidebar.open{
+  animation:slideMenuIn .22s ease;
+}
+@keyframes slideMenuIn{
+  from{transform:translateX(-12px);opacity:.7}
+  to{transform:none;opacity:1}
+}
+.success-flash{
+  animation:successFlash .75s ease;
+}
+@keyframes successFlash{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,.35)}
+  70%{box-shadow:0 0 0 14px rgba(34,197,94,0)}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}
+}
+@media(max-width:650px){
+  .stat-card:hover{
+    transform:translateY(-2px) scale(1.01);
+  }
+  tr:active{
+    transform:scale(.99);
+  }
+  .bottom-mobile-nav button:active{
+    background:linear-gradient(135deg,rgba(6,182,212,.30),rgba(56,189,248,.14))!important;
+  }
+}
+
+
+/* ===== SIDEBAR LOGO GUNCELLEME ===== */
+.logo-row-image{
+  justify-content:flex-start;
+  margin-bottom:24px;
+}
+.sidebar-logo-img{
+  width:100%;
+  max-width:232px;
+  height:auto;
+  display:block;
+  object-fit:contain;
+  filter:brightness(0) invert(1);
+}
+@media(max-width:650px){
+  .sidebar-logo-img{
+    max-width:215px;
+  }
+}
+
 </style>
 </head>
 <body>
 <section id="loginPage" class="login-page"><div class="login-card"><div class="brand-mark">DO</div><h1>DO DESIGN Takip</h1><p>Kurumsal sipariş, üretim ve A4 baskı takip paneli.</p><form id="loginForm" action="javascript:void(0)"><div class="field"><label>Email</label><input id="loginEmail" type="email" required></div><div class="field"><label>Şifre</label><input id="loginPassword" type="password" required></div><label class="remember-row"><input id="rememberMe" type="checkbox"> Beni hatırla</label><button class="btn btn-primary" style="width:100%" type="submit">Giriş Yap</button><div id="loginError" class="error-box hidden">Email veya şifre hatalı.</div></form></div></section>
-<section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><div class="logo-row"><div class="logo-mini">DO</div><div><h2>DO DESIGN</h2><span>Sipariş Takip Paneli</span></div></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Tüm Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="newOrder">Sipariş Ekle</button><button data-page="alerts">Uyarılar</button><button data-page="reports">Raporlar</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
+<section id="app" class="app hidden"><aside id="sidebar" class="sidebar no-print"><button class="sidebar-close" onclick="document.getElementById('sidebar').classList.remove('open')">×</button><div class="logo-row logo-row-image"><img src="/do-logo.png" alt="DO DESIGN" class="sidebar-logo-img"></div><nav class="nav"><button data-page="dashboard" class="active">Dashboard</button><div><button id="ordersToggle" class="nav-main" type="button">Sipariş Durumları ▾</button><div id="ordersSubnav" class="subnav"><button data-status="ALL">Tüm Siparişler</button><button data-status="IMPORTANT">Önemli Siparişler</button><button data-status="İŞLEME ALINDI">İşleme Alınanlar</button><button data-status="İPTAL">İptal Olanlar</button><button data-status="KARGO GÖNDERİLDİ">Kargo Gönderilen</button><button data-status="TAMAMLANDI">Tamamlananlar</button></div></div><div><button id="categoryToggle" class="nav-main" type="button">Ürün Kategorileri ▾</button><div id="categorySubnav" class="subnav"><button data-category="OTO KOKUSU">Oto Kokulu Ürünler</button><button data-category="PASPAS">Paspaslı Ürünler</button><button data-category="BARDAK ALTLIĞI">Bardak Altlığı Ürünler</button><button data-category="SIRT KARTONU">Sırt Kartonlu Ürünler</button></div></div><button data-page="newOrder">Sipariş Ekle</button><button data-page="alerts">Uyarılar</button><button data-page="reports">Raporlar</button><button data-page="testers">Tester Çıkışı</button><button data-page="print">A4 Baskı</button><button data-page="profile">Profilim</button></nav><div class="user-box"><img id="sideAvatar" class="avatar hidden"><strong>Giriş yapan:</strong><br><span id="currentUser"></span><br><span id="currentName" class="mini"></span><br><br><button id="logoutBtn" class="btn btn-light" style="width:100%">Çıkış Yap</button></div></aside>
 <main class="main"><div class="topbar no-print"><div><h1 id="pageTitle">Dashboard</h1><p>İşleri takip et, güncelle, kullanıcı bilgilerini yönet ve A4 liste oluştur.</p></div><button id="menuBtn" class="btn btn-dark mobile-menu">Menü</button></div>
 <section id="dashboardPage" class="page"><div class="stats" id="stats"></div><div class="panel"><div class="panel-head"><h2>Durum Dağılımı</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş</button></div><div id="statusBars" class="status-bars"></div></div><div class="panel"><div class="panel-head"><h2>Son Eklenen İşler</h2><button class="btn btn-light" onclick="openOrdersByStatus('ALL')">Tümünü Gör</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay</th><th>Durum</th><th>Ekleyen</th></tr></thead><tbody id="latestOrders"></tbody></table></div></div></section>
 <section id="ordersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2 id="ordersTitle">Sipariş Listesi</h2><button class="btn btn-primary" onclick="goPage('newOrder')">Yeni Sipariş Ekle</button></div><div id="ordersStatusBars" class="status-bars"></div><div class="filters"><input id="searchInput" placeholder="No, kategori, açıklama, not veya ekleyen ara..."><select id="statusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><button class="btn btn-light" onclick="clearFilters()">Temizle</button></div><div class="orders-table-wrap"><table><thead><tr><th>No</th><th>Kategori</th><th>Görseller</th><th>Adet / Açıklama</th><th>Onay Tarihi</th><th>Durum</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="ordersTable"></tbody></table></div></div></section>
@@ -391,7 +678,7 @@ h1,h2,p{margin-top:0}.login-card h1{font-size:29px;margin-bottom:8px}.login-card
   <div class="panel">
     <div class="panel-head">
       <h2>Yaklaşan Kargo Uyarıları</h2>
-      <span class="mini">12 iş günü hesabına göre, kargoya yaklaşan işler burada görünür.</span>
+      <span class="mini">12 iş günü hesabına göre, kargoya yaklaşan işler burada görünür. Kargo çıktı butonuna basınca uyarı kapanır.</span>
     </div>
     <div id="alertSummary" class="status-bars"></div>
     <div class="orders-table-wrap">
@@ -435,10 +722,23 @@ h1,h2,p{margin-top:0}.login-card h1{font-size:29px;margin-bottom:8px}.login-card
 </section>
 
 <section id="testersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tester Çıkışı</h2><span class="mini">Siparişten bağımsız tester paketlerini buradan takip et.</span></div><form id="testerForm" action="javascript:void(0)"><input type="hidden" id="testerEditId"><div class="grid-3"><div class="field"><label>Tarih</label><input id="testerDate" type="date" required></div><div class="field"><label>Paket Adedi</label><input id="testerQty" type="number" required placeholder="10"></div><div class="field"><label>Gönderilen Yer / Kişi</label><input id="testerTarget" placeholder="Firma / kişi adı"></div></div><div class="field"><label>Not</label><textarea id="testerNote" placeholder="Örn: 5 paket oto kokusu tester, 2 paket paspas numunesi..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Tester Kaydet</button><button class="btn btn-light" type="button" onclick="resetTesterForm()">Temizle</button></div></form></div><div class="panel"><div class="panel-head"><h2>Tester Geçmişi</h2><span id="testerCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>Tarih</th><th>Paket</th><th>Gönderilen</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="testerTable"></tbody></table></div></div></section>
-<section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi</h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><button class="btn btn-dark" onclick="renderPrint()">A4 Güncelle</button></div><div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header"><div><div class="print-brand">DO DESIGN ÜRETİM LİSTESİ</div><div class="print-sub">Seçilen iş numaralarının üretim çıktısı</div></div><div class="print-date-top" id="printTopDate"></div></div><table class="print-table"><thead><tr><th style="width:30%">ÜRÜN</th><th style="width:42%">ADET / AÇIKLAMA</th><th style="width:28%">ONAY TARİHİ</th></tr></thead><tbody id="printBody"></tbody></table></div></div></div></section>
+<section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi</h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters print-filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option></select><input id="printStart" type="date"><input id="printEnd" type="date"><button class="btn btn-light" onclick="setPrintToday()">Bugün</button><button class="btn btn-dark" onclick="renderPrintSelector();renderPrint()">A4 Güncelle</button></div><div id="printSelector" class="selection-box"></div></div><div class="panel print-only-panel"><div class="print-layout"><div class="print-page"><div class="print-header"><div><div class="print-brand">DO DESIGN ÜRETİM LİSTESİ</div><div class="print-sub">Seçilen iş numaralarının üretim çıktısı</div></div><div class="print-date-top" id="printTopDate"></div></div><table class="print-table"><thead><tr><th style="width:30%">ÜRÜN</th><th style="width:42%">ADET / AÇIKLAMA</th><th style="width:28%">ONAY TARİHİ</th></tr></thead><tbody id="printBody"></tbody></table></div></div></div></section>
 <section id="profilePage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Profilim</h2><span class="mini">Sadece giriş yapan kullanıcı kendi bilgilerini düzenler.</span></div><form id="profileForm" action="javascript:void(0)"><div class="grid-2"><div class="field"><label>Profil Fotoğrafı</label><input id="profilePhotoInput" type="file" accept="image/*"><img id="profilePreview" class="profile-preview hidden"></div><div class="field"><label>Ad Soyad</label><input id="profileName" required></div></div><div class="grid-2"><div class="field"><label>Email</label><input id="profileEmail" type="email" disabled></div><div class="field"><label>Telefon</label><input id="profilePhone" placeholder="Opsiyonel"></div></div><div class="field"><label>Yeni Şifre</label><input id="profilePassword" type="password" placeholder="Boş bırakırsan değişmez"></div><button class="btn btn-primary" type="submit">Bilgilerimi Güncelle</button><div id="profileOk" class="ok-box hidden">Bilgiler güncellendi.</div></form></div></section>
 </main></section>
-<div class="bottom-mobile-nav no-print"><button class="menu-open-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">Menü</button><button onclick="goPage('dashboard')">Panel</button><button onclick="openOrdersByStatus('ALL')">Sipariş</button><button onclick="goPage('alerts')">Uyarı</button><button onclick="goPage('reports')">Rapor</button><button onclick="goPage('newOrder')">Ekle</button></div>
+<div class="bottom-mobile-nav no-print">
+  <button class="menu-open-btn" onclick="document.getElementById('sidebar').classList.toggle('open')"><span>☰</span><b>Menü</b></button>
+  <button onclick="goPage('dashboard')"><span>⌂</span><b>Panel</b></button>
+  <button onclick="openOrdersByStatus('ALL')"><span>▦</span><b>Sipariş</b></button>
+  <button onclick="goPage('alerts')"><span>!</span><b>Uyarı</b></button>
+  <button onclick="goPage('reports')"><span>↕</span><b>Rapor</b></button>
+  <button onclick="goPage('newOrder')"><span>＋</span><b>Ekle</b></button>
+</div>
+
+<div id="imageModal" class="image-modal hidden" onclick="closeImageModal()">
+  <button class="image-modal-close" onclick="closeImageModal()">×</button>
+  <img id="imageModalImg" src="" alt="Büyük görsel">
+</div>
+
 <script>
 const DEFAULT_USERS=[{email:'akyapromosyon@gmail.com',password:'akyapromo123',name:'Akya Promosyon',phone:'',photo:''},{email:'deryaaydogan@gmail.com',password:'deryaaydogan123',name:'Derya Aydoğan',phone:'',photo:''}];
 const STORAGE_KEY='do_design_orders_final_v3',TESTER_KEY='do_design_testers_final_v3',SESSION_KEY='do_design_session_final_v3',USERS_KEY='do_design_users_final_v3',REMEMBER_KEY='do_design_remember_final_v3';
@@ -447,7 +747,7 @@ function seedOrders(){return[{id:uid(),orderNo:2367,approvalDate:'2026-04-27',st
 function loadUsers(){try{users=JSON.parse(localStorage.getItem(USERS_KEY))||DEFAULT_USERS}catch(e){users=DEFAULT_USERS}users=users.map(u=>({photo:'',phone:'',...u}));localStorage.setItem(USERS_KEY,JSON.stringify(users))}
 function saveUsers(){localStorage.setItem(USERS_KEY,JSON.stringify(users))}function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(orders))}function saveTesters(){localStorage.setItem(TESTER_KEY,JSON.stringify(testers))}function loadTesters(){try{testers=JSON.parse(localStorage.getItem(TESTER_KEY))||[]}catch(e){testers=[]}}
 function load(){try{const raw=localStorage.getItem(STORAGE_KEY);orders=raw?JSON.parse(raw):seedOrders();orders=orders.map(o=>({...o,important:!!o.important,items:(o.items||[]).map(i=>({product:i.product||'OTO KOKUSU',quantity:i.quantity,desc:i.desc||i.scent||'',image:i.image||''})),createdBy:o.createdBy||currentUser?.email||''}));if(!raw)save()}catch(e){orders=seedOrders();save()}}
-function norm(s){return s.replace('İŞLEME ALINDI','ISLEME').replace('İPTAL','IPTAL').replace('KARGO GÖNDERİLDİ','KARGO')}function fdate(d){if(!d)return'-';const a=d.split('-');return a.length===3?`${a[2]}.${a[1]}.${a[0]}`:d}function todayTR(){return new Date().toLocaleDateString('tr-TR')}function lineText(i){return`${i.quantity} ${i.desc}`.trim()}function itxt(items){return(items||[]).map(lineText).join('\n')}function productPills(items){return[...new Set((items||[]).map(i=>i.product))].map(p=>`<span class="product-pill">${p}</span>`).join('')}function itemImages(items){const imgs=(items||[]).map(i=>i.image).filter(Boolean);return imgs.length?`<div class="multi-thumbs">${imgs.map(src=>`<img src="${src}">`).join('')}</div>`:`<div class="empty-thumb">GÖRSEL<br>YOK</div>`}function badge(s){return`<span class="badge ${norm(s)}">${s}</span>`}function userName(email){return users.find(u=>u.email===email)?.name||email||'-'}
+function norm(s){return s.replace('İŞLEME ALINDI','ISLEME').replace('İPTAL','IPTAL').replace('KARGO GÖNDERİLDİ','KARGO')}function fdate(d){if(!d)return'-';const a=d.split('-');return a.length===3?`${a[2]}.${a[1]}.${a[0]}`:d}function todayTR(){return new Date().toLocaleDateString('tr-TR')}function lineText(i){return`${i.quantity} ${i.desc}`.trim()}function itxt(items){return(items||[]).map(lineText).join('\n')}function productPills(items){return[...new Set((items||[]).map(i=>i.product))].map(p=>`<span class="product-pill">${p}</span>`).join('')}function itemImages(items){const imgs=(items||[]).map(i=>i.image).filter(Boolean);return imgs.length?`<div class="multi-thumbs">${imgs.map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}</div>`:`<div class="empty-thumb">GÖRSEL<br>YOK</div>`}function badge(s){return`<span class="badge ${norm(s)}">${s}</span>`}function userName(email){return users.find(u=>u.email===email)?.name||email||'-'}
 function startApp(email){loadUsers();currentUser=users.find(u=>u.email===email);if(!currentUser){localStorage.removeItem(SESSION_KEY);return location.reload()}document.body.classList.add('logged-in');$('loginPage').classList.add('hidden');$('app').classList.remove('hidden');$('currentUser').textContent=currentUser.email;$('currentName').textContent=currentUser.name;if(currentUser.photo){$('sideAvatar').src=currentUser.photo;$('sideAvatar').classList.remove('hidden')}else{$('sideAvatar').classList.add('hidden')}load();loadTesters();resetForm(false);resetTesterForm();renderAll();goPage('dashboard')}
 function prefillRemember(){loadUsers();const remembered=localStorage.getItem(REMEMBER_KEY);if(remembered){$('loginEmail').value=remembered;$('rememberMe').checked=true}}
 $('loginForm').addEventListener('submit',e=>{e.preventDefault();loadUsers();const email=$('loginEmail').value.trim().toLowerCase(),pass=$('loginPassword').value;const ok=users.find(u=>u.email===email&&u.password===pass);if(!ok){$('loginError').classList.remove('hidden');return}if($('rememberMe').checked)localStorage.setItem(REMEMBER_KEY,email);else localStorage.removeItem(REMEMBER_KEY);localStorage.setItem(SESSION_KEY,email);startApp(email)});
@@ -522,9 +822,10 @@ function inRange(dateStr,start,end){
 
 function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',newOrder:'Sipariş Ekle',alerts:'Uyarılar',reports:'Raporlar',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
 function renderAll(){renderStats();renderStatusBars();renderLatest();renderOrders();renderAlerts();renderReports();renderTesters();renderPrintSelector();renderPrint()}function countStatus(s){return orders.filter(o=>o.status===s).length}
-function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler'],['Önemli',importantTotal,'Öncelikli işler'],['Uyarı',alertTotal,'Yaklaşan çıkış'],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı'],['Tester',testerTotal,'Paket çıkışı']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card':''}"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
+function renderStats(){const testerTotal=testers.reduce((sum,t)=>sum+(Number(t.qty)||0),0);const importantTotal=orders.filter(o=>o.important).length;const alertTotal=getAlertOrders().length;const data=[['Toplam',orders.length,'Tüm işler','orders','ALL'],['Önemli',importantTotal,'Öncelikli işler','orders','IMPORTANT'],['Uyarı',alertTotal,'Yaklaşan çıkış','alerts',''],['İşleme',countStatus('İŞLEME ALINDI'),'Üretimde','orders','İŞLEME ALINDI'],['Kargo',countStatus('KARGO GÖNDERİLDİ'),'Çıkışı yapıldı','orders','KARGO GÖNDERİLDİ'],['Tester',testerTotal,'Paket çıkışı','testers','']];$('stats').innerHTML=data.map(x=>`<div class="stat-card ${x[0]==='Uyarı'&&x[1]>0?'alert-card pulse-alert':''}" onclick="handleStatClick('${x[3]}','${x[4]}')"><span>${x[0]}</span><strong>${x[1]}</strong><small>${x[2]}</small></div>`).join('')}
+function handleStatClick(type,value){if(type==='alerts'){goPage('alerts');return}if(type==='testers'){goPage('testers');return}if(type==='orders'){openOrdersByStatus(value||'ALL');return}}
 function barsHtml(){const max=Math.max(orders.length,1);return['İŞLEME ALINDI','İPTAL','KARGO GÖNDERİLDİ','TAMAMLANDI'].map(s=>{const c=countStatus(s),w=Math.round(c/max*100);return`<div class="status-bar"><b>${s}</b><span>${c}</span><div class="barline"><div class="barfill" style="width:${w}%"></div></div></div>`}).join('')}function renderStatusBars(){$('statusBars').innerHTML=barsHtml();$('ordersStatusBars').innerHTML=barsHtml()}
-function rowHtml(o,latest=false){return`<tr><td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td>${itemImages(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong><br><span class="mini">Çıkış: ${fdate(dueDateForOrder(o))}</span></td><td>${badge(o.status)}<br>${duePill(o)}</td><td>${latest?userName(o.createdBy):(o.note||'-')}</td>${latest?'':`<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}</tr>`}
+function rowHtml(o,latest=false){const shipped=o.status==='KARGO GÖNDERİLDİ';return`<tr class="${o.important?'important-order':''}"><td><span class="order-no-strong">No:${o.orderNo}</span><br>${o.important?'<span class="important-pill">ÖNEMLİ</span>':''}</td><td>${productPills(o.items)}</td><td>${itemImages(o.items)}</td><td class="scent-list">${itxt(o.items)}</td><td><strong>${fdate(o.approvalDate)}</strong><br><span class="mini">Çıkış: ${fdate(dueDateForOrder(o))}</span></td><td>${badge(o.status)}${shipped?'':`<br>${duePill(o)}`}</td><td>${latest?userName(o.createdBy):(o.note||'-')}</td>${latest?'':`<td>${userName(o.createdBy)}</td><td><div class="actions"><button class="btn btn-light" onclick="editOrder('${o.id}')">Düzenle</button><button class="btn quick-ship-btn" onclick="markShipped('${o.id}')">Kargo Çıktı</button><button class="btn btn-danger" onclick="deleteOrder('${o.id}')">Sil</button></div></td>`}</tr>`}
 function renderLatest(){const list=[...orders].sort((a,b)=>b.createdAt-a.createdAt).slice(0,6);$('latestOrders').innerHTML=list.map(o=>rowHtml(o,true)).join('')||`<tr><td colspan="7">Henüz kayıt yok.</td></tr>`}
 function filtered(searchId='searchInput',statusId='statusFilter'){const q=($(searchId)?.value||'').toLowerCase().trim(),st=($(statusId)?.value||'ALL');return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')} ${userName(o.createdBy)}`.toLowerCase();const matchSearch=!q||hay.includes(q);const matchStatus=st==='ALL'||o.status===st;const matchCategory=currentCategory==='ALL'||o.items.some(i=>i.product===currentCategory);const matchSpecial=currentSpecial!=='IMPORTANT'||o.important;return matchSearch&&matchStatus&&matchCategory&&matchSpecial})}
 function renderOrders(){const list=filtered();$('ordersTable').innerHTML=list.map(o=>rowHtml(o,false)).join('')||`<tr><td colspan="9">Kayıt bulunamadı.</td></tr>`}$('searchInput').oninput=renderOrders;$('statusFilter').onchange=renderOrders;function clearFilters(){$('searchInput').value='';$('statusFilter').value='ALL';currentCategory='ALL';currentSpecial='ALL';$('ordersTitle').textContent='Sipariş Listesi';renderOrders()}
@@ -532,10 +833,10 @@ function addItemRow(product='OTO KOKUSU',q='',d='',image=''){const rowId=uid();c
 $('orderForm').addEventListener('submit',e=>{e.preventDefault();const id=$('editId').value,orderNo=Number($('orderNo').value);if(orders.find(o=>o.orderNo===orderNo&&o.id!==id)){alert('Bu iş numarası zaten var.');return}const items=[...document.querySelectorAll('.item-row')].map((row,idx)=>({product:row.querySelector('.item-product').value,quantity:Number(row.querySelector('.item-qty').value),desc:row.querySelector('.item-desc').value.trim().toUpperCase(),image:row.dataset.image||'',sort:idx})).filter(i=>i.quantity&&i.desc);if(!items.length){alert('En az 1 adet ürün/adet satırı ekle.');return}const old=id?orders.find(o=>o.id===id):null;const payload={id:id||uid(),orderNo,approvalDate:$('approvalDate').value,status:$('status').value,important:$('important').checked,note:$('note').value.trim(),items,createdAt:old?old.createdAt:Date.now(),updatedAt:Date.now(),createdBy:old?old.createdBy:currentUser.email,updatedBy:currentUser.email};orders=id?orders.map(o=>o.id===id?payload:o):[...orders,payload];save();resetForm();renderAll();openOrdersByStatus('ALL')});
 function resetForm(setNext=true){$('orderForm').reset();$('editId').value='';$('formTitle').textContent='Sipariş Ekle';$('itemsBox').innerHTML='';$('important').checked=false;addItemRow();if(setNext){const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:2367;$('orderNo').value=max}$('approvalDate').valueAsDate=new Date()}
 function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${o.orderNo} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
-function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;o.status='KARGO GÖNDERİLDİ';o.updatedAt=Date.now();o.updatedBy=currentUser.email;save();renderAll()}
+function markShipped(id){const o=orders.find(x=>x.id===id);if(!o)return;o.status='KARGO GÖNDERİLDİ';o.updatedAt=Date.now();o.updatedBy=currentUser.email;save();renderAll();setTimeout(()=>{const firstPanel=document.querySelector('.panel');if(firstPanel){firstPanel.classList.add('success-flash');setTimeout(()=>firstPanel.classList.remove('success-flash'),800)}},50)}
 function deleteOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;if(!confirm(`No:${o.orderNo} siparişini silmek istediğine emin misin?`))return;orders=orders.filter(x=>x.id!==id);save();renderAll()}
-function renderPrintSelector(){if(!$('printSelector'))return;const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL');const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)});$('printSelector').innerHTML=list.map(o=>`<label class="select-order"><input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint()"><strong>No:${o.orderNo}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span>${badge(o.status)}</label>`).join('')||'Kayıt bulunamadı.'}
-$('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);return(ids.length?orders.filter(o=>ids.includes(o.id)):orders.slice(0,7)).sort((a,b)=>a.orderNo-b.orderNo)}
+function renderPrintSelector(){if(!$('printSelector'))return;const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL');const start=$('printStart')?.value||'',end=$('printEnd')?.value||'';const list=[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk});$('printSelector').innerHTML=list.map(o=>`<label class="select-order"><input type="checkbox" class="print-check" value="${o.id}" onchange="renderPrint()"><strong>No:${o.orderNo}</strong><span>${itxt(o.items).replaceAll('\n',' / ')}</span>${badge(o.status)}</label>`).join('')||'Kayıt bulunamadı.'}
+$('printSearch').oninput=renderPrintSelector;$('printStatusFilter').onchange=renderPrintSelector;if($('printStart'))$('printStart').onchange=renderPrintSelector;if($('printEnd'))$('printEnd').onchange=renderPrintSelector;function selected(){const ids=[...document.querySelectorAll('.print-check:checked')].map(i=>i.value);if(ids.length)return orders.filter(o=>ids.includes(o.id)).sort((a,b)=>a.orderNo-b.orderNo);const q=($('printSearch')?.value||'').toLowerCase().trim(),st=($('printStatusFilter')?.value||'ALL');const start=$('printStart')?.value||'',end=$('printEnd')?.value||'';return[...orders].sort((a,b)=>a.orderNo-b.orderNo).filter(o=>{const hay=`${o.orderNo} ${o.status} ${o.note} ${itxt(o.items)} ${o.items.map(i=>i.product).join(' ')}`.toLowerCase();const dateOk=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);return(!q||hay.includes(q))&&(st==='ALL'||o.status===st)&&dateOk}).slice(0,12)}
 function renderPrint(){if(!$('printBody'))return;const list=selected();$('printTopDate').textContent=`Liste Tarihi: ${todayTR()}`;$('printBody').innerHTML=list.map(o=>{const productHtml=(o.items||[]).map(i=>`<div class="print-product-card"><div class="print-product-label">${i.product}</div>${i.image?`<img class="print-img" src="${i.image}">`:`<div style="height:20mm;display:flex;align-items:center;justify-content:center;font-weight:900;color:#999">GÖRSEL YOK</div>`}</div>`).join('');const note=o.note?`<div class="print-note">NOT: ${o.note}</div>`:'';return `<tr><td><div class="print-no">No:${o.orderNo}</div><div class="print-product-stack">${productHtml}</div></td><td><div class="print-items">${itxt(o.items)}</div>${note}</td><td><div class="print-date">${fdate(o.approvalDate)}</div></td></tr>`}).join('')}
 function selectAllPrint(v){document.querySelectorAll('.print-check').forEach(c=>c.checked=v);renderPrint()}function resetTesterForm(){if(!$('testerForm'))return;$('testerForm').reset();$('testerEditId').value='';$('testerDate').valueAsDate=new Date()}
 
@@ -588,6 +889,24 @@ function editTester(id){const t=testers.find(x=>x.id===id);if(!t)return;goPage('
 function fillProfile(){if(!currentUser)return;$('profileName').value=currentUser.name||'';$('profileEmail').value=currentUser.email;$('profilePhone').value=currentUser.phone||'';$('profilePassword').value='';profilePhotoCache=currentUser.photo||'';if(profilePhotoCache){$('profilePreview').src=profilePhotoCache;$('profilePreview').classList.remove('hidden')}else{$('profilePreview').classList.add('hidden')}$('profileOk').classList.add('hidden')}
 $('profilePhotoInput').onchange=e=>{const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{profilePhotoCache=r.result;$('profilePreview').src=profilePhotoCache;$('profilePreview').classList.remove('hidden')};r.readAsDataURL(file)};
 $('profileForm').addEventListener('submit',e=>{e.preventDefault();const idx=users.findIndex(u=>u.email===currentUser.email);if(idx<0)return;users[idx].name=$('profileName').value.trim()||users[idx].name;users[idx].phone=$('profilePhone').value.trim();users[idx].photo=profilePhotoCache;if($('profilePassword').value.trim())users[idx].password=$('profilePassword').value.trim();currentUser=users[idx];saveUsers();$('currentName').textContent=currentUser.name;if(currentUser.photo){$('sideAvatar').src=currentUser.photo;$('sideAvatar').classList.remove('hidden')}renderAll();$('profileOk').classList.remove('hidden')});
+
+function openImageModal(src){
+  if(!src)return;
+  $('imageModalImg').src=src;
+  $('imageModal').classList.remove('hidden');
+}
+function closeImageModal(){
+  $('imageModal').classList.add('hidden');
+  $('imageModalImg').src='';
+}
+function setPrintToday(){
+  const today=toISODate(new Date());
+  $('printStart').value=today;
+  $('printEnd').value=today;
+  renderPrintSelector();
+  renderPrint();
+}
+
 window.addEventListener('load',()=>{prefillRemember();const user=localStorage.getItem(SESSION_KEY);if(user)startApp(user)});
 </script>
 </body>
