@@ -2977,7 +2977,7 @@ $('logoutBtn').onclick=()=>{document.body.classList.remove('logged-in');localSto
 $('menuBtn').onclick=()=>$('sidebar').classList.toggle('open'); document.querySelectorAll('.nav button[data-page]').forEach(b=>b.onclick=()=>goPage(b.dataset.page)); $('ordersToggle').onclick=()=>$('ordersSubnav').classList.toggle('open'); $('categoryToggle').onclick=()=>$('categorySubnav').classList.toggle('open'); document.querySelectorAll('#ordersSubnav button').forEach(b=>b.onclick=()=>openOrdersByStatus(b.dataset.status)); document.querySelectorAll('#categorySubnav button').forEach(b=>b.onclick=()=>openOrdersByCategory(b.dataset.category));
 function openOrdersByStatus(st){currentCategory='ALL';currentSpecial=st==='IMPORTANT'?'IMPORTANT':'ALL';goPage('orders');$('ordersSubnav').classList.add('open');$('statusFilter').value=(st==='IMPORTANT'?'ALL':st)||'ALL';$('ordersTitle').textContent=st==='IMPORTANT'?'Önemli Siparişler':(st==='KARGO GÖNDERİLDİ'?'Kargoya Çıkanlar':(st==='ALL'?'Aktif Siparişler':'Sipariş Listesi'));renderOrders()}
 function openOrdersByCategory(cat){currentSpecial='ALL';currentCategory=cat||'ALL';goPage('orders');$('categorySubnav').classList.add('open');$('statusFilter').value='ALL';$('ordersTitle').textContent=cat+' Ürünler';renderOrders()}
-function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',alerts:'Uyarılar',reports:'Raporlar',newOrder:'Sipariş Ekle',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value&&$('itemsBox').children.length===0)resetForm(false)}
+function goPage(page){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$(`${page}Page`).classList.remove('hidden');document.querySelectorAll('.nav button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page));$('pageTitle').textContent={dashboard:'Dashboard',orders:'Siparişler',alerts:'Uyarılar',reports:'Raporlar',newOrder:'Sipariş Ekle',testers:'Tester Çıkışı',print:'A4 Baskı',profile:'Profilim'}[page]||'Panel';$('sidebar').classList.remove('open');if(page==='print'){renderPrintSelector();renderPrint()}if(page==='profile')fillProfile();if(page==='alerts')renderAlerts();if(page==='reports')renderReports();if(page==='testers')renderTesters();if(page==='newOrder'&&!$('editId').value){if($('itemsBox').children.length===0)resetForm(true);else{$('orderNo').value=$('orderNo').value||getNextOrderNo();$('approvalDate').value=$('approvalDate').value||getLastOrderDate();}}}
 function renderAll(){
   const safe=(name,fn)=>{try{fn()}catch(e){console.error(name,e)}};
   safe('stats',renderStats);
@@ -3251,14 +3251,14 @@ $('orderForm').addEventListener('submit',async e=>{
     if(itemError) throw itemError;
 
     const usedDate=$('approvalDate').value;
+    rememberLastOrderEntry(orderNo, usedDate);
 
     await refreshAll();
 
     resetForm();
 
     $('approvalDate').value=usedDate;
-    const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:orderNo+1;
-    $('orderNo').value=max;
+    $('orderNo').value=getNextOrderNo();
     $('status').value='İŞLEME ALINDI';
 
     if(typeof showToast==='function'){
@@ -3272,6 +3272,23 @@ $('orderForm').addEventListener('submit',async e=>{
     document.body.classList.remove('loading');
   }
 });
+
+
+function rememberLastOrderEntry(orderNo,dateValue){
+  try{
+    localStorage.setItem('do_design_last_order_no', String(Number(orderNo)||''));
+    localStorage.setItem('do_design_last_order_date', dateValue || '');
+  }catch(e){}
+}
+function getNextOrderNo(){
+  const saved=Number(localStorage.getItem('do_design_last_order_no')||0);
+  const maxFromDb=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0)):0;
+  const maxNo=Math.max(saved,maxFromDb);
+  return maxNo ? maxNo+1 : 2367;
+}
+function getLastOrderDate(){
+  return localStorage.getItem('do_design_last_order_date') || toISODate(new Date());
+}
 
 function resetForm(setNext=true,keepDate=''){$('orderForm').reset();$('editId').value='';$('formTitle').textContent='Sipariş Ekle';$('itemsBox').innerHTML='';$('important').checked=false;addItemRow();if(setNext){const max=orders.length?Math.max(...orders.map(o=>Number(o.orderNo)||0))+1:2367;$('orderNo').value=max}if(keepDate){$('approvalDate').value=keepDate}else{$('approvalDate').valueAsDate=new Date()}$('status').value='İŞLEME ALINDI'}
 function editOrder(id){const o=orders.find(x=>x.id===id);if(!o)return;goPage('newOrder');$('formTitle').textContent=`No:${o.orderNo} Düzenle`;$('editId').value=o.id;$('orderNo').value=o.orderNo;$('approvalDate').value=o.approvalDate;$('status').value=o.status;$('important').checked=!!o.important;$('note').value=o.note||'';$('itemsBox').innerHTML='';o.items.forEach(i=>addItemRow(i.product,i.quantity,i.desc,i.image||''))}
