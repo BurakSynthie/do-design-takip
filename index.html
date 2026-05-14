@@ -2607,6 +2607,66 @@ table{
   }
 }
 
+
+/* ===== V40 AYNI GORSEL TEK GOSTERIM FIX ===== */
+.unique-thumbs{
+  display:flex!important;
+  align-items:center!important;
+  gap:4px!important;
+  flex-wrap:nowrap!important;
+}
+.unique-thumbs img{
+  width:44px!important;
+  height:44px!important;
+  object-fit:contain!important;
+  border-radius:9px!important;
+  background:#f8fafc!important;
+}
+.unique-thumbs img:nth-child(n+2){
+  opacity:.88;
+}
+.more-img{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:26px;
+  height:26px;
+  border-radius:999px;
+  background:rgba(255,255,255,.14);
+  color:#fff;
+  font-size:10px;
+  font-weight:1000;
+  border:1px solid rgba(255,255,255,.18);
+}
+@media(min-width:651px){
+  #ordersTable .multi-thumbs,
+  #latestOrders .multi-thumbs,
+  #alertsTable .multi-thumbs,
+  #reportsTable .multi-thumbs{
+    max-width:150px!important;
+  }
+  #ordersTable .scent-list,
+  #latestOrders .scent-list{
+    white-space:pre-line!important;
+    line-height:1.18!important;
+  }
+}
+@media(max-width:650px){
+  .unique-thumbs{
+    max-width:48px!important;
+  }
+  .unique-thumbs img{
+    width:44px!important;
+    height:44px!important;
+  }
+  .unique-thumbs img:nth-child(n+2){
+    display:none!important;
+  }
+  .more-img{
+    display:none!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2830,6 +2890,15 @@ function productClassName(p){
   if(v.includes('SIRT')) return 'cat-sirt';
   return 'cat-default';
 }
+
+function productClassName(p){
+  const v=String(p||'').toUpperCase();
+  if(v.includes('OTO')) return 'cat-oto';
+  if(v.includes('PASPAS')) return 'cat-paspas';
+  if(v.includes('BARDAK')) return 'cat-bardak';
+  if(v.includes('SIRT')) return 'cat-sirt';
+  return 'cat-default';
+}
 function productPills(items){
   const arr=[...new Set((items||[]).map(i=>i.product).filter(Boolean))];
   return arr.map(p=>`<span class="product-pill ${productClassName(p)}">${p}</span>`).join('');
@@ -2841,13 +2910,16 @@ function itemImages(items){
     .map(i=>i.image||i.image_url)
     .filter(Boolean)
     .filter(src=>{
-      if(seen.has(src)) return false;
+      if(seen.has(src))return false;
       seen.add(src);
       return true;
     });
-  return imgs.length
-    ? `<div class="multi-thumbs">${imgs.map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}</div>`
-    : `<div class="empty-thumb">GÖRSEL<br>YOK</div>`;
+
+  if(!imgs.length){
+    return `<div class="empty-thumb">GÖRSEL<br>YOK</div>`;
+  }
+
+  return `<div class="multi-thumbs unique-thumbs">${imgs.slice(0,3).map(src=>`<img src="${src}" onclick="openImageModal('${src}')">`).join('')}${imgs.length>3?`<span class="more-img">+${imgs.length-3}</span>`:''}</div>`;
 }
 
 function badge(s){
