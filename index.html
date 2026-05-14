@@ -2886,6 +2886,13 @@ table{
   color:#bbf7d0!important;
 }
 
+
+/* ===== V50 A4 SECIM ONIZLEME HARD FIX ===== */
+.print-select-chip:has(.print-check:checked){
+  outline:2px solid rgba(34,197,94,.55)!important;
+  background:rgba(34,197,94,.12)!important;
+}
+
 </style>
 </head>
 <body>
@@ -4091,23 +4098,40 @@ document.addEventListener('click',e=>{
 });
 
 
-/* === A4 ONIZLEME KESIN DOM OVERRIDE V49 === */
-function renderPrintV49(){
+
+/* === A4 HARD PREVIEW FIX V50 === */
+window.DO_SELECTED_PRINT_IDS = window.DO_SELECTED_PRINT_IDS || [];
+
+function doGetSelectedPrintOrders(){
+  const ids=(window.DO_SELECTED_PRINT_IDS||[]).map(String);
+  return (orders||[])
+    .filter(o=>ids.includes(String(o.id)))
+    .sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0));
+}
+
+function doUpdatePrintCount(){
+  const el=$('printSelectedCount');
+  const count=(window.DO_SELECTED_PRINT_IDS||[]).length;
+  if(el)el.textContent=count ? `${count} seçildi` : '0 seçildi';
+}
+
+function doRenderA4Preview(){
   const rows=$('printRows');
   if(!rows)return;
 
-  const checkedIds=[...document.querySelectorAll('.print-check:checked')].map(c=>String(c.value));
-  selectedPrintIds=checkedIds;
+  const selected=doGetSelectedPrintOrders();
 
-  const selected=orders
-    .filter(o=>checkedIds.includes(String(o.id)))
-    .sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0));
-
-  if($('printTopDate'))$('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
+  if($('printTopDate')){
+    $('printTopDate').textContent=new Date().toLocaleDateString('tr-TR');
+  }
 
   rows.innerHTML=selected.map(o=>{
-    const productHtml=uniquePrintProductCards(o.items||[]);
-    const printed=isPrinted(o.id);
+    const productHtml=typeof uniquePrintProductCards==='function'
+      ? uniquePrintProductCards(o.items||[])
+      : '';
+
+    const printed=typeof isPrinted==='function' ? isPrinted(o.id) : false;
+
     return '<tr class="'+(printed?'printed-print-row':'')+'">'+
       '<td>'+
         '<div class="print-no">No:'+o.orderNo+'</div>'+
@@ -4127,24 +4151,83 @@ function renderPrintV49(){
     '</tr>';
   }).join('') || '<tr><td colspan="3">Yazdırmak için sipariş seç.</td></tr>';
 
-  const el=$('printSelectedCount');
-  if(el)el.textContent=checkedIds.length?`${checkedIds.length} seçildi`:'0 seçildi';
+  doUpdatePrintCount();
 }
 
-const oldRenderPrint=renderPrint;
-renderPrint=renderPrintV49;
+function doSyncPrintChecks(){
+  document.querySelectorAll('.print-check').forEach(ch=>{
+    ch.checked=(window.DO_SELECTED_PRINT_IDS||[]).includes(String(ch.value));
+  });
+}
 
-const oldSelectAllPrint=selectAllPrint;
+function doSetPrintSelected(orderId, checked){
+  orderId=String(orderId);
+  const arr=(window.DO_SELECTED_PRINT_IDS||[]).map(String);
+  if(checked){
+    if(!arr.includes(orderId))arr.push(orderId);
+  }else{
+    const idx=arr.indexOf(orderId);
+    if(idx>-1)arr.splice(idx,1);
+  }
+  window.DO_SELECTED_PRINT_IDS=arr;
+  doSyncPrintChecks();
+  doRenderA4Preview();
+}
+
+function doBindA4Selector(){
+  const box=$('printSelector');
+  if(!box)return;
+
+  box.querySelectorAll('.print-check').forEach(ch=>{
+    if(ch.dataset.hardBound==='1')return;
+    ch.dataset.hardBound='1';
+    ch.addEventListener('change',()=>doSetPrintSelected(ch.value,ch.checked));
+  });
+
+  doSyncPrintChecks();
+  doRenderA4Preview();
+}
+
+const doOldRenderPrintSelector = typeof renderPrintSelector==='function' ? renderPrintSelector : null;
+if(doOldRenderPrintSelector){
+  renderPrintSelector=function(){
+    doOldRenderPrintSelector();
+    setTimeout(doBindA4Selector,0);
+  };
+}
+
+renderPrint=doRenderA4Preview;
+
 selectAllPrint=function(v){
-  document.querySelectorAll('.print-check').forEach(c=>c.checked=v);
-  renderPrint();
+  document.querySelectorAll('.print-check').forEach(ch=>{
+    doSetPrintSelected(ch.value,!!v);
+  });
+  doSyncPrintChecks();
+  doRenderA4Preview();
 };
 
 document.addEventListener('change',function(e){
   if(e.target && e.target.classList && e.target.classList.contains('print-check')){
-    renderPrint();
+    doSetPrintSelected(e.target.value,e.target.checked);
   }
 });
+
+document.addEventListener('click',function(e){
+  if(e.target && e.target.closest && e.target.closest('.print-select-chip')){
+    const chip=e.target.closest('.print-select-chip');
+    const ch=chip.querySelector('.print-check');
+    if(ch && e.target.tagName!=='INPUT' && e.target.tagName!=='BUTTON'){
+      ch.checked=!ch.checked;
+      doSetPrintSelected(ch.value,ch.checked);
+    }
+  }
+});
+
+setInterval(()=>{
+  if($('printSelector') && $('printRows')){
+    doBindA4Selector();
+  }
+},800);
 
 window.addEventListener('load',async()=>{await prefillRemember();const user=localStorage.getItem(SESSION_KEY);if(user)await startApp(user)});
 </script>
