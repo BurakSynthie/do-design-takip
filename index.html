@@ -744,8 +744,40 @@ async function loadUsers(){
   }
 }
 
-async function loadOrders(){const {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no'); if(error){alert('Siparişler yüklenemedi: '+error.message);orders=[];return} orders=(data||[]).map(mapOrder)}
-async function loadTesters(){const {data,error}=await db.from('testers').select('*').order('date',{ascending:false}); if(error){alert('Tester kayıtları yüklenemedi: '+error.message);testers=[];return} testers=(data||[]).map(t=>({id:t.id,date:t.date,qty:t.qty,target:t.target||'',note:t.note||'',createdBy:t.created_by||'',createdAt:new Date(t.created_at||Date.now()).getTime()}))}
+async function loadOrders(){
+  try{
+    let {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no');
+    if(error){
+      console.warn('Join ile sipariş çekilemedi, ayrı tablo yöntemi deneniyor:', error);
+      const ordersRes=await db.from('orders').select('*').order('order_no');
+      if(ordersRes.error) throw ordersRes.error;
+      const itemsRes=await db.from('order_items').select('*').order('sort_order');
+      if(itemsRes.error) throw itemsRes.error;
+      const rawOrders=ordersRes.data||[];
+      const rawItems=itemsRes.data||[];
+      orders=rawOrders.map(row=>{
+        const related=rawItems.filter(i=>i.order_id===row.id);
+        return mapOrder({...row, order_items: related});
+      });
+      return;
+    }
+    orders=(data||[]).map(mapOrder);
+  }catch(err){
+    console.error('Siparişler yüklenemedi:',err);
+    showToast('Siparişler yüklenemedi','Supabase verileri silinmedi; sadece çekme hatası var: '+err.message,'danger');
+    orders=[];
+  }
+}
+async function loadTesters(){
+  try{
+    const {data,error}=await db.from('testers').select('*').order('date',{ascending:false});
+    if(error) throw error;
+    testers=(data||[]).map(t=>({id:t.id,date:t.date,qty:t.qty,target:t.target||'',note:t.note||'',createdBy:t.created_by||'',createdAt:new Date(t.created_at||Date.now()).getTime()}));
+  }catch(err){
+    console.error('Tester kayıtları yüklenemedi:',err);
+    testers=[];
+  }
+}
 async function refreshAll(){
   document.body.classList.add('loading');
   try{
