@@ -725,6 +725,25 @@ function addBusinessDays(startDateStr,businessDays=12){
   }
   return toISODate(date);
 }
+async function loadUsers(){
+  try{
+    const {data,error}=await db.from('app_users').select('*').order('created_at');
+    if(error || !data || !data.length){
+      console.warn('Supabase kullanıcıları çekilemedi, yedek kullanıcılar kullanılıyor:', error);
+      users=DEFAULT_USERS;
+      return;
+    }
+    users=data.map(u=>({
+      ...u,
+      email:String(u.email||'').trim().toLowerCase(),
+      password:String(u.password||'').trim()
+    }));
+  }catch(err){
+    console.warn('Kullanıcı yükleme hatası, yedek kullanıcılar kullanılıyor:', err);
+    users=DEFAULT_USERS;
+  }
+}
+
 async function loadOrders(){const {data,error}=await db.from('orders').select('*, order_items(*)').order('order_no'); if(error){alert('Siparişler yüklenemedi: '+error.message);orders=[];return} orders=(data||[]).map(mapOrder)}
 async function loadTesters(){const {data,error}=await db.from('testers').select('*').order('date',{ascending:false}); if(error){alert('Tester kayıtları yüklenemedi: '+error.message);testers=[];return} testers=(data||[]).map(t=>({id:t.id,date:t.date,qty:t.qty,target:t.target||'',note:t.note||'',createdBy:t.created_by||'',createdAt:new Date(t.created_at||Date.now()).getTime()}))}
 async function refreshAll(){document.body.classList.add('loading');await Promise.all([loadOrders(),loadTesters(),loadUsers()]);document.body.classList.remove('loading');renderAll()}
