@@ -2850,6 +2850,22 @@ table{
 .printed-row{background:rgba(34,197,94,.12)!important;border-color:rgba(34,197,94,.28)!important}
 .empty-print-state{grid-column:1/-1;padding:14px;text-align:center;color:#cbd5e1;font-weight:900}
 
+
+/* ===== V47 A4 TUMU FILTRESI FIX ===== */
+.print-filter-tabs{
+  flex-wrap:wrap!important;
+}
+.print-filter-btn{
+  min-width:96px!important;
+}
+@media(max-width:650px){
+  .print-filter-btn{
+    min-width:0!important;
+    flex:1 1 30%!important;
+    padding:8px 6px!important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -2903,7 +2919,7 @@ table{
 <section id="testersPage" class="page hidden"><div class="panel"><div class="panel-head"><h2>Tester Çıkışı</h2><span class="mini">Siparişten bağımsız tester paketlerini buradan takip et.</span></div><form id="testerForm" action="javascript:void(0)"><input type="hidden" id="testerEditId"><div class="grid-3"><div class="field"><label>Tarih</label><input id="testerDate" type="date" required></div><div class="field"><label>Paket Adedi</label><input id="testerQty" type="number" required placeholder="10"></div><div class="field"><label>Gönderilen Yer / Kişi</label><input id="testerTarget" placeholder="Firma / kişi adı"></div></div><div class="field"><label>Not</label><textarea id="testerNote" placeholder="Örn: 5 paket oto kokusu tester, 2 paket paspas numunesi..."></textarea></div><div class="actions"><button class="btn btn-primary" type="submit">Tester Kaydet</button><button class="btn btn-light" type="button" onclick="resetTesterForm()">Temizle</button></div></form></div><div class="panel"><div class="panel-head"><h2>Tester Geçmişi</h2><span id="testerCount" class="mini"></span></div><div class="orders-table-wrap"><table><thead><tr><th>Tarih</th><th>Paket</th><th>Gönderilen</th><th>Not</th><th>Ekleyen</th><th>İşlem</th></tr></thead><tbody id="testerTable"></tbody></table></div></div></section>
 <section id="printPage" class="page hidden"><div class="panel no-print"><div class="panel-head"><h2>A4 Baskı Listesi <span id="printSelectedCount" class="print-count-pill">0 seçildi</span></h2><div class="actions"><button class="btn btn-light" onclick="selectAllPrint(true)">Tümünü Seç</button><button class="btn btn-light" onclick="selectAllPrint(false)">Temizle</button><button class="btn btn-primary" onclick="window.print()">Yazdır / PDF</button></div></div><div class="filters print-filters"><input id="printSearch" placeholder="Baskıya eklenecek iş no, kategori veya açıklama ara..."><select id="printStatusFilter"><option value="ALL">Tüm Durumlar</option><option>BEKLEMEDE</option><option>İŞLEME ALINDI</option><option>İPTAL</option><option>KARGO GÖNDERİLDİ</option><option>TAMAMLANDI</option><option>ARŞİV</option></select><input id="printStart" type="date"><input id="printEnd" type="date"><button class="btn btn-light" onclick="setPrintToday()">Bugün</button><button class="btn btn-dark" onclick="renderPrintSelector();renderPrint()">A4 Güncelle</button></div>
 <div class="print-filter-tabs">
-  <button id="printFilterPendingBtn" class="print-filter-btn active" onclick="setPrintFilter('pending')">Basılmayanlar</button>
+  <button id="printFilterAllBtn" class="print-filter-btn active" onclick="setPrintFilter('all')">Tümü</button><button id="printFilterPendingBtn" class="print-filter-btn" onclick="setPrintFilter('pending')">Basılmayanlar</button>
   <button id="printFilterPrintedBtn" class="print-filter-btn" onclick="setPrintFilter('printed')">Basılanlar</button>
 </div>
 
@@ -3636,13 +3652,15 @@ function renderReports(showMsg=false){
 }
 
 
-let currentPrintFilter='pending';
+let currentPrintFilter='all';
 
 function setPrintFilter(type){
   currentPrintFilter=type;
-  $('printFilterPendingBtn')?.classList.toggle('active',type==='pending');
-  $('printFilterPrintedBtn')?.classList.toggle('active',type==='printed');
+  if($('printFilterAllBtn'))$('printFilterAllBtn').classList.toggle('active',type==='all');
+  if($('printFilterPendingBtn'))$('printFilterPendingBtn').classList.toggle('active',type==='pending');
+  if($('printFilterPrintedBtn'))$('printFilterPrintedBtn').classList.toggle('active',type==='printed');
   renderPrintSelector();
+  renderPrint();
 }
 
 function filteredPrintOrders(){
@@ -3693,7 +3711,7 @@ function renderPrintSelector(){
   const list=[...orders].sort((a,b)=>(Number(a.orderNo)||0)-(Number(b.orderNo)||0)).filter(o=>{
     const printed=isPrinted(o.id);
     const hay=(String(o.orderNo||'')+' '+String(o.status||'')+' '+String(o.note||'')+' '+itxt(o.items)+' '+(o.items||[]).map(i=>i.product).join(' ')).toLowerCase();
-    const matchPrinted=currentPrintFilter==='printed'?printed:!printed;
+    const matchPrinted=currentPrintFilter==='all'?true:(currentPrintFilter==='printed'?printed:!printed);
     const matchStatus=st==='ALL'||o.status===st;
     const matchDate=(!start||o.approvalDate>=start)&&(!end||o.approvalDate<=end);
     const matchSearch=!q||hay.includes(q);
@@ -3710,7 +3728,7 @@ function renderPrintSelector(){
       '<span class="chip-text">'+txt+'</span>'+
       '<button type="button" class="chip-print-btn" data-printed-id="'+o.id+'">'+(isPrinted(o.id)?'✓':'Basıldı')+'</button>'+
     '</label>';
-  }).join('') || '<div class="empty-print-state">'+(currentPrintFilter==='printed'?'Basılan kayıt yok.':'Basılmayan kayıt yok.')+'</div>';
+  }).join('') || '<div class="empty-print-state">'+(currentPrintFilter==='all'?'Kayıt bulunamadı.':(currentPrintFilter==='printed'?'Basılan kayıt yok.':'Basılmayan kayıt yok.'))+'</div>';
 
   box.querySelectorAll('.print-check').forEach(ch=>{
     ch.addEventListener('change',()=>togglePrintSelection(ch.dataset.orderId,ch.checked));
