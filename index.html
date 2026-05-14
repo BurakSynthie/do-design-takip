@@ -762,6 +762,66 @@ async function loadUsers(){
 
 
 
+
+function hasProduct(o, productName){
+  return (o.items||[]).some(i=>i.product===productName);
+}
+function hasExtraProductionDays(o){
+  return hasProduct(o,'SIRT KARTONU') || hasProduct(o,'BARDAK ALTLIĞI');
+}
+function baseProductionDays(o){
+  const hasOto=hasProduct(o,'OTO KOKUSU');
+  const hasPaspas=hasProduct(o,'PASPAS');
+  const hasSirt=hasProduct(o,'SIRT KARTONU');
+  const hasBardak=hasProduct(o,'BARDAK ALTLIĞI');
+  if(hasOto) return 12;
+  if(hasPaspas && !hasOto && !hasSirt && !hasBardak) return 7;
+  if(hasPaspas && (hasSirt || hasBardak)) return 7;
+  return 12;
+}
+function productionDayCount(o){
+  return baseProductionDays(o) + (hasExtraProductionDays(o) ? 7 : 0);
+}
+function extraProductionNote(o){
+  const base=baseProductionDays(o);
+  const extra=hasExtraProductionDays(o) ? ' +7 iş günü' : '';
+  if(base===7 && extra) return '7 iş günü' + extra;
+  if(base===7) return '7 iş günü';
+  if(extra) return '+7 iş günü';
+  return '';
+}
+function dueDateForOrder(o){
+  return addBusinessDays(o.approvalDate, productionDayCount(o));
+}
+function daysUntilDate(dateStr){
+  const d=parseLocalDate(dateStr);
+  if(!d)return 999;
+  const t=new Date();
+  const today=new Date(t.getFullYear(),t.getMonth(),t.getDate());
+  return Math.ceil((d-today)/(1000*60*60*24));
+}
+function getAlertOrders(){
+  return orders.filter(o=>{
+    if(o.status==='KARGO GÖNDERİLDİ'||o.status==='TAMAMLANDI'||o.status==='İPTAL') return false;
+    const due=dueDateForOrder(o);
+    const remaining=daysUntilDate(due);
+    return remaining<=2;
+  }).sort((a,b)=>dueDateForOrder(a).localeCompare(dueDateForOrder(b)));
+}
+function duePill(o){
+  const due=dueDateForOrder(o);
+  const r=daysUntilDate(due);
+  if(o.status==='KARGO GÖNDERİLDİ')return`<span class="due-pill done">Kargolandı</span>`;
+  if(r<0)return`<span class="due-pill danger">${Math.abs(r)} gün gecikti</span>`;
+  if(r===0)return`<span class="due-pill danger">Bugün çıkmalı</span>`;
+  if(r<=2)return`<span class="due-pill">${r} gün kaldı</span>`;
+  return`<span class="due-pill">${r} gün</span>`;
+}
+function inRange(dateStr,start,end){
+  if(!dateStr)return false;
+  return(!start||dateStr>=start)&&(!end||dateStr<=end);
+}
+
 function mapOrder(row){
   const rawItems = row.order_items || [];
   const items = rawItems
